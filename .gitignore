@@ -352,3 +352,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# specific ignore
+DM2122_Week16_Files - Copy/Common/Debug
+DM2122_Week16_Files - Copy/DM2122 Prac/Debug
