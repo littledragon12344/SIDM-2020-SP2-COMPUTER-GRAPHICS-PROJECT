@@ -93,8 +93,10 @@ void CarAi::GeneratePath(const std::string& file_path)
 
 float CarAi::dot(Vector3 Fstnum, Vector3 sndNum)
 {
-	float num = Fstnum.x * sndNum.x + Fstnum.y * sndNum.y + Fstnum.z + sndNum.z;
-	return Fstnum.x*sndNum.x+Fstnum.y*sndNum.y+Fstnum.z+sndNum.z;
+	float x = Fstnum.x * sndNum.x;
+	float z = Fstnum.z * sndNum.z;
+	float num =x+z;
+	return num;
 }
 
 void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up)

@@ -494,6 +494,10 @@ void Minigame::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,stati
 		RenderMesh(meshList[GEO_LIGHTSPHERE], false);
 		modelStack.PopMatrix();
 	}
+	/*modelStack.PushMatrix();
+	modelStack.Translate(Car1.Point[0].x, Car1.Point[0].y, Car1.Point[0].z);
+	RenderMesh(meshList[GEO_PLAYER], false);
+	modelStack.PopMatrix();*/
 }
 
 void Minigame::RenderText(Mesh* mesh, std::string text, Color color)
