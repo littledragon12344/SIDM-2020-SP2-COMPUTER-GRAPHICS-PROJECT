@@ -11,6 +11,7 @@
 #include "Application.h"
 
 #include "SceneSkybox.h"
+#include "Minigame.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -106,14 +107,16 @@ void Application::Run()
 	//Main Loop
 
 	Scene* scene = new SceneSkybox();
+	Scene* scenegame = new Minigame();
 
 	scene->Init();
+	scenegame->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
-		scene->Update(m_timer.getElapsedTime());
-		scene->Render();
+		scenegame->Update(m_timer.getElapsedTime());
+		scenegame->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
@@ -122,7 +125,9 @@ void Application::Run()
 
 	} //Check if the ESC key had been pressed or if the window had been closed
 	scene->Exit();
+	scenegame->Exit();
 	delete scene;
+	delete scenegame;
 }
 
 void Application::Exit()

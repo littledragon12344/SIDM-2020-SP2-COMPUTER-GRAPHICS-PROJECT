@@ -60,6 +60,12 @@
     <ClInclude Include="Source\Camera3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Minigame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CarAI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\shader.cpp">
@@ -96,6 +102,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Minigame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CarAi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

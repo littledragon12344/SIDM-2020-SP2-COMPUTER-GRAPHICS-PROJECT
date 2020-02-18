@@ -539,7 +539,8 @@ Mesh* MeshBuilder::GenerateOBJ(const std::string& meshname, const std::string& f
 	std::vector<Position> vertices;
 	std::vector<TexCoord> uvs;
 	std::vector<Vector3> normals;
-	bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+	std::vector<Position> Points;
+	bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals,Points);
 	if (!success) return NULL;
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;

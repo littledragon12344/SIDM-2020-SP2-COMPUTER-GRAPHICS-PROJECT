@@ -13,8 +13,9 @@ Camera3::~Camera3()
 
 void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 {
-	this->position = pos;
+	this->position =defaultPosition= pos;
 	TargetFromPos = pos-target;
+	defaultTarget = TargetFromPos;
 	xzTarget = target-pos;
 	Vector3 view = (position - this->target).Normalized();
 	this->target = target;
