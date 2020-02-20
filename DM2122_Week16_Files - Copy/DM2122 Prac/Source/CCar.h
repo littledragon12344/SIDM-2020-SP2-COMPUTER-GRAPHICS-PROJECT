@@ -8,6 +8,7 @@ class CCar
 	//float t;	//time
 	float speed;
 	float acceleration;
+	Position carPos;
 
 public: 
 	CCar();
@@ -17,6 +18,8 @@ public:
 	void SetSpeed(float speed);
 	float GetAcceleration();
 	void SetAcceleration(float acceleration);
+
+	void SetCarPos(int carPosx, int carPosy, int carPosz);
 
 	float Kinematic1(float v, float u, float a, float t);
 	float Kinematic2(float s, float u, float v, float t);
