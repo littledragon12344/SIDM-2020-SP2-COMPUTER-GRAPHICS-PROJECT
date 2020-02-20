@@ -5,5 +5,6 @@
 #include "Vertex.h"
 
 Position operator*(const Mtx44& lhs, const Position& rhs);
+float GetDefaultValue();
 
 #endif
