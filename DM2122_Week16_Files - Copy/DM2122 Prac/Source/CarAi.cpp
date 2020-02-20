@@ -117,19 +117,52 @@ void CarAi::Updates(float dt)
 			if(Tempangle<0)
 				Tempangle = -Tempangle;
 		}
-		if (rotationy + -angleFromx > 180|| rotationy + -angleFromx<-180)
+		if (rotationy - angleFromx > 180 || rotationy - angleFromx < -180)
 		{
-			if (rotationy < (-angleFromx + rotationy) && Tempangle != 0)
+			if (rotationy > 90 && angleFromx < -90)
 			{
-			
 				Tempangle -= 250.f * dt;
 				rotationy += 250.f * dt;
+				if (rotationy < (2 * 180 + angleFromx))
+				{
+					rotationy = angleFromx;
+					Tempangle = 0;
+				}
 			}
-			if (rotationy > (-angleFromx + rotationy) && Tempangle != 0)
+			else if (rotationy < -90 && angleFromx > 90)
 			{
-		
 				Tempangle -= 250.f * dt;
 				rotationy -= 250.f * dt;
+				if (rotationy < (-2 * 180 + angleFromx))
+				{
+					rotationy = angleFromx;
+					Tempangle = 0;
+				}
+			}
+			else
+			{
+				if (rotationy < (-angleFromx + rotationy) && Tempangle != 0)
+				{
+					Tempangle -= 250.f * dt;
+					rotationy += 250.f * dt;
+					if (rotationy > (-angleFromx + rotationy))
+					{
+						rotationy = angleFromx;
+						Tempangle = 0;
+					}
+
+				}
+				if (rotationy > (-angleFromx + rotationy) && Tempangle != 0)
+				{
+
+					Tempangle -= 250.f * dt;
+					rotationy -= 250.f * dt;
+					if (rotationy < (-angleFromx + rotationy))
+					{
+						rotationy = angleFromx;
+						Tempangle = 0;
+					}
+				}
 			}
 		}
 		else
@@ -138,18 +171,28 @@ void CarAi::Updates(float dt)
 			{
 				Tempangle -= 250.f * dt;
 				rotationy += 250.f * dt;
+				if (rotationy >angleFromx)
+				{
+					rotationy = angleFromx;
+					Tempangle = 0;
+				}
 			}
 			if (rotationy > angleFromx && Tempangle != 0)
 			{
 				Tempangle -= 250.f * dt;
 				rotationy -= 250.f * dt;
+				if (rotationy <angleFromx)
+				{
+					rotationy = angleFromx;
+					Tempangle = 0;
+				}
 			}
-		}
+		}/*
 		if (Tempangle < 0)
 		{
 			Tempangle = 0;
 			rotationy = angleFromx;
-		}
+		}*/
 	}
 	if (start == 0)
 	{
