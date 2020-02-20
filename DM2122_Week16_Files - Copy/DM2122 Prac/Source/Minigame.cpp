@@ -39,6 +39,7 @@ void Minigame::Init()
 	FPScamera.Init(Vector3(-10, 2, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
 	Frecamera.Init(Vector3(-10, 2, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
 	TPSCamera.Init(Vector3(-30, 2, 0), FPScamera.position, FPScamera.up);
+	TopCamera.Init(Vector3(-10, 300, 0), Vector3(-10, 0, 0), Vector3(1, 0, 0));
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -162,14 +163,15 @@ void Minigame::Init()
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 0.5f);
 
+	meshList[GEO_CARTARGET] = MeshBuilder::GenerateSphere("lightBall", Color(0.f, 1.f, 1.f), 9, 36, 0.5f);
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	meshList[GEO_PLAYER] = MeshBuilder::GenerateCuboid("Car", Color(1, 1, 1), 1.f, 1.f,1.f);
-	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//sky.tga");
-
-	Car1.GeneratePath("OBJ//Path.obj");
-	Car1.init(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0));
+	meshList[GEO_PLAYER] = MeshBuilder::GenerateOBJ("Car", "OBJ//car_frame.obj");
+	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//CarBody_texture.tga");
+	Car1.GeneratePath("OBJ//Path.obj",1.5,Vector3(0,0,10));//PathObj , scale, Offset
+	Car1.init(Vector3(0, 0, 0), Vector3(0, 0, 100), Vector3(0, 1, 0));
 	SwitchCamera = 1;
 	switchcolor = false;
 	lightcolor = 0.f;
@@ -246,6 +248,10 @@ void Minigame::Update(double dt)
 	{
 		SwitchCamera = 3;
 	}
+	if (Application::IsKeyPressed('V'))
+	{
+		SwitchCamera = 4;
+	}
 	if (Application::IsKeyPressed('5'))
 	{
 		//to do: switch light type to POINT and pass the information to
@@ -280,6 +286,7 @@ void Minigame::Update(double dt)
 	{
 		FPScamera.Update(dt);
 		TPSCamera.Update(dt);
+		TopCamera.Update(dt);
 	}
 	light[1].position.Set(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);
 	Car1.Updates(dt);
@@ -295,8 +302,10 @@ void Minigame::Render()
 		viewStack.LookAt(Frecamera.position.x, Frecamera.position.y, Frecamera.position.z, Frecamera.target.x, Frecamera.target.y, Frecamera.target.z, Frecamera.up.x, Frecamera.up.y, Frecamera.up.z);
 	else if (SwitchCamera == 1)
 		viewStack.LookAt(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z, FPScamera.target.x, FPScamera.target.y, FPScamera.target.z, FPScamera.up.x, FPScamera.up.y, FPScamera.up.z);
-	else
+	else if(SwitchCamera==3)
 		viewStack.LookAt(TPSCamera.position.x, TPSCamera.position.y, TPSCamera.position.z, TPSCamera.target.x, TPSCamera.target.y, TPSCamera.target.z, TPSCamera.up.x, TPSCamera.up.y, TPSCamera.up.z);
+	else
+		viewStack.LookAt(TopCamera.position.x, TopCamera.position.y, TopCamera.position.z, TopCamera.target.x, TopCamera.target.y, TopCamera.target.z, TopCamera.up.x, TopCamera.up.y, TopCamera.up.z);
 	modelStack.LoadIdentity();
 
 	// passing the light direction if it is a direction light	
@@ -349,8 +358,10 @@ void Minigame::Render()
 	modelStack.PopMatrix();
 	RenderSkybox();
 	RenderEnviroment();
+	RenderPlayer();
 	modelStack.PushMatrix();
 	modelStack.Translate(Car1.position.x, Car1.position.y, Car1.position.z);
+	modelStack.Rotate(Car1.rotationy, 0, 1, 0);
 	RenderMesh(meshList[GEO_PLAYER], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
@@ -364,9 +375,9 @@ void Minigame::Render()
 	modelStack.PushMatrix();
 	RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
 	modelStack.PopMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
-	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 4, 10, 7.5);
-	RenderMeshOnScreen(meshList[GEO_TEXT], 4, 4, 10, 7.5, 1);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 4, 0, 0,true);
+	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 4, 9.85, 7.1,false);
+	RenderMeshOnScreen(meshList[GEO_TEXT], 4, 4, 10, 7., 1);
 }
 
 void Minigame::Exit()
@@ -479,7 +490,7 @@ void Minigame::RenderSkybox()
 void Minigame::RenderPlayer()
 {
 	//modelStack.PushMatrix();
-	//modelStack.Translate(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);
+	//modelStack.Translate(FPScamera.position.x+10, FPScamera.position.y, FPScamera.position.z);
 	//RenderMesh(meshList[GEO_PLAYER], false);
 	//modelStack.PopMatrix();
 }
@@ -494,6 +505,18 @@ void Minigame::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,stati
 		RenderMesh(meshList[GEO_LIGHTSPHERE], false);
 		modelStack.PopMatrix();
 	}
+	modelStack.PushMatrix();
+	modelStack.Translate(Car1.target.x, Car1.target.y, Car1.target.z);
+	RenderMesh(meshList[GEO_CARTARGET], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(Car1.TargetFromPos.x, Car1.TargetFromPos.y, Car1.TargetFromPos.z);
+	RenderMesh(meshList[GEO_CARTARGET], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(Car1.defaultPosition.x, Car1.defaultPosition.y, Car1.defaultPosition.z);
+	RenderMesh(meshList[GEO_CARTARGET], false);
+	modelStack.PopMatrix();
 	/*modelStack.PushMatrix();
 	modelStack.Translate(Car1.Point[0].x, Car1.Point[0].y, Car1.Point[0].z);
 	RenderMesh(meshList[GEO_PLAYER], false);
@@ -526,7 +549,7 @@ void Minigame::RenderText(Mesh* mesh, std::string text, Color color)
 	glEnable(GL_DEPTH_TEST);
 }
 
-void Minigame::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void Minigame::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y,bool scaleFirst)
 {
 	if (!mesh || mesh->textureID <= 0)
 		return;

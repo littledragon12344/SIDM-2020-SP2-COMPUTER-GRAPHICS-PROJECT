@@ -141,8 +141,10 @@
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneSkybox.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\TopDownCamera.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
+    <ClInclude Include="Source\Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
@@ -158,7 +160,9 @@
     <ClCompile Include="Source\Minigame.cpp" />
     <ClCompile Include="Source\SceneSkybox.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\TopDownCamera.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
+    <ClCompile Include="Source\Wall.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

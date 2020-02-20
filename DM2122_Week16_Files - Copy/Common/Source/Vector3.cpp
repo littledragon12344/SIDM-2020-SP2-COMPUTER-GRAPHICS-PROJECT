@@ -360,7 +360,7 @@ Vector3& Vector3::Normalize( void ) throw( DivideByZero )
 	float d = Length();
 	if(d <= Math::EPSILON && -d <= Math::EPSILON)
 	  throw DivideByZero();
-	x /= d;
+ 	x /= d;
 	y /= d;
 	z /= d;
 	return *this;

@@ -5,6 +5,7 @@
 #include <MatrixStack.h>
 #include "Camera2.h"
 #include "Camera3.h"
+#include "TopDownCamera.h"
 #include "Mesh.h"
 #include "Light.h"
 #include "CarAI.h"
@@ -25,6 +26,7 @@ class Minigame : public Scene
 		GEO_FLOOR,
 		GEO_PLAYER,
 		GEO_LIGHTSPHERE,
+		GEO_CARTARGET,
 		GEO_TEXT,
 		NUM_GEOMETRY,
 	};
@@ -90,6 +92,7 @@ private:
 	Camera2 FPScamera;
 	Camera Frecamera;
 	Camera3 TPSCamera;
+	TopDownCamera TopCamera;
 
 	CarAi Car1;
 
@@ -101,7 +104,7 @@ private:
 	void RenderPlayer();
 	void RenderEnviroment();
 	void RenderText(Mesh* mesh, std::string text, Color color);
-	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, bool scaleFirst);
 	void RenderMeshOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y,int animFrames);
 
 public:
