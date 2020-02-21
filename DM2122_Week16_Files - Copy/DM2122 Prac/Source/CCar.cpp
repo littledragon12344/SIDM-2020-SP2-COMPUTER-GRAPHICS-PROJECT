@@ -12,6 +12,13 @@ CCar::~CCar()
 
 }
 
+void CCar::SetCarPos(int carPosx, int carPosy, int carPosz)
+{
+	carPos.x = carPosx;
+	carPos.y = carPosy;
+	carPos.z = carPosz;
+}
+
 float CCar::GetSpeed()
 {
 	return speed;
