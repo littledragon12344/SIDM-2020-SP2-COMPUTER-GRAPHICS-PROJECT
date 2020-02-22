@@ -19,7 +19,8 @@ public:
 	float GetAcceleration();
 	void SetAcceleration(float acceleration);
 
-	void SetCarPos(int carPosx, int carPosy, int carPosz);
+	void SetCarPos(float carPosx, float carPosy, float carPosz);
+	float GetCarPos(char pos);
 
 	float Kinematic1(float v, float u, float a, float t);
 	float Kinematic2(float s, float u, float v, float t);

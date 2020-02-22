@@ -12,11 +12,27 @@ CCar::~CCar()
 
 }
 
-void CCar::SetCarPos(int carPosx, int carPosy, int carPosz)
+//setting the car position
+void CCar::SetCarPos(float carPosx, float carPosy, float carPosz)
 {
 	carPos.x = carPosx;
 	carPos.y = carPosy;
 	carPos.z = carPosz;
+}
+
+float CCar::GetCarPos(char pos)		//pass in the x,y, or z character to get the position
+{
+	switch (pos)
+	{
+	case 'x':
+		return carPos.x;
+	case 'y':
+		return carPos.y;
+	case 'z':
+		return carPos.z;
+	default:
+		break;
+	}
 }
 
 float CCar::GetSpeed()
@@ -39,6 +55,7 @@ void CCar::SetAcceleration(float acceleration)
 	this->acceleration = acceleration;
 }
 
+//use GetDefaultValue() in Utilities.h to pass as the unknown value
 float CCar::Kinematic1(float v, float u, float a, float t)
 {
 	if (v == GetDefaultValue())		//finding final speed
