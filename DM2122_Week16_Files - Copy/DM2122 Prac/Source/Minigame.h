@@ -27,6 +27,8 @@ class Minigame : public Scene
 		GEO_PLAYER,
 		GEO_LIGHTSPHERE,
 		GEO_CARTARGET,
+		GEO_ROAD,
+		GEO_SPEEDMETER,
 		GEO_TEXT,
 		NUM_GEOMETRY,
 	};
@@ -104,8 +106,8 @@ private:
 	void RenderPlayer();
 	void RenderEnviroment();
 	void RenderText(Mesh* mesh, std::string text, Color color);
-	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, bool scaleFirst);
-	void RenderMeshOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y,int animFrames);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderMeshOnScreen(Mesh* mesh, Color color, float sizex, float sizey, float x, float y,int animFrames);
 
 public:
 	Minigame();

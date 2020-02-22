@@ -14,33 +14,6 @@ CarAi::~CarAi()
 
 void CarAi::Updates(float dt)
 {
-	/*Vector3 closest;
-	float shortest=1000;
-	Vector3 scdClose;
-	for (int i = 0; i < Point.size(); i++)
-	{
-		Vector3 Temp = Vector3(Point[i].x, Point[i].y, Point[i].z);
-		Vector3 View =Temp - target;
-		float Distance = sqrtf(dot(View, View));
-		if (position== Temp)
-		{
-		}
-		if (Distance < shortest)
-		{
-			scdClose = closest;
-			closest = Temp;
-			shortest = Distance;
-		}
-	}*/
-	/*if (Start == NULL)
-	{
-		Start = closest;
-		position = closest;
-	}
-	else
-	{
-		target = scdClose;
-	}*/
 	Vector3 Temp = Vector3(Point[start].x, Point[start].y, Point[start].z);
 	if (position == defaultPosition)//Starting angle
 	{
@@ -53,11 +26,6 @@ void CarAi::Updates(float dt)
 		rotationy = Math::RadianToDegree(atan2(1 * view.z - 0 * view.x, 1 * view.x + 0));
 		rotationy = -rotationy;
 	}
-	/*if (start == Point.size())
-	{
-		start = 0;
-		End = Vector3(Point[1].x, Point[1].y, Point[1].z);
-	}*/
 	Vector3 View = Temp - position;
 	if (sqrt(dot(View, View)) < 0.5|| dot(View, View)<0.1)
 	{
@@ -80,26 +48,12 @@ void CarAi::Updates(float dt)
 	{
 		if (rotationy < angleFromx)
 		{
-			/*float yaw = (float)(250.f * dt * 2);
-			Mtx44 rotation;
-			rotation.SetToRotation(yaw, 0, 1, 0);
-			xzTarget = rotation * xzTarget;
-			TargetFromPos = rotation * TargetFromPos;
-			target = TargetFromPos + position;
-			up = rotation * up;*/
 			rotationy += 250.f * dt;
 			if (rotationy > angleFromx)
 				rotationy = angleFromx;
 		}
 		if (rotationy > angleFromx)
 		{
-		/*	float yaw = (float)(-250.f * dt * 2);
-			Mtx44 rotation;
-			rotation.SetToRotation(yaw, 0, 1, 0);
-			xzTarget = rotation * xzTarget;
-			TargetFromPos = rotation * TargetFromPos;
-			target = TargetFromPos + position;
-			up = rotation * up;*/
 			rotationy -= 250.f * dt;
 			if (rotationy < angleFromx)
 				rotationy = angleFromx;
@@ -123,7 +77,7 @@ void CarAi::Updates(float dt)
 			{
 				Tempangle -= 250.f * dt;
 				rotationy += 250.f * dt;
-				if (rotationy < (2 * 180 + angleFromx))
+				if (rotationy > (2 * 180 + angleFromx))
 				{
 					rotationy = angleFromx;
 					Tempangle = 0;
@@ -198,8 +152,8 @@ void CarAi::Updates(float dt)
 	{
 		std::cout << angleFromx << std::endl;
 	}
-	position += view * (float)(10.f * dt);
-	target += view * (float(10.f * dt));
+	position += view * (float)(30.f * dt);
+	target += view * (float(30.f * dt));
 }
 
 //PAth only works idthe vertices is in the rite order best to start with 2d triangle and increase the amount of vertices on it using multicutTool
