@@ -139,7 +139,6 @@
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Minigame.h" />
     <ClInclude Include="Source\Scene.h" />
-    <ClInclude Include="Source\SceneShowroom.h" />
     <ClInclude Include="Source\SceneSkybox.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\TopDownCamera.h" />
@@ -159,7 +158,6 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Minigame.cpp" />
-    <ClCompile Include="Source\SceneShowroom.cpp" />
     <ClCompile Include="Source\SceneSkybox.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\TopDownCamera.cpp" />
