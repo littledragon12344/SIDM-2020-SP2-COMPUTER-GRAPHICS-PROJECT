@@ -4,7 +4,7 @@
 #include "Mtx44.h"
 
 
-CarAi::CarAi()
+CarAi::CarAi():rotationSpeed(0.f),PathToGo(NULL)
 {
 }
 
@@ -14,33 +14,34 @@ CarAi::~CarAi()
 
 void CarAi::Updates(float dt)
 {
-	Vector3 Temp = Vector3(Point[start].x, Point[start].y, Point[start].z);
-	if (position == defaultPosition)//Starting angle
+	Vector3 Temp = (*PathToGo).Point[start];//Get Start of each point
+	if (position == defaultPosition)//Starting angle			//Initializing of car ai pos can put in init() honestly
 	{
-		Vector3 Temp2 = Vector3(Point[1].x, Point[1].y, Point[1].z);
-		End = Temp2;
+		Vector3 Temp2 = (*PathToGo).Point[1];
+		End = Temp2;//Initialize End
 		TargetFromPos = (Temp2 - Temp).Normalized();
 		position = Temp;
 		Vector3 view = (End - position).Normalized();
-		float num = dot(view, Vector3(1, 0, 0)) / (distance(view) * distance(Vector3(1, 0, 0)));
+		//float num = dot(view, Vector3(1, 0, 0)) / (distance(view) * distance(Vector3(1, 0, 0)));//Check distance of start to next End
 		rotationy = Math::RadianToDegree(atan2(1 * view.z - 0 * view.x, 1 * view.x + 0));
 		rotationy = -rotationy;
 	}
-	Vector3 View = Temp - position;
-	if (sqrt(dot(View, View)) < 0.5|| dot(View, View)<0.1)
+	Vector3 Distance = Temp - position;		//Check Distance of the car to the end
+	if (sqrt(dot(Distance, Distance)) < 20|| dot(Distance, Distance)<0.1)
 	{
-		start++;
-		if (start == Point.size())
+		Tempangle = 0;
+		//rotationy = angleFromx;
+		start++;		//Variable to say move to next start// start = next end , next end = next next end 
+		if (start == (*PathToGo).Point.size())	//Check when start reach the end of line
 		{
-			start = 0;
-			End = Vector3(Point[0].x, Point[0].y, Point[0].z);
+			start = 0; //start = 1st start variable
+			//End = Vector3(Point[0].x, Point[0].y, Point[0].z);	//End = first start vector
 		}
-		Vector3 Temp2 = Vector3(Point[start].x, Point[start].y, Point[start].z);
-		End = Temp2;
+		Vector3 Temp2 = (*PathToGo).Point[start];//get next End
+		End = Temp2;//end = next end
 		//target = Temp*2;
 	}
 	Vector3 view = (End -position).Normalized();
-	Vector3 TargetView = (target - position).Normalize();
 	//float num = dot(view, Vector3(1, 0, 0)) / (distance(view) * distance(Vector3(1, 0, 0)));
 	angleFromx = Math::RadianToDegree(atan2(1*view.z-0*view.x,1*view.x+0));
 	angleFromx = -angleFromx;
@@ -48,13 +49,13 @@ void CarAi::Updates(float dt)
 	{
 		if (rotationy < angleFromx)
 		{
-			rotationy += 250.f * dt;
+			rotationy += rotationSpeed * dt;
 			if (rotationy > angleFromx)
 				rotationy = angleFromx;
 		}
 		if (rotationy > angleFromx)
 		{
-			rotationy -= 250.f * dt;
+			rotationy -= rotationSpeed * dt;
 			if (rotationy < angleFromx)
 				rotationy = angleFromx;
 		}
@@ -75,8 +76,8 @@ void CarAi::Updates(float dt)
 		{
 			if (rotationy > 90 && angleFromx < -90)
 			{
-				Tempangle -= 250.f * dt;
-				rotationy += 250.f * dt;
+				Tempangle -= rotationSpeed * dt;
+				rotationy += rotationSpeed * dt;
 				if (rotationy > (2 * 180 + angleFromx))
 				{
 					rotationy = angleFromx;
@@ -85,8 +86,8 @@ void CarAi::Updates(float dt)
 			}
 			else if (rotationy < -90 && angleFromx > 90)
 			{
-				Tempangle -= 250.f * dt;
-				rotationy -= 250.f * dt;
+				Tempangle -= rotationSpeed * dt;
+				rotationy -= rotationSpeed * dt;
 				if (rotationy < (-2 * 180 + angleFromx))
 				{
 					rotationy = angleFromx;
@@ -97,8 +98,8 @@ void CarAi::Updates(float dt)
 			{
 				if (rotationy < (-angleFromx + rotationy) && Tempangle != 0)
 				{
-					Tempangle -= 250.f * dt;
-					rotationy += 250.f * dt;
+					Tempangle -= rotationSpeed * dt;
+					rotationy += rotationSpeed * dt;
 					if (rotationy > (-angleFromx + rotationy))
 					{
 						rotationy = angleFromx;
@@ -109,8 +110,8 @@ void CarAi::Updates(float dt)
 				if (rotationy > (-angleFromx + rotationy) && Tempangle != 0)
 				{
 
-					Tempangle -= 250.f * dt;
-					rotationy -= 250.f * dt;
+					Tempangle -= rotationSpeed * dt;
+					rotationy -= rotationSpeed * dt;
 					if (rotationy < (-angleFromx + rotationy))
 					{
 						rotationy = angleFromx;
@@ -123,8 +124,8 @@ void CarAi::Updates(float dt)
 		{
 			if (rotationy < angleFromx && Tempangle != 0)
 			{
-				Tempangle -= 250.f * dt;
-				rotationy += 250.f * dt;
+				Tempangle -= rotationSpeed * dt;
+				rotationy += rotationSpeed * dt;
 				if (rotationy >angleFromx)
 				{
 					rotationy = angleFromx;
@@ -133,8 +134,8 @@ void CarAi::Updates(float dt)
 			}
 			if (rotationy > angleFromx && Tempangle != 0)
 			{
-				Tempangle -= 250.f * dt;
-				rotationy -= 250.f * dt;
+				Tempangle -= rotationSpeed * dt;
+				rotationy -= rotationSpeed * dt;
 				if (rotationy <angleFromx)
 				{
 					rotationy = angleFromx;
@@ -148,38 +149,49 @@ void CarAi::Updates(float dt)
 			rotationy = angleFromx;
 		}*/
 	}
+	if (rotationy > 180)
+	{
+		rotationy = rotationy-360;
+	}
+	if (rotationy < -180)
+	{
+		rotationy = rotationy + 360;
+	}
 	if (start == 0)
 	{
 		std::cout << angleFromx << std::endl;
 	}
-	position += view * (float)(30.f * dt);
-	target += view * (float(30.f * dt));
+	target = GetTargetpos();
+	Vector3 TargetView = (target - position).Normalize();
+	position += TargetView * (float)(50.f * dt);
+	target = GetTargetpos();
+
 }
 
 //PAth only works idthe vertices is in the rite order best to start with 2d triangle and increase the amount of vertices on it using multicutTool
-void CarAi::GeneratePath(const std::string& file_path,float scale,Vector3 Offset)//get points on the obj
-{
-	std::ifstream fileStream(file_path, std::ios::binary);
-	if (!fileStream.is_open())
-	{
-		std::cout << "Unable to open " << file_path << ". Are you in the right directory ?\n";
-		return;
-	}
-	while (!fileStream.eof())
-	{
-		char buf[256];
-		fileStream.getline(buf, 256);
-		if (strncmp("v ", buf, 2) == 0)
-		{
-			Vector3 vertex;
-			sscanf_s((buf + 2), "%f%f%f", &vertex.x, &vertex.y, &vertex.z);
-			vertex = vertex * scale;
-			vertex += Offset;
-			Point.push_back(vertex);
-		}
-	}
-
-}
+//void CarAi::GeneratePath(const std::string& file_path,float scale,Vector3 Offset)//get points on the obj
+//{
+//	std::ifstream fileStream(file_path, std::ios::binary);
+//	if (!fileStream.is_open())
+//	{
+//		std::cout << "Unable to open " << file_path << ". Are you in the right directory ?\n";
+//		return;
+//	}
+//	while (!fileStream.eof())
+//	{
+//		char buf[256];
+//		fileStream.getline(buf, 256);
+//		if (strncmp("v ", buf, 2) == 0)
+//		{
+//			Vector3 vertex;
+//			sscanf_s((buf + 2), "%f%f%f", &vertex.x, &vertex.y, &vertex.z);
+//			vertex = vertex * scale;
+//			vertex += Offset;
+//			Point.push_back(vertex);
+//		}
+//	}
+//
+//}
 
 float CarAi::dot(Vector3 Fstnum, Vector3 sndNum)
 {
@@ -199,9 +211,11 @@ float CarAi::distance(Vector3 Num)
 	return num;
 }
 
-void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up)
+void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up,float RotateSpeed, Path *paths)
 {
+	PathToGo = paths;
 	start = 0;
+	rotationSpeed = RotateSpeed;
 	this->position = defaultPosition = pos;
 	TargetFromPos = defaultTarget = Target;
 	this->target = TargetFromPos + position;
@@ -211,4 +225,16 @@ void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up)
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
+}
+
+Vector3 CarAi::GetTargetpos()
+{
+	Vector3 Temp;
+	Vector3 xDir = Vector3(1, 0, 0);
+	//Since we only rotaing x and y
+	Temp.x = cos(Math::DegreeToRadian(-rotationy)) * xDir.x - sin(Math::DegreeToRadian(-rotationy)) * xDir.z;
+	Temp.z = sin(Math::DegreeToRadian(-rotationy)) * xDir.x + cos(Math::DegreeToRadian(-rotationy)) * xDir.z;
+	Temp.y = 0;
+	Temp = position + Temp;
+	return Temp;
 }

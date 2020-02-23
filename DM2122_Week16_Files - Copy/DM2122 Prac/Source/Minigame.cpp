@@ -4,7 +4,6 @@
 #include <Mtx44.h>
 #include "shader.hpp"
 #include "MeshBuilder.h"
-//#include "PathBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
 
@@ -177,8 +176,8 @@ void Minigame::Init()
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Car", "OBJ//Road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Image//RoadTexture.tga");
 
-	Car1.GeneratePath("OBJ//Path.obj",2.5,Vector3(10,0,0));//PathObj , scale, Offset
-	Car1.init(Vector3(0, 0, 0), Vector3(0, 0, 100), Vector3(0, 1, 0));
+	path1.GeneratePath("OBJ//Path.obj",2.5,Vector3(10,0,0));//PathObj , scale, Offset
+	Car1.init(Vector3(0, 0, 0), Vector3(0, 0, 100), Vector3(0, 1, 0),100.f,&path1);
 	SwitchCamera = 4;
 	switchcolor = false;
 	lightcolor = 0.f;
@@ -506,10 +505,10 @@ void Minigame::RenderPlayer()
 
 void Minigame::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,station car,booth ,plants, well anything static
 {
-	for (int i = 0; i < Car1.Point.size(); i++)
+	for (int i = 0; i < path1.Point.size(); i++)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(Car1.Point[i].x, Car1.Point[i].y, Car1.Point[i].z);
+		modelStack.Translate(path1.Point[i].x, path1.Point[i].y, path1.Point[i].z);
 		RenderMesh(meshList[GEO_LIGHTSPHERE], false);
 		modelStack.PopMatrix();
 	}

@@ -1,11 +1,12 @@
-#ifndef CAR_AI_H
-#define CAR_AI_H
+#ifndef CAR_MINI_H
+#define CAR_MINI_H
 
 #include "Vector3.h"
 #include <vector>
 #include <MyMath.h>
-#include "Path.h"
-class CarAi
+#include "LoadOBJ.h"
+
+class CarMinigame
 {
 private:
 public:
@@ -14,7 +15,6 @@ public:
 	Vector3 up;
 	Vector3 TargetFromPos;
 	Vector3 xzTarget;
-	Vector3 End;
 
 	float angleFromx;
 	float rotationy;
@@ -22,21 +22,17 @@ public:
 	float Tempangle;
 	float rotationSpeed;
 
-	Path *PathToGo;
-
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;
 	Vector3 defaultUp;
 
-	//std::vector<Vector3> Point;
-	CarAi();
-	~CarAi();
+	CarMinigame();
+	~CarMinigame();
 	void Updates(float dt);
-	//void GeneratePath(const std::string& file_path, float scale, Vector3 Offset);
+	void GeneratePath(const std::string& file_path, float scale, Vector3 Offset);
 	float dot(Vector3 Fstnum, Vector3 sndNum);
 	float distance(Vector3 Num);
-	void init(Vector3 position, Vector3 Target, Vector3 UP, float RotateSpeed,Path *paths);
-	Vector3 GetTargetpos();
+	void init(Vector3 position, Vector3 Target, Vector3 UP, float RotateSpeed);
 };
 
 #endif

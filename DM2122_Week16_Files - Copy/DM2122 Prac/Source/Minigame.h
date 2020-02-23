@@ -1,6 +1,7 @@
 #ifndef MINIGAME_H
 #define MINIGAME_H
 
+#include "Path.h"
 #include "Scene.h"
 #include <MatrixStack.h>
 #include "Camera2.h"
@@ -96,6 +97,7 @@ private:
 	Camera3 TPSCamera;
 	TopDownCamera TopCamera;
 
+	Path path1;
 	CarAi Car1;
 
 	float lightcolor;
