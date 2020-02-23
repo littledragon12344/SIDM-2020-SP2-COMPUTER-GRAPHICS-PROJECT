@@ -22,6 +22,11 @@ class SceneSkybox : public Scene
 		GEO_CHAR,
 		GEO_FLOOR,
 		GEO_PLAYER,
+		GEO_CAR1,
+		GEO_CAR1WHEELS,
+		GEO_CAR2,
+		GEO_CAR2WHEELS,
+		GEO_STAND,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -79,19 +84,13 @@ private:
 	unsigned m_parameters[U_TOTAL];
 
 	int SwitchCamera;
-	float LegAngle;
 	float Yaw;
 
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];
 
-	bool Jump;
-	bool legmove;
-	bool switchleg;
-
 	Camera2 FPScamera;
 	Camera Frecamera;
-	Camera3 TPSCamera;
 
 	float lightcolor;
 	bool switchcolor;
