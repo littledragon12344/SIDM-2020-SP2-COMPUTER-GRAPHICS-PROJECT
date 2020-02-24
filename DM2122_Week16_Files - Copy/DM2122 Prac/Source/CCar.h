@@ -1,31 +1,34 @@
 #pragma once
+#include "Vertex.h"
 class CCar
 {
-	//float u;	//initial speed 
-	//float v;	//final speed
-	//float a;	//accelation
-	//float s;	//displacement
-	//float t;	//time
 	float speed;
 	float acceleration;
+	float distance;
 	Position carPos;
 
 public: 
 	CCar();
 	~CCar();
 
+	//getting the values
 	float GetSpeed();
-	void SetSpeed(float speed);
 	float GetAcceleration();
+	float GetDist();
+	//setting values
+	void SetSpeed(float speed);
 	void SetAcceleration(float acceleration);
+	void SetDist(float dist);
 
+	//car position management
 	void SetCarPos(float carPosx, float carPosy, float carPosz);
 	float GetCarPos(char pos);
 
-	float Kinematic1(float v, float u, float a, float t);
-	float Kinematic2(float s, float u, float v, float t);
-	float Kinematic3(float s, float u, float t, float a);
-	float Kinematic4(float v, float u, float a, float s);
+	//kinematic formulas
+	float Kinematic1(char mode, float v, float u, float a, float t);
+	float Kinematic2(char mode, float s, float u, float v, float t);
+	float Kinematic3(char mode, float s, float u, float t, float a);
+	float Kinematic4(char mode, float v, float u, float a, float s);
 
 };
 
