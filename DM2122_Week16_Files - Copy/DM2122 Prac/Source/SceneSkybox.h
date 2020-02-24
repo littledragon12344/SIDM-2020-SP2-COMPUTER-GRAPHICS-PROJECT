@@ -2,6 +2,7 @@
 #define SCENESKYBOX_H
 
 #include "Scene.h"
+#include "Wall.h"
 #include <MatrixStack.h>
 #include "Camera2.h"
 #include "Camera3.h"
@@ -85,6 +86,7 @@ private:
 
 	int SwitchCamera;
 	float Yaw;
+	float rotate;
 
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];

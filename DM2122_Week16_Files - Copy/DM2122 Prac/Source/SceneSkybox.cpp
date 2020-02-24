@@ -27,6 +27,8 @@ void SceneSkybox::Init()
 {
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
+	rotate = 0;
+
 	// Generate a default VAO for now
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
@@ -134,8 +136,7 @@ void SceneSkybox::Init()
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); 
 
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//sky.tga");
+	meshList[GEO_LEFT] = MeshBuilder::GenerateCuboid("left", Color(0, 0, 0), 100.f, 50.f, 10.f);
 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//sky.tga");
@@ -292,6 +293,15 @@ void SceneSkybox::Update(double dt)
 		FPScamera.Update(dt);
 	}
 	light[1].position.Set(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);
+
+	if (rotate <= 360)
+	{
+		rotate += (float)(dt * LSPEED);
+		if (rotate == 360)
+		{
+			rotate = 0;
+		}
+	}
 }
 
 void SceneSkybox::Render()
@@ -431,9 +441,8 @@ void SceneSkybox::RenderMesh(Mesh* mesh, bool enableLight)
 void SceneSkybox::RenderSkybox()
 {
 	modelStack.PushMatrix();
-		///scale, translate, rotate 
-		modelStack.Translate(-100.f, 40.f, 0.f);
-		modelStack.Scale(200.f, 200.f, 200.f);
+		///scale, translate, rotate
+		modelStack.Translate(-50.f, 24.5f, 0.f);
 		modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
 		RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
@@ -492,6 +501,7 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(10.f, -0.5f, 10.f);
+	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], false);
 	modelStack.PushMatrix();
 	modelStack.Translate(0.f, 0.3f, 0.f);
@@ -523,6 +533,7 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 
 	modelStack.PushMatrix();
 	modelStack.Translate(10.f, -0.5f, -10.f);
+	modelStack.Rotate(-rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], false);
 	modelStack.PushMatrix();
 	modelStack.Translate(0.f, -0.7f, 0.f);
