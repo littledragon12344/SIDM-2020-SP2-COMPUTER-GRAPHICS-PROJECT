@@ -160,11 +160,13 @@ float Wall::getWallNormalRotation()
 		return 180 + atan(normal.z / normal.x) * 180.0 / 3.1415926535f;
 }
 
-// For point - rectangle collision detection
-// Gets the displacement of an object after it collides with a wall
-// Position: position of the object
-// Displacement: displacement of where the object will move
-Vector3 Wall::dispAftCollideWithWall(Vector3 position, Vector3 displacement)
+// For player and wall collision detection in xz plane / top-down view
+// Paramenters:
+//		Position:		current position of the player
+//		Displacement:	displacement of where the player will move if there's no wall
+// Returns: 
+//		Vector3, displacement of the point after it hits the wall
+Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 {
 	int numWallsCollided = 0;
 	Vector3 nextPos = position + displacement;
@@ -233,13 +235,17 @@ Vector3 Wall::dispAftCollideWithWall(Vector3 position, Vector3 displacement)
 	return finalPosDisplacement;
 }
 
-// For rectangle - wall collision detection in xz plane
-// Position: center position of the rectangle
-// Fwd: foward direction of the rectangle
-// len: length of the rectangle
-// width: width of the rectangle
+// For car and wall collision detection in xz plane / top-down view
+// Parameters:
+//		Position:	position of the car
+//		Fwd:		foward vector of the car
+//		len:		length of the car
+//		width:		width of the car
+// Returns:
+//		bool,	returns true if collide with any walls,
+//		returns	false if never collide with any wall
 // Method used: separating axis theorem (from online)
-bool Wall::rectWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
+bool Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 {
 	fwd.Normalize();
 	Vector3 rectRight;
