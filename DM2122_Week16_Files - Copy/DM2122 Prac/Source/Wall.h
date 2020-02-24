@@ -33,15 +33,21 @@ public:
 
 	// Collison functions:
 
-	// For point - rectangle collision detection in xz plane
-	// Position: position of the object
-	// Displacement: displacement of where the object will move
-	// Returns: Vector3, displacement of the point after it hits the wall
-	static Vector3 dispAftCollideWithWall(Vector3 position, Vector3 displacement);
-	// For rectangle - wall collision detection in xz plane
-	// Position: center position of the rectangle
-	// Fwd: foward direction of the rectangle
-	// len: length of the rectangle
-	// width: width of the rectangle
-	static bool rectWallCollision(Vector3 pos, Vector3 fwd, float len, float width);
+	// For player and wall collision detection in xz plane / top-down view
+	// Paramenters:
+	//		Position:		current position of the player
+	//		Displacement:	displacement of where the player will move if there's no wall
+	// Returns: 
+	//		Vector3, displacement of the point after it hits the wall
+	static Vector3 playerWallCollision(Vector3 position, Vector3 displacement);
+	// For car and wall collision detection in xz plane / top-down view
+	// Parameters:
+	//		Position:	position of the car
+	//		Fwd:		foward vector of the car
+	//		len:		length of the car
+	//		width:		width of the car
+	// Returns:
+	//		bool,	returns true if collide with any walls,
+	//		returns	false if never collide with any wall
+	static bool carWallCollision(Vector3 pos, Vector3 fwd, float len, float width);
 };
