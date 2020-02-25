@@ -9,8 +9,3 @@ Position operator*(const Mtx44& lhs, const Position& rhs)
 	return Position(b[0], b[1], b[2]);
 }
 
-float GetDefaultValue()			//this function is used to find the unknown value in an equation
-{
-	return (float)rand();
-}
-

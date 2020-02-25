@@ -27,6 +27,8 @@ void SceneSkybox::Init()
 {
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
+	rotate = 0;
+
 	// Generate a default VAO for now
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
@@ -37,7 +39,6 @@ void SceneSkybox::Init()
 
 	FPScamera.Init(Vector3(-10, 2, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
 	Frecamera.Init(Vector3(-10, 2, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
-	TPSCamera.Init(Vector3(-30, 2,0), FPScamera.position, FPScamera.up);
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -135,8 +136,7 @@ void SceneSkybox::Init()
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); 
 
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//sky.tga");
+	meshList[GEO_LEFT] = MeshBuilder::GenerateCuboid("left", Color(0, 0, 0), 100.f, 50.f, 10.f);
 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//sky.tga");
@@ -157,7 +157,22 @@ void SceneSkybox::Init()
 	meshList[GEO_CHAR]->textureID = LoadTGA("Image//char.tga");
 
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("Floor", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//Grass.tga");
+	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//showroom_floor.tga");
+
+	meshList[GEO_CAR1] = MeshBuilder::GenerateOBJ("car1", "Obj//car_frame.obj");
+	meshList[GEO_CAR1]->textureID = LoadTGA("Image//CarBody_texture.tga");
+
+	meshList[GEO_CAR1WHEELS] = MeshBuilder::GenerateOBJ("car1wheels", "Obj//car1_wheels.obj");
+	meshList[GEO_CAR1WHEELS]->textureID = LoadTGA("Image//carwheels_1.tga");
+
+	meshList[GEO_CAR2] = MeshBuilder::GenerateOBJ("car2", "Obj//carframe2.obj");
+	meshList[GEO_CAR2]->textureID = LoadTGA("Image//spcarframe2.tga");
+
+	meshList[GEO_CAR2WHEELS] = MeshBuilder::GenerateOBJ("car2wheels", "Obj//spcar2_wheels.obj");
+	meshList[GEO_CAR2WHEELS]->textureID = LoadTGA("Image//spcar2_wheel.tga");
+
+	meshList[GEO_STAND] = MeshBuilder::GenerateOBJ("stand", "Obj//car_stand.obj");
+	meshList[GEO_STAND]->textureID = LoadTGA("Image//stand.tga");
 
 	meshList[GEO_PLAYER] = MeshBuilder::GenerateCuboid("Player", Color(1, 1, 1), 1.f, 1.f,1.f);
 	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//Bush.tga");
@@ -170,8 +185,6 @@ void SceneSkybox::Init()
 	SwitchCamera = 1;
 	switchcolor = false;
 	lightcolor = 0.f;
-	Jump = false;
-	switchleg = true;
 }
 
 void SceneSkybox::Update(double dt)
@@ -245,26 +258,6 @@ void SceneSkybox::Update(double dt)
 	{
 		SwitchCamera = 3;
 	}
-	if (Application::IsKeyPressed(VK_SPACE)&&FPScamera.position.y<=2)
-	{
-		Jump = true;
-	}
-	if (FPScamera.position.y > 5)
-	{
-		Jump = false;
-	}
-	if (FPScamera.position.y <= 2)
-	{
-		FPScamera.position.y = 2;
-	}
-	if (Jump)
-	{
-		FPScamera.position.y += 10 * dt;
-	}
-	else
-	{
-		FPScamera.position.y -= 10 * dt;
-	}
 	if (Application::IsKeyPressed('5'))
 	{
 		//to do: switch light type to POINT and pass the information to
@@ -298,29 +291,17 @@ void SceneSkybox::Update(double dt)
 	else
 	{
 		FPScamera.Update(dt);
-		TPSCamera.Update(dt);
-	}
-	if (Application::IsKeyPressed('W')||Application::IsKeyPressed('S'))
-	{
-		legmove = true;
-	}
-	if (legmove)
-	{
-		if (switchleg)
-		{
-			LegAngle += 70 * dt;
-		}
-		else
-		{
-			LegAngle -= 70 * dt;
-		}
-		if (LegAngle > 20)
-			switchleg=false;
-		if (LegAngle < -20)
-			switchleg = true;
-		legmove = false;
 	}
 	light[1].position.Set(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);
+
+	if (rotate <= 360)
+	{
+		rotate += (float)(dt * LSPEED);
+		if (rotate == 360)
+		{
+			rotate = 0;
+		}
+	}
 }
 
 void SceneSkybox::Render()
@@ -333,8 +314,6 @@ void SceneSkybox::Render()
 		viewStack.LookAt(Frecamera.position.x, Frecamera.position.y, Frecamera.position.z, Frecamera.target.x, Frecamera.target.y, Frecamera.target.z, Frecamera.up.x, Frecamera.up.y, Frecamera.up.z);
 	else if(SwitchCamera==1)
 		viewStack.LookAt(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z, FPScamera.target.x, FPScamera.target.y, FPScamera.target.z, FPScamera.up.x, FPScamera.up.y, FPScamera.up.z);
-	else
-		viewStack.LookAt(TPSCamera.position.x, TPSCamera.position.y, TPSCamera.position.z, TPSCamera.target.x, TPSCamera.target.y, TPSCamera.target.z, TPSCamera.up.x, TPSCamera.up.y, TPSCamera.up.z);
 	modelStack.LoadIdentity();
 
 	// passing the light direction if it is a direction light	
@@ -397,10 +376,10 @@ void SceneSkybox::Render()
 	modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z);
 	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
 	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
-	modelStack.PopMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
+	//modelStack.PushMatrix();
+	//RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
+	//modelStack.PopMatrix();
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 4, 10, 7.5);
 }
 
@@ -462,9 +441,8 @@ void SceneSkybox::RenderMesh(Mesh* mesh, bool enableLight)
 void SceneSkybox::RenderSkybox()
 {
 	modelStack.PushMatrix();
-		///scale, translate, rotate 
-		modelStack.Translate(-100.f, 40.f, 0.f);
-		modelStack.Scale(200.f, 200.f, 200.f);
+		///scale, translate, rotate
+		modelStack.Translate(-50.f, 24.5f, 0.f);
 		modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
 		RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
@@ -521,7 +499,65 @@ void SceneSkybox::RenderPlayer()
 
 void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,station car,booth ,plants, well anything static
 {
-	
+	modelStack.PushMatrix();
+	modelStack.Translate(10.f, -0.5f, 10.f);
+	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_STAND], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.3f, 0.f);
+	modelStack.Scale(0.5f, 0.5f, 0.5f);
+	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_CAR1], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(0.5f, -0.3f, -0.1f);
+	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_CAR1WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(6.5f, -0.3f, -0.1f);
+	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_CAR1WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.5f, -0.3f, -6.1f);
+	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_CAR1WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(6.5f, -0.3f, -6.1f);
+	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_CAR1WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(10.f, -0.5f, -10.f);
+	modelStack.Rotate(-rotate, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_STAND], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, -0.7f, 0.f);
+	modelStack.Scale(1.15f, 1.15f, 1.15f);
+	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_CAR2], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.9f, 0.f);
+	RenderMesh(meshList[GEO_CAR2WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-3.0, 0.9f, 0.f);
+	RenderMesh(meshList[GEO_CAR2WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.9f, -2.35f);
+	RenderMesh(meshList[GEO_CAR2WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-3.0, 0.9f, -2.35f);
+	RenderMesh(meshList[GEO_CAR2WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
 }
 
 void SceneSkybox::RenderText(Mesh* mesh, std::string text, Color color)

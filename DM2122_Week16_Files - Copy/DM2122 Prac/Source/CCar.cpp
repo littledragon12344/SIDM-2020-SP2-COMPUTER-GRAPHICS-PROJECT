@@ -2,7 +2,7 @@
 #include "Utility.h"
 
 CCar::CCar()
-	: speed(-1), acceleration(-1)
+	: speed(-1), acceleration(-1), distance(-1)
 {
 
 }
@@ -20,7 +20,7 @@ void CCar::SetCarPos(float carPosx, float carPosy, float carPosz)
 	carPos.z = carPosz;
 }
 
-float CCar::GetCarPos(char pos)		//pass in the x,y, or z character to get the position
+float CCar::GetCarPos(char pos)		//pass in the x, y, or z character to get the position
 {
 	switch (pos)
 	{
@@ -35,9 +35,19 @@ float CCar::GetCarPos(char pos)		//pass in the x,y, or z character to get the po
 	}
 }
 
+//===================Setters & Getters===================
 float CCar::GetSpeed()
 {
 	return speed;
+}
+
+float CCar::GetAcceleration()
+{
+	return acceleration;
+}
+float CCar::GetDist()
+{
+	return distance;
 }
 
 void CCar::SetSpeed(float speed)
@@ -45,111 +55,104 @@ void CCar::SetSpeed(float speed)
 	this->speed = speed;
 }
 
-float CCar::GetAcceleration()
+void CCar::SetDist(float dist)
 {
-	return acceleration;
+	this->distance = dist;
 }
 
 void CCar::SetAcceleration(float acceleration)
 {
 	this->acceleration = acceleration;
 }
+//=======================================================
 
-//use GetDefaultValue() in Utilities.h to pass as the unknown value
-float CCar::Kinematic1(float v, float u, float a, float t)
+//===================Kinematic formulas===================
+float CCar::Kinematic1(char mode, float v, float u, float a, float t)
 {
-	if (v == GetDefaultValue())		//finding final speed
+	switch (mode)
 	{
-		v = u + (a * t);
+	case 'v':
+		v = u + (a * t);		//finding final speed
+		SetSpeed(v);
 		return v;
-	}
-	if (u == GetDefaultValue())		//finding initial speed
-	{
-		u = v - (a * t);
+	case 'u':
+		u = v - (a * t);		//finding initial speed
+		SetSpeed(u);
 		return u;
-	}
-	if (a == GetDefaultValue())		//finding acceleration
-	{
-		a = (v - u) / t;
+	case 'a':
+		a = (v - u) / t;		//finding acceleration
+		SetAcceleration(a);
 		return a;
-	}
-	if (t == GetDefaultValue())		//finding time
-	{
-		t = (v - u) / a;
-		return t;
+	default:
+		break;
 	}
 }
 
-float CCar::Kinematic2(float s, float u, float v, float t)
+float CCar::Kinematic2(char mode, float s, float u, float v, float t)
 {
-	if (s == GetDefaultValue())		//finding displacment/distance
+	switch (mode)
 	{
-		s = (u + v) / 2 * t;
+	case 's':
+		s = (u + v) / 2 * t;		//finding displacment/distance
+		SetDist(s);
 		return s;
-	}
-	if (u == GetDefaultValue())		//finding initial speed
-	{
-		u = (s * t * 2) - v;
+	case 'u':
+		u = (s * t * 2) - v;		//finding initial speed
+		SetSpeed(u);
 		return u;
-	}
-	if (v == GetDefaultValue())		//finding final speed
-	{
-		v = (s * t * 2) - u;
+	case 'v':
+		v = (s * t * 2) - u;		//finding final speed
+		SetSpeed(v);
 		return v;
-	}
-	if (t == GetDefaultValue())		//finding time
-	{
-		t = (s * 2) / (u + v);
-		return t;
+	default:
+		break;
 	}
 }
 
-float CCar::Kinematic3(float s, float u, float t, float a)
+float CCar::Kinematic3(char mode, float s, float u, float t, float a)
 {
-	if (s == GetDefaultValue())		//finding displpacement/distance
+	switch (mode)
 	{
-		s = (u * t) + (a * (t * t)) / 2;
+	case 's':
+		s = (u * t) + (a * (t * t)) / 2;		//finding displpacement/distance
+		SetDist(s);
 		return s;
-	}
-	if (u == GetDefaultValue())		//finding initial speed
-	{
-		u = (s - (a * (t * t) / 2)) / t;
+	case 'u':
+		u = (s - (a * (t * t) / 2)) / t;		//finding initial speed
+		SetSpeed(u);
 		return u;
-	}
-	if (t == GetDefaultValue())		//finding time
-	{
-		t = sqrt((s - (u * t)) * 2 / a);
-		return t;
-	}
-	if (a == GetDefaultValue())		//finding acceleration
-	{
-		a = (s - (u * t)) * 2 / (t * t);
+	case 'a':
+		a = (s - (u * t)) * 2 / (t * t);		//finding acceleration
+		SetAcceleration(a);
 		return a;
+	default:
+		break;
 	}
-
 }
 
-float CCar::Kinematic4(float v, float u, float a, float s)
+float CCar::Kinematic4(char mode, float v, float u, float a, float s)
 {
-	if (v == GetDefaultValue())		//finding final speed 
+	switch (mode)
 	{
-		v = sqrt((u * u) + (2 * a * s));
+	case 'v':
+		v = sqrt((u * u) + (2 * a * s));		//finding final speed 
+		SetSpeed(v);
 		return v;
-	}
-	if (u == GetDefaultValue())		//finding initial speed
-	{
-		u = sqrt((v * v) - (2 * a * s));
+	case 'u':
+		u = sqrt((v * v) - (2 * a * s));		//finding initial speed
+		SetSpeed(u);
 		return u;
-	}
-	if (a == GetDefaultValue())		//finding acceleration
-	{
-		a = ((v * v) - (u * u)) / 2 / s;
+	case 'a':
+		a = ((v * v) - (u * u)) / 2 / s;		//finding acceleration
+		SetAcceleration(a);
 		return a;
-	}
-	if (s == GetDefaultValue())		//finding displacement/distance
-	{
-		s = ((v * v) - (u * u)) / 2 / a;
+	case 's':
+		s = ((v * v) - (u * u)) / 2 / a;		//finding displacement/distance
+		SetDist(s);
 		return s;
+	default:
+		break;
 	}
-
 }
+//========================================================
+
