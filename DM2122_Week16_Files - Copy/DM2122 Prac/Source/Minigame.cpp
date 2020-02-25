@@ -170,14 +170,14 @@ void Minigame::Init()
 	meshList[GEO_SPEEDMETER] = MeshBuilder::GenerateText("Meter", 1, 1);
 	meshList[GEO_SPEEDMETER]->textureID = LoadTGA("Image//SpeedMeter.tga");
 
-	meshList[GEO_PLAYER] = MeshBuilder::GenerateOBJ("Car", "OBJ//car_frame.obj");
-	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//CarBody_texture.tga");
+	meshList[GEO_CARAI] = MeshBuilder::GenerateOBJ("Car", "OBJ//car_frame.obj");
+	meshList[GEO_CARAI]->textureID = LoadTGA("Image//CarBody_texture.tga");
 
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Car", "OBJ//Road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Image//RoadTexture.tga");
 
 	path1.GeneratePath("OBJ//Path.obj",2.5,Vector3(10,0,0));//PathObj , scale, Offset
-	Car1.init(Vector3(0, 0, 0), Vector3(0, 0, 100), Vector3(0, 1, 0),100.f,&path1);
+	Car1.init(Vector3(0, 0, 0), Vector3(0, 0, 100), Vector3(0, 1, 0),200.f,&path1);
 	SwitchCamera = 4;
 	switchcolor = false;
 	lightcolor = 0.f;
@@ -360,7 +360,7 @@ void Minigame::Render()
 	modelStack.Scale(200.f, 200.f, 200.f);
 	modelStack.Rotate(-90.f, 1.f, 0.f, 0.f);
 	modelStack.Rotate(90.f, 0.f, 0.f, 1.f);
-	RenderMesh(meshList[GEO_FLOOR], false);
+	RenderMesh(meshList[GEO_FLOOR], true);
 	modelStack.PopMatrix();
 	RenderSkybox();
 	RenderEnviroment();
@@ -368,7 +368,7 @@ void Minigame::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(Car1.position.x, Car1.position.y, Car1.position.z);
 	modelStack.Rotate(Car1.rotationy, 0, 1, 0);
-	RenderMesh(meshList[GEO_PLAYER], false);
+	RenderMesh(meshList[GEO_CARAI], true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);

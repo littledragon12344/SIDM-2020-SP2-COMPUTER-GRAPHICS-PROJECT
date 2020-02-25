@@ -27,7 +27,7 @@ void CarAi::Updates(float dt)
 		rotationy = -rotationy;
 	}
 	Vector3 Distance = Temp - position;		//Check Distance of the car to the end
-	if (sqrt(dot(Distance, Distance)) < 20|| dot(Distance, Distance)<0.1)
+	if (sqrt(dot(Distance, Distance)) < 10|| dot(Distance, Distance)<0.1)
 	{
 		Tempangle = 0;
 		//rotationy = angleFromx;
@@ -80,7 +80,7 @@ void CarAi::Updates(float dt)
 				rotationy += rotationSpeed * dt;
 				if (rotationy > (2 * 180 + angleFromx))
 				{
-					rotationy = angleFromx;
+					//rotationy = angleFromx;
 					Tempangle = 0;
 				}
 			}
@@ -90,7 +90,7 @@ void CarAi::Updates(float dt)
 				rotationy -= rotationSpeed * dt;
 				if (rotationy < (-2 * 180 + angleFromx))
 				{
-					rotationy = angleFromx;
+				//	rotationy = angleFromx;
 					Tempangle = 0;
 				}
 			}
@@ -102,7 +102,7 @@ void CarAi::Updates(float dt)
 					rotationy += rotationSpeed * dt;
 					if (rotationy > (-angleFromx + rotationy))
 					{
-						rotationy = angleFromx;
+						//rotationy = angleFromx;
 						Tempangle = 0;
 					}
 
@@ -114,7 +114,7 @@ void CarAi::Updates(float dt)
 					rotationy -= rotationSpeed * dt;
 					if (rotationy < (-angleFromx + rotationy))
 					{
-						rotationy = angleFromx;
+					//	rotationy = angleFromx;
 						Tempangle = 0;
 					}
 				}
@@ -128,7 +128,7 @@ void CarAi::Updates(float dt)
 				rotationy += rotationSpeed * dt;
 				if (rotationy >angleFromx)
 				{
-					rotationy = angleFromx;
+					//rotationy = angleFromx;
 					Tempangle = 0;
 				}
 			}
@@ -138,7 +138,7 @@ void CarAi::Updates(float dt)
 				rotationy -= rotationSpeed * dt;
 				if (rotationy <angleFromx)
 				{
-					rotationy = angleFromx;
+				//	rotationy = angleFromx;
 					Tempangle = 0;
 				}
 			}
@@ -163,8 +163,8 @@ void CarAi::Updates(float dt)
 	}
 	target = GetTargetpos();
 	Vector3 TargetView = (target - position).Normalize();
-	position += TargetView * (float)(50.f * dt);
-	target = GetTargetpos();
+	position += TargetView * (float)(60.f * dt);
+//	target = GetTargetpos();
 
 }
 

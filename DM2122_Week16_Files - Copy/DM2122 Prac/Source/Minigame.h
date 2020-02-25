@@ -25,7 +25,7 @@ class Minigame : public Scene
 		GEO_BACK,
 		GEO_CHAR,
 		GEO_FLOOR,
-		GEO_PLAYER,
+		GEO_CARAI,
 		GEO_LIGHTSPHERE,
 		GEO_CARTARGET,
 		GEO_ROAD,
@@ -116,6 +116,7 @@ public:
 	~Minigame();
 
 	virtual void Init();
+	virtual void InitPlayerCar();
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
