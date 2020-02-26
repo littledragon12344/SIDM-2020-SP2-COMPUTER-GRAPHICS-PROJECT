@@ -132,6 +132,7 @@
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\CarAI.h" />
     <ClInclude Include="Source\CarMinigame.h" />
+    <ClInclude Include="Source\CCar.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
     <ClInclude Include="Source\LoadTGA.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\CarAi.cpp" />
     <ClCompile Include="Source\CarMinigame.cpp" />
+    <ClCompile Include="Source\CCar.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\main.cpp" />

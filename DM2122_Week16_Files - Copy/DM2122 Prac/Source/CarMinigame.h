@@ -5,6 +5,9 @@
 #include <vector>
 #include <MyMath.h>
 #include "LoadOBJ.h"
+#include <iostream>
+#include "Mesh.h"
+#include "CCar.h"
 
 class CarMinigame
 {
@@ -14,13 +17,9 @@ public:
 	Vector3 target;
 	Vector3 up;
 	Vector3 TargetFromPos;
-	Vector3 xzTarget;
-
-	float angleFromx;
 	float rotationy;
-	int start;
-	float Tempangle;
-	float rotationSpeed;
+	float rotateSpeed;
+	float Speed;
 
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;
@@ -28,11 +27,10 @@ public:
 
 	CarMinigame();
 	~CarMinigame();
-	void Updates(float dt);
-	void GeneratePath(const std::string& file_path, float scale, Vector3 Offset);
-	float dot(Vector3 Fstnum, Vector3 sndNum);
-	float distance(Vector3 Num);
 	void init(Vector3 position, Vector3 Target, Vector3 UP, float RotateSpeed);
+	void GetNewSpeed(float dt, float Acceration);
+	void Updates(float dt);
+	Vector3 GetTargetpos();
 };
 
 #endif

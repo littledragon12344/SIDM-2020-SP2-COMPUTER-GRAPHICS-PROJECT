@@ -10,6 +10,8 @@
 #include "Mesh.h"
 #include "Light.h"
 #include "CarAI.h"
+#include "CarMinigame.h"
+#include "Wall.h"
 
 
 class Minigame : public Scene
@@ -25,11 +27,13 @@ class Minigame : public Scene
 		GEO_BACK,
 		GEO_CHAR,
 		GEO_FLOOR,
-		GEO_PLAYER,
+		GEO_CARAI,
 		GEO_LIGHTSPHERE,
-		GEO_CARTARGET,
+		GEO_CARTARGET,//testing angles
 		GEO_ROAD,
 		GEO_SPEEDMETER,
+		GEO_PLAYER,
+		GEO_WALL,
 		GEO_TEXT,
 		NUM_GEOMETRY,
 	};
@@ -99,6 +103,7 @@ private:
 
 	Path path1;
 	CarAi Car1;
+	CarMinigame Player;
 
 	float lightcolor;
 	bool switchcolor;
@@ -116,6 +121,7 @@ public:
 	~Minigame();
 
 	virtual void Init();
+	virtual void InitPlayerCar();
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();

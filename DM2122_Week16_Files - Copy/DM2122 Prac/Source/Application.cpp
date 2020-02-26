@@ -137,3 +137,9 @@ void Application::Exit()
 	//Finalize and clean up GLFW
 	glfwTerminate();
 }
+
+void Application::ChangeScene(Mesh* Playercar, CCar* Carstats,int scenenum)
+{
+	Player = Playercar;
+	this->Carstats = Carstats;
+}

@@ -26,7 +26,7 @@ void TopDownCamera::Init(const Vector3& pos, const Vector3& target, const Vector
 void TopDownCamera::Update(double dt)
 {
 
-	static const float CAMERA_SPEED = 50.f;
+	/*static const float CAMERA_SPEED = 50.f;
 	if (Application::IsKeyPressed(VK_LEFT))
 	{
 		float yaw = (float)(CAMERA_SPEED * dt * 2);
@@ -77,27 +77,7 @@ void TopDownCamera::Update(double dt)
 	if (Application::IsKeyPressed('R'))
 	{
 		Reset();
-	}
-	if (position.x > 90)
-	{
-		position.x = 90;
-		target = TargetFromPos + position;
-	}
-	if (position.z > 90)
-	{
-		position.z = 90;
-		target = TargetFromPos + position;
-	}
-	if (position.x < -90)
-	{
-		position.x = -90;
-		target = TargetFromPos + position;
-	}
-	if (position.z < -90)
-	{
-		position.z = -90;
-		target = TargetFromPos + position;
-	}
+	}*/
 }
 
 void TopDownCamera::Reset()
