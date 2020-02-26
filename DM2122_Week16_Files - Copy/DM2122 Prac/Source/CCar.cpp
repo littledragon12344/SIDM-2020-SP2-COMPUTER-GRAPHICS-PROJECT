@@ -76,33 +76,6 @@ void CCar::SetAcceleration(float acceleration)
 }
 //=======================================================
 
-//========================CarInfo========================
-Mesh* CarInfo(std::string file_name, std::string texture_name)
-{
-
-}
-//=======================================================
-
-void CarStats()
-{
-	CCar* Car1;
-	CCar* Car2;
-	CCar* Car3;
-	CCar* Car4;
-
-	//car max speed
-	Car1->SetMaxSpeed(30.f);
-	Car2->SetMaxSpeed(25.f);
-	Car3->SetMaxSpeed(40.f);
-	Car4->SetMaxSpeed(50.f);
-
-	//car accelerations
-	Car1->SetAcceleration(3.f);
-	Car2->SetAcceleration(4.f);
-	Car3->SetAcceleration(2.f);
-	Car4->SetAcceleration(1.f);
-}
-
 //===================Kinematic formulas===================
 float CCar::Kinematic1(char mode, float v, float u, float a, float t)
 {
