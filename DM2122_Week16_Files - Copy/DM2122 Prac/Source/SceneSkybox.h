@@ -29,6 +29,11 @@ class SceneSkybox : public Scene
 		GEO_CAR1WHEELS,
 		GEO_CAR2,
 		GEO_CAR2WHEELS,
+		GEO_CAR3,
+		GEO_CAR3WHEELS,
+		GEO_CAR4,
+		GEO_CAR4WHEELS,
+		GEO_WALL,
 		GEO_STAND,
 		GEO_LIGHTSPHERE1,
 		GEO_LIGHTSPHERE2,
@@ -92,6 +97,8 @@ private:
 	float rotate;
 	float translateY1;
 	float translateY2;
+	float translateY3;
+	float translateY4;
 	float Cameraspeed;
 
 	MS modelStack, viewStack, projectionStack;

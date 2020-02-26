@@ -175,6 +175,18 @@ void SceneSkybox::Init()
 	meshList[GEO_CAR2WHEELS] = MeshBuilder::GenerateOBJ("car2wheels", "Obj//spcar2_wheels.obj");
 	meshList[GEO_CAR2WHEELS]->textureID = LoadTGA("Image//spcar2_wheel.tga");
 
+	meshList[GEO_CAR3] = MeshBuilder::GenerateOBJ("car3", "Obj//gray.obj");
+	meshList[GEO_CAR3]->textureID = LoadTGA("Image//car_cyan.tga");
+
+	meshList[GEO_CAR3WHEELS] = MeshBuilder::GenerateOBJ("car3wheels", "Obj//car3_wheel.obj");
+	meshList[GEO_CAR3WHEELS]->textureID = LoadTGA("Image//car_cyan.tga");
+
+	meshList[GEO_CAR4] = MeshBuilder::GenerateOBJ("car4", "Obj//Carzx.obj");
+	meshList[GEO_CAR4]->textureID = LoadTGA("Image//Carzx.tga");
+
+	meshList[GEO_CAR4WHEELS] = MeshBuilder::GenerateOBJ("car4wheels", "Obj//Car4_Wheels.obj");
+	meshList[GEO_CAR4WHEELS]->textureID = LoadTGA("Image//car_wheels4.tga");
+
 	meshList[GEO_STAND] = MeshBuilder::GenerateOBJ("stand", "Obj//car_stand.obj");
 	meshList[GEO_STAND]->textureID = LoadTGA("Image//stand.tga");
 
@@ -589,6 +601,61 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.PushMatrix();
 	modelStack.Translate(-3.0, 0.9f, -2.35f);
 	RenderMesh(meshList[GEO_CAR2WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-10.f, -0.5f, 20.f);
+	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_STAND], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 1.2f, 0.f);
+	modelStack.Scale(0.5f, 0.5f, 0.5f);
+	RenderMesh(meshList[GEO_CAR3], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(-2.9f, -0.6f, -4.65f);
+	RenderMesh(meshList[GEO_CAR3WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-2.9f, -0.6f, 4.f);
+	RenderMesh(meshList[GEO_CAR3WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(2.9f, -0.6f, -4.65f);
+	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_CAR3WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(2.9f, -0.6f, 4.f);
+	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_CAR3WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-10.f, -0.3f, -20.f);
+	modelStack.Rotate(-rotate, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_STAND], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.1f, 0.f);
+	RenderMesh(meshList[GEO_CAR4], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(2.2f, 0.2f, 0.3f);
+	RenderMesh(meshList[GEO_CAR4WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.1f, 0.2f, 0.3f);
+	RenderMesh(meshList[GEO_CAR4WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(2.2f, 0.2f, -1.8f);
+	RenderMesh(meshList[GEO_CAR4WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.1f, 0.2f, -1.8f);
+	RenderMesh(meshList[GEO_CAR4WHEELS], false);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
