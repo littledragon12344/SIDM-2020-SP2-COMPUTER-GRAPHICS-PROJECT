@@ -30,8 +30,8 @@ void SceneSkybox::Init()
 	rotate = 0;
 	translateY1 = 0.7f;
 	translateY2 = -0.3f;
-	translateY3 = 1.2f;
-	translateY4 = 0.1f;
+	translateY3 = 1.4f;
+	translateY4 = 0.3f;
 	Cameraspeed = 25.f;
 
 	// Generate a default VAO for now
@@ -347,6 +347,26 @@ void SceneSkybox::Update(double dt)
 		translateY2 = -0.3f;
 	}
 
+	if (translateY3 > 1.2f)
+	{
+		translateY3 -= (float)(dt * 0.1);
+	}
+
+	else if (translateY3 <= 1.2f)
+	{
+		translateY3 = 1.4f;
+	}
+
+	if (translateY4 > 0.1f)
+	{
+		translateY4 -= (float)(dt * 0.1);
+	}
+
+	else if (translateY4 <= 0.1f)
+	{
+		translateY4 = 0.3f;
+	}
+
 }
 
 void SceneSkybox::Render()
@@ -624,7 +644,7 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], false);
 	modelStack.PushMatrix();
-	modelStack.Translate(0.f, 1.2f, 0.f);
+	modelStack.Translate(0.f, translateY3, 0.f);
 	modelStack.Scale(0.5f, 0.5f, 0.5f);
 	RenderMesh(meshList[GEO_CAR3], false);
 	modelStack.PushMatrix();
@@ -653,7 +673,7 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.Rotate(-rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], false);
 	modelStack.PushMatrix();
-	modelStack.Translate(0.f, 0.1f, 0.f);
+	modelStack.Translate(0.f, translateY4, 0.f);
 	RenderMesh(meshList[GEO_CAR4], false);
 	modelStack.PushMatrix();
 	modelStack.Translate(2.2f, 0.2f, 0.3f);
