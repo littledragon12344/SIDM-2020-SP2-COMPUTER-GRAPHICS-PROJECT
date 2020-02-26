@@ -79,7 +79,8 @@ void Camera2::Update(double dt)
 		TargetFromPos = rotation * TargetFromPos;
 		target =TargetFromPos + Temp;
 	}
-	if(Application::IsKeyPressed('S'))
+
+	/*if(Application::IsKeyPressed('S'))
 	{
 		Vector3 direction = position - target;
 			Vector3 view = xzTarget.Normalized();
@@ -109,7 +110,8 @@ void Camera2::Update(double dt)
 		viewRight = Vector3(cos(Math::DegreeToRadian(90)) * view.x - sin(Math::DegreeToRadian(90)) * view.z, 0, cos(Math::DegreeToRadian(90)) * view.z + sin(Math::DegreeToRadian(90)) * view.x);
 		target += viewRight * (float)(10.f * dt);
 		position += viewRight * (float)(10.f * dt);
-	}
+	}*/
+
 	if(Application::IsKeyPressed('R'))
 	{
 		Reset();

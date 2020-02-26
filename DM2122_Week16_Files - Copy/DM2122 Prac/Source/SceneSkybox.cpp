@@ -30,6 +30,8 @@ void SceneSkybox::Init()
 	rotate = 0;
 	translateY1 = 0.7f;
 	translateY2 = -0.3f;
+	translateY3 = 1.2f;
+	translateY4 = 0.1f;
 	Cameraspeed = 25.f;
 
 	// Generate a default VAO for now
@@ -344,6 +346,7 @@ void SceneSkybox::Update(double dt)
 	{
 		translateY2 = -0.3f;
 	}
+
 }
 
 void SceneSkybox::Render()
