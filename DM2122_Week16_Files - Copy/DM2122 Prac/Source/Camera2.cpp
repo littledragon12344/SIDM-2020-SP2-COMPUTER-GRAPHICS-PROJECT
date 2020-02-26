@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Mtx44.h"
 #include "Utility.h"
+#include "Wall.h"
 
 Camera2::Camera2()
 {
@@ -132,6 +133,30 @@ void Camera2::Update(double dt)
 	{
 		position.z = -90;
 		target = TargetFromPos + position;
+	}
+
+	Vector3 view = (target - position).Normalized();
+	Vector3 right = view.Cross(up).Normalized();
+	Vector3 posDisplacement;
+
+	if (Application::IsKeyPressed('W'))
+		posDisplacement += view;
+	if (Application::IsKeyPressed('S'))
+		posDisplacement -= view;
+	if (Application::IsKeyPressed('A'))
+		posDisplacement -= right;
+	if (Application::IsKeyPressed('D'))
+		posDisplacement += right;
+
+	if (posDisplacement != Vector3(0, 0, 0))
+	{
+		posDisplacement.y = 0;
+
+		posDisplacement = posDisplacement.Normalized() * (float)(CAMERA_SPEED * dt);
+		Vector3 displacementAftCollide = Wall::playerWallCollision(position, posDisplacement);
+
+		position += displacementAftCollide;
+		target = position + view;
 	}
 }
 

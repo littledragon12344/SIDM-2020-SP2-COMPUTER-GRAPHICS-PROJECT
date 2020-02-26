@@ -2,14 +2,14 @@
 #include "Utility.h"
 
 CCar::CCar()
-	: speed(-1), acceleration(-1), distance(-1)
+	: current_speed(-1), max_speed(-1), acceleration(-1), distance(-1)
 {
 
 }
 
 CCar::~CCar()
 {
-
+	
 }
 
 //setting the car position
@@ -36,9 +36,14 @@ float CCar::GetCarPos(char pos)		//pass in the x, y, or z character to get the p
 }
 
 //===================Setters & Getters===================
-float CCar::GetSpeed()
+float CCar::GetCurrentSpeed()
 {
-	return speed;
+	return current_speed;
+}
+
+float CCar::GetMaxSpeed()
+{
+	return max_speed;
 }
 
 float CCar::GetAcceleration()
@@ -50,9 +55,14 @@ float CCar::GetDist()
 	return distance;
 }
 
-void CCar::SetSpeed(float speed)
+void CCar::SetCurrentSpeed(float speed)
 {
-	this->speed = speed;
+	this->current_speed = speed;
+}
+
+void CCar::SetMaxSpeed(float speed)
+{
+	this->max_speed = speed;
 }
 
 void CCar::SetDist(float dist)
@@ -66,6 +76,33 @@ void CCar::SetAcceleration(float acceleration)
 }
 //=======================================================
 
+//========================CarInfo========================
+Mesh* CarInfo(std::string file_name, std::string texture_name)
+{
+
+}
+//=======================================================
+
+void CarStats()
+{
+	CCar* Car1;
+	CCar* Car2;
+	CCar* Car3;
+	CCar* Car4;
+
+	//car max speed
+	Car1->SetMaxSpeed(30.f);
+	Car2->SetMaxSpeed(25.f);
+	Car3->SetMaxSpeed(40.f);
+	Car4->SetMaxSpeed(50.f);
+
+	//car accelerations
+	Car1->SetAcceleration(3.f);
+	Car2->SetAcceleration(4.f);
+	Car3->SetAcceleration(2.f);
+	Car4->SetAcceleration(1.f);
+}
+
 //===================Kinematic formulas===================
 float CCar::Kinematic1(char mode, float v, float u, float a, float t)
 {
@@ -73,11 +110,11 @@ float CCar::Kinematic1(char mode, float v, float u, float a, float t)
 	{
 	case 'v':
 		v = u + (a * t);		//finding final speed
-		SetSpeed(v);
+		SetMaxSpeed(v);
 		return v;
 	case 'u':
 		u = v - (a * t);		//finding initial speed
-		SetSpeed(u);
+		SetCurrentSpeed(u);
 		return u;
 	case 'a':
 		a = (v - u) / t;		//finding acceleration
@@ -98,11 +135,11 @@ float CCar::Kinematic2(char mode, float s, float u, float v, float t)
 		return s;
 	case 'u':
 		u = (s * t * 2) - v;		//finding initial speed
-		SetSpeed(u);
+		SetCurrentSpeed(u);
 		return u;
 	case 'v':
 		v = (s * t * 2) - u;		//finding final speed
-		SetSpeed(v);
+		SetMaxSpeed(v);
 		return v;
 	default:
 		break;
@@ -119,7 +156,7 @@ float CCar::Kinematic3(char mode, float s, float u, float t, float a)
 		return s;
 	case 'u':
 		u = (s - (a * (t * t) / 2)) / t;		//finding initial speed
-		SetSpeed(u);
+		SetCurrentSpeed(u);
 		return u;
 	case 'a':
 		a = (s - (u * t)) * 2 / (t * t);		//finding acceleration
@@ -136,11 +173,11 @@ float CCar::Kinematic4(char mode, float v, float u, float a, float s)
 	{
 	case 'v':
 		v = sqrt((u * u) + (2 * a * s));		//finding final speed 
-		SetSpeed(v);
+		SetMaxSpeed(v);
 		return v;
 	case 'u':
 		u = sqrt((v * v) - (2 * a * s));		//finding initial speed
-		SetSpeed(u);
+		SetCurrentSpeed(u);
 		return u;
 	case 'a':
 		a = ((v * v) - (u * u)) / 2 / s;		//finding acceleration

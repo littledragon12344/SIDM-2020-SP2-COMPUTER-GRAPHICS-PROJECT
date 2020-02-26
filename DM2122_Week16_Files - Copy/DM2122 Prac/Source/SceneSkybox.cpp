@@ -28,6 +28,9 @@ void SceneSkybox::Init()
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 	rotate = 0;
+	translateY1 = 0.7f;
+	translateY2 = -0.3f;
+	Cameraspeed = 25.f;
 
 	// Generate a default VAO for now
 	glGenVertexArrays(1, &m_vertexArrayID);
@@ -136,7 +139,8 @@ void SceneSkybox::Init()
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); 
 
-	meshList[GEO_LEFT] = MeshBuilder::GenerateCuboid("left", Color(0, 0, 0), 100.f, 50.f, 10.f);
+	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//sky.tga");
 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//sky.tga");
@@ -171,13 +175,27 @@ void SceneSkybox::Init()
 	meshList[GEO_CAR2WHEELS] = MeshBuilder::GenerateOBJ("car2wheels", "Obj//spcar2_wheels.obj");
 	meshList[GEO_CAR2WHEELS]->textureID = LoadTGA("Image//spcar2_wheel.tga");
 
+	meshList[GEO_CAR3] = MeshBuilder::GenerateOBJ("car3", "Obj//gray.obj");
+	meshList[GEO_CAR3]->textureID = LoadTGA("Image//car_cyan.tga");
+
+	meshList[GEO_CAR3WHEELS] = MeshBuilder::GenerateOBJ("car3wheels", "Obj//car3_wheel.obj");
+	meshList[GEO_CAR3WHEELS]->textureID = LoadTGA("Image//car_cyan.tga");
+
+	meshList[GEO_CAR4] = MeshBuilder::GenerateOBJ("car4", "Obj//Carzx.obj");
+	meshList[GEO_CAR4]->textureID = LoadTGA("Image//Carzx.tga");
+
+	meshList[GEO_CAR4WHEELS] = MeshBuilder::GenerateOBJ("car4wheels", "Obj//Car4_Wheels.obj");
+	meshList[GEO_CAR4WHEELS]->textureID = LoadTGA("Image//car_wheels4.tga");
+
 	meshList[GEO_STAND] = MeshBuilder::GenerateOBJ("stand", "Obj//car_stand.obj");
 	meshList[GEO_STAND]->textureID = LoadTGA("Image//stand.tga");
 
 	meshList[GEO_PLAYER] = MeshBuilder::GenerateCuboid("Player", Color(1, 1, 1), 1.f, 1.f,1.f);
 	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//Bush.tga");
 
-	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
+	meshList[GEO_LIGHTSPHERE1] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
+
+	meshList[GEO_LIGHTSPHERE2] = MeshBuilder::GenerateSphere("lightBall2", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
@@ -273,7 +291,7 @@ void SceneSkybox::Update(double dt)
 		//to do: switch light type to SPOT and pass the information to
 		light[0].type = Light::LIGHT_SPOT;
 	}
-	float Cameraspeed = 50.f;
+
 	if (Application::IsKeyPressed(VK_LEFT) && SwitchCamera!=2)
 	{
 		Yaw += Cameraspeed * dt * 2;
@@ -294,14 +312,36 @@ void SceneSkybox::Update(double dt)
 	}
 	light[1].position.Set(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);
 
-	if (rotate <= 360)
+	if (rotate < 360)
 	{
 		rotate += (float)(dt * LSPEED);
-		if (rotate == 360)
-		{
-			rotate = 0;
-		}
 	}
+
+	else if (rotate >= 360)
+	{
+		rotate = 0;
+	}
+
+	if (translateY1 > 0.4f)
+	{
+		translateY1 -= (float)(dt * 0.1);
+	}
+
+	else if (translateY1 <= 0.4f)
+	{
+		translateY1 = 0.7f;
+	}
+
+	if (translateY2 > -0.6f)
+	{
+		translateY2 -= (float)(dt * 0.1);
+	}
+
+	else if (translateY2 <= -0.6f)
+	{
+		translateY2 = -0.3f;
+	}
+
 }
 
 void SceneSkybox::Render()
@@ -370,17 +410,18 @@ void SceneSkybox::Render()
 	RenderEnviroment();
 	modelStack.PushMatrix();
 	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
+	RenderMesh(meshList[GEO_LIGHTSPHERE1], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z);
-	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
+	RenderMesh(meshList[GEO_LIGHTSPHERE1], false);
 	modelStack.PopMatrix();
 	//modelStack.PushMatrix();
 	//RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
 	//modelStack.PopMatrix();
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 4, 10, 7.5);
+	RenderRoom();
 }
 
 void SceneSkybox::Exit()
@@ -442,7 +483,8 @@ void SceneSkybox::RenderSkybox()
 {
 	modelStack.PushMatrix();
 		///scale, translate, rotate
-		modelStack.Translate(-50.f, 24.5f, 0.f);
+		modelStack.Translate(-100.f, 40.f, 0.f);
+		modelStack.Scale(200.f, 200.f, 200.f);
 		modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
 		RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
@@ -496,6 +538,10 @@ void SceneSkybox::RenderPlayer()
 	modelStack.PopMatrix();
 }
 
+void SceneSkybox::RenderRoom()
+{
+	
+}
 
 void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,station car,booth ,plants, well anything static
 {
@@ -504,7 +550,7 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], false);
 	modelStack.PushMatrix();
-	modelStack.Translate(0.f, 0.3f, 0.f);
+	modelStack.Translate(0.f, translateY1, 0.f);
 	modelStack.Scale(0.5f, 0.5f, 0.5f);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_CAR1], false);
@@ -536,7 +582,7 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.Rotate(-rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], false);
 	modelStack.PushMatrix();
-	modelStack.Translate(0.f, -0.7f, 0.f);
+	modelStack.Translate(0.f, translateY2, 0.f);
 	modelStack.Scale(1.15f, 1.15f, 1.15f);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_CAR2], false);
@@ -555,6 +601,61 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.PushMatrix();
 	modelStack.Translate(-3.0, 0.9f, -2.35f);
 	RenderMesh(meshList[GEO_CAR2WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-10.f, -0.5f, 20.f);
+	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_STAND], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 1.2f, 0.f);
+	modelStack.Scale(0.5f, 0.5f, 0.5f);
+	RenderMesh(meshList[GEO_CAR3], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(-2.9f, -0.6f, -4.65f);
+	RenderMesh(meshList[GEO_CAR3WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-2.9f, -0.6f, 4.f);
+	RenderMesh(meshList[GEO_CAR3WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(2.9f, -0.6f, -4.65f);
+	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_CAR3WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(2.9f, -0.6f, 4.f);
+	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_CAR3WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-10.f, -0.3f, -20.f);
+	modelStack.Rotate(-rotate, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_STAND], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.1f, 0.f);
+	RenderMesh(meshList[GEO_CAR4], false);
+	modelStack.PushMatrix();
+	modelStack.Translate(2.2f, 0.2f, 0.3f);
+	RenderMesh(meshList[GEO_CAR4WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.1f, 0.2f, 0.3f);
+	RenderMesh(meshList[GEO_CAR4WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(2.2f, 0.2f, -1.8f);
+	RenderMesh(meshList[GEO_CAR4WHEELS], false);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.1f, 0.2f, -1.8f);
+	RenderMesh(meshList[GEO_CAR4WHEELS], false);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();

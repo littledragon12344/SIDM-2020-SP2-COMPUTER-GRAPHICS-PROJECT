@@ -20,6 +20,8 @@ class SceneSkybox : public Scene
 		GEO_BOTTOM, 
 		GEO_FRONT, 
 		GEO_BACK,
+		GEO_LEFTWALL,
+		GEO_RIGHTWALL,
 		GEO_CHAR,
 		GEO_FLOOR,
 		GEO_PLAYER,
@@ -27,8 +29,14 @@ class SceneSkybox : public Scene
 		GEO_CAR1WHEELS,
 		GEO_CAR2,
 		GEO_CAR2WHEELS,
+		GEO_CAR3,
+		GEO_CAR3WHEELS,
+		GEO_CAR4,
+		GEO_CAR4WHEELS,
+		GEO_WALL,
 		GEO_STAND,
-		GEO_LIGHTSPHERE,
+		GEO_LIGHTSPHERE1,
+		GEO_LIGHTSPHERE2,
 		GEO_TEXT,
 		NUM_GEOMETRY,
 	};
@@ -87,6 +95,11 @@ private:
 	int SwitchCamera;
 	float Yaw;
 	float rotate;
+	float translateY1;
+	float translateY2;
+	float translateY3;
+	float translateY4;
+	float Cameraspeed;
 
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];
@@ -99,6 +112,7 @@ private:
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
+	void RenderRoom();
 	void RenderPlayer();
 	void RenderEnviroment();
 	void RenderText(Mesh* mesh, std::string text, Color color);
