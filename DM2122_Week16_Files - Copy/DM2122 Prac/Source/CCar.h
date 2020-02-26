@@ -1,8 +1,11 @@
 #pragma once
 #include "Vertex.h"
+#include "Mesh.h"
+
 class CCar
 {
-	float speed;
+	float current_speed;
+	float max_speed;
 	float acceleration;
 	float distance;
 	Position carPos;
@@ -12,17 +15,22 @@ public:
 	~CCar();
 
 	//getting the values
-	float GetSpeed();
+	float GetCurrentSpeed();
+	float GetMaxSpeed();
 	float GetAcceleration();
 	float GetDist();
 	//setting values
-	void SetSpeed(float speed);
+	void SetCurrentSpeed(float speed);
+	void SetMaxSpeed(float speed);
 	void SetAcceleration(float acceleration);
 	void SetDist(float dist);
 
 	//car position management
 	void SetCarPos(float carPosx, float carPosy, float carPosz);
 	float GetCarPos(char pos);
+
+	//car name and texture
+	Mesh* CarInfo(std::string file_name, std::string texture_name);
 
 	//kinematic formulas
 	float Kinematic1(char mode, float v, float u, float a, float t);
