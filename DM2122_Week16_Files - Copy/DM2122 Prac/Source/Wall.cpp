@@ -47,7 +47,7 @@ bool Wall::generateWalls(const char* file_path)
 			temp_normals.push_back(normal);
 		}
 		// if it has "g Wall" or "g wall" in the buffer, it means that the vertices and normals in temp_vertices and temp_normals are for walls.
-		else if (strncmp("g Wall", buf, 6) == 0 || strncmp("g wall", buf, 6) == 0)
+		else if (std::string(buf).find("Wall") != std::string::npos)
 		{
 			// Get the middle position of the wall
 			Vector3 position;
