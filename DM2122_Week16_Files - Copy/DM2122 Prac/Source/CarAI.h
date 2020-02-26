@@ -22,7 +22,7 @@ public:
 	float Tempangle;
 	float rotationSpeed;
 
-	Path *PathToGo;
+	Path *PathToGo;//Get Path information
 
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;

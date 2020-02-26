@@ -14,13 +14,14 @@ CarAi::~CarAi()
 
 void CarAi::Updates(float dt)
 {
-	Vector3 Temp = (*PathToGo).Point[start];//Get Start of each point
+	Vector3 Temp = PathToGo->Point[start];//Get Start of each point
 	if (position == defaultPosition)//Starting angle			//Initializing of car ai pos can put in init() honestly
 	{
+		start++;
 		Vector3 Temp2 = (*PathToGo).Point[1];
 		End = Temp2;//Initialize End
 		TargetFromPos = (Temp2 - Temp).Normalized();
-		position = Temp;
+		//position = Temp;
 		Vector3 view = (End - position).Normalized();
 		//float num = dot(view, Vector3(1, 0, 0)) / (distance(view) * distance(Vector3(1, 0, 0)));//Check distance of start to next End
 		rotationy = Math::RadianToDegree(atan2(1 * view.z - 0 * view.x, 1 * view.x + 0));
@@ -32,12 +33,12 @@ void CarAi::Updates(float dt)
 		Tempangle = 0;
 		//rotationy = angleFromx;
 		start++;		//Variable to say move to next start// start = next end , next end = next next end 
-		if (start == (*PathToGo).Point.size())	//Check when start reach the end of line
+		if (start == PathToGo->Point.size())	//Check when start reach the end of line
 		{
 			start = 0; //start = 1st start variable
 			//End = Vector3(Point[0].x, Point[0].y, Point[0].z);	//End = first start vector
 		}
-		Vector3 Temp2 = (*PathToGo).Point[start];//get next End
+		Vector3 Temp2 = PathToGo->Point[start];//get next End
 		End = Temp2;//end = next end
 		//target = Temp*2;
 	}
@@ -60,7 +61,7 @@ void CarAi::Updates(float dt)
 				rotationy = angleFromx;
 		}
 	}
-	else
+	else  
 	{
 		if (Tempangle == 0)
 		{
@@ -72,9 +73,9 @@ void CarAi::Updates(float dt)
 			if(Tempangle<0)
 				Tempangle = -Tempangle;
 		}
-		if (rotationy - angleFromx > 180 || rotationy - angleFromx < -180)
+		if (rotationy - angleFromx > 180 || rotationy - angleFromx < -180) 
 		{
-			if (rotationy > 90 && angleFromx < -90)
+			if (rotationy > 90 && angleFromx < -90)//Check for acute
 			{
 				Tempangle -= rotationSpeed * dt;
 				rotationy += rotationSpeed * dt;
@@ -84,7 +85,7 @@ void CarAi::Updates(float dt)
 					Tempangle = 0;
 				}
 			}
-			else if (rotationy < -90 && angleFromx > 90)
+			else if (rotationy < -90 && angleFromx > 90)//Check for acute
 			{
 				Tempangle -= rotationSpeed * dt;
 				rotationy -= rotationSpeed * dt;
@@ -94,7 +95,7 @@ void CarAi::Updates(float dt)
 					Tempangle = 0;
 				}
 			}
-			else
+			else//happen when angleFromx is facing oppsite x directions of rotationy
 			{
 				if (rotationy < (-angleFromx + rotationy) && Tempangle != 0)
 				{
@@ -193,7 +194,7 @@ void CarAi::Updates(float dt)
 //
 //}
 
-float CarAi::dot(Vector3 Fstnum, Vector3 sndNum)
+float CarAi::dot(Vector3 Fstnum, Vector3 sndNum)//Dot product in Vector Math
 {
 	float x = Fstnum.x * sndNum.x;
 	float y = Fstnum.y * sndNum.y;
@@ -201,7 +202,7 @@ float CarAi::dot(Vector3 Fstnum, Vector3 sndNum)
 	float num =x+z+y;
 	return num;
 }
-float CarAi::distance(Vector3 Num)
+float CarAi::distance(Vector3 Num)// vector math to find distance ||
 {
 	float x = Num.x * Num.x;
 	float y = Num.y * Num.y;
@@ -211,7 +212,7 @@ float CarAi::distance(Vector3 Num)
 	return num;
 }
 
-void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up,float RotateSpeed, Path *paths)
+void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up,float RotateSpeed, Path *paths)//Initiallizing
 {
 	PathToGo = paths;
 	start = 0;
@@ -227,7 +228,7 @@ void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up,float RotateSpeed, Path *
 	this->up = defaultUp = right.Cross(view).Normalized();
 }
 
-Vector3 CarAi::GetTargetpos()
+Vector3 CarAi::GetTargetpos()//Get Target Posiiton using the angles
 {
 	Vector3 Temp;
 	Vector3 xDir = Vector3(1, 0, 0);
