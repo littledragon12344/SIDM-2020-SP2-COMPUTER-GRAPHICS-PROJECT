@@ -11,6 +11,11 @@ FirstPersonCamera::~FirstPersonCamera()
 {
 }
 
+void FirstPersonCamera::SetCameraSpeed(float speed)
+{
+	cameraSpeed = speed;
+}
+
 void FirstPersonCamera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 {
 	this->position = defaultPosition = pos;
@@ -30,15 +35,15 @@ void FirstPersonCamera::Update(double dt)
 	if (Application::IsKeyPressed('S'))
 	{
 		Vector3 view = (target - position).Normalized();
-		target -= view * (float)(10.f * dt);
-		position -= view * (float)(10.f * dt);
+		target -= view * (float)(cameraSpeed * dt);
+		position -= view * (float)(cameraSpeed * dt);
 	}
 	if (Application::IsKeyPressed('W'))
 	{
 		Vector3 view = (target - position).Normalized();
 		//Vector3 view = xzTarget.Normalized();
-		target += view * (float)(10.f * dt);
-		position += view * (float)(10.f * dt);
+		target += view * (float)(cameraSpeed * dt);
+		position += view * (float)(cameraSpeed * dt);
 
 	}
 	if (Application::IsKeyPressed('A'))
