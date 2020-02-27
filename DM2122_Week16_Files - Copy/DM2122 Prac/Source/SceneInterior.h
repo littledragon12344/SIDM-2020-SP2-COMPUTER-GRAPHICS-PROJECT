@@ -9,6 +9,7 @@
 #include "FirstPersonCamera.h"
 #include "Mesh.h"
 #include "Light.h"
+#include "CCar.h"
 
 class SceneInterior : public Scene
 {
@@ -23,6 +24,7 @@ class SceneInterior : public Scene
 		GEO_BACK,
 		GEO_FLOOR,
 		GEO_CAR,
+		GEO_WALL,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -82,14 +84,29 @@ private:
 	int SwitchCamera;
 	float Yaw;
 	float rotate;
+	float dist;
+
+	int CarSwitch;
+
+	bool moving;
 
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];
 
 	FirstPersonCamera fpsCamera;
 
+	//initialize
+	CCar* Car1 = new CCar();
+	CCar* Car2 = new CCar();
+	CCar* Car3 = new CCar();
+	CCar* Car4 = new CCar();
+
+	CCar* selected;
+
 	float lightcolor;
 	bool switchcolor;
+
+	void RenderRoom();
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();

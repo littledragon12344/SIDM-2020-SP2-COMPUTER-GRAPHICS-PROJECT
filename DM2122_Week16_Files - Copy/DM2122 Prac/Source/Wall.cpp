@@ -208,7 +208,7 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 			// If the perpendicular distance of the current position of the object is more than the depth,
 			// It is on the length (x-axis) side of the object
 			// Need to round the value to 4.d.p because for rotated walls, the value might have some accuracy error like floating point errors
-			if (roundf(abs(position.Dot(wall.normal) - wall.position.Dot(wall.normal)) * 1000) / 1000 >= maxWallPlayerDepthDist)
+			if (roundf(abs(position.Dot(wall.normal) - wall.position.Dot(wall.normal)) * 1000) / 1000 >= (roundf(maxWallPlayerDepthDist) * 1000) / 1000.f)
 			{
 				// Flip wallPara to the other direction if the displacement is the other direction of wallPara.
 				// wallPara will be 90 degrees anti-clockwise to the normal

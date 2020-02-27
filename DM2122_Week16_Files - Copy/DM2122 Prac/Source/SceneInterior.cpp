@@ -29,6 +29,7 @@ void SceneInterior::Init()
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 	rotate = 0;
+	CarSwitch = 0;
 
 	// Generate a default VAO for now
 	glGenVertexArrays(1, &m_vertexArrayID);
@@ -38,7 +39,7 @@ void SceneInterior::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	fpsCamera.Init(Vector3(-10, 0, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
+	fpsCamera.Init(Vector3(-10, 5, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -136,7 +137,8 @@ void SceneInterior::Init()
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
 
-	meshList[GEO_LEFT] = MeshBuilder::GenerateCuboid("left", Color(0, 0, 0), 100.f, 50.f, 10.f);
+	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//sky.tga");
 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//sky.tga");
@@ -156,19 +158,13 @@ void SceneInterior::Init()
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("Floor", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//showroom_floor.tga");
 
-	meshList[GEO_CAR] = MeshBuilder::GenerateQuad("carInterior", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_CAR]->textureID = LoadTGA("Image//carInterior.tga");
+	meshList[GEO_CAR] = MeshBuilder::GenerateOBJ("car1Interior", "OBJ//car1Interior.obj");
+	meshList[GEO_CAR]->textureID = LoadTGA("Image//carZX_Interior.tga");
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
-
-	//initialize
-	CCar* Car1 = new CCar();
-	CCar* Car2 = new CCar();
-	CCar* Car3 = new CCar();
-	CCar* Car4 = new CCar();
 
 	//car max speed
 	Car1->SetMaxSpeed(30.f);
@@ -181,7 +177,7 @@ void SceneInterior::Init()
 	Car2->SetAcceleration(4.f);
 	Car3->SetAcceleration(2.f);
 	Car4->SetAcceleration(1.f);
-
+	
 	lightcolor = 0.f;
 
 }
@@ -241,7 +237,51 @@ void SceneInterior::Update(double dt)
 	if (Application::IsKeyPressed('P'))
 		light[0].position.y += (float)(LSPEED * dt);
 
-	/*float Cameraspeed = 50.f;
+	if (Application::IsKeyPressed('B'))
+	{
+		dist = 0;
+		CarSwitch++;
+		if (CarSwitch > 3)
+		{
+			CarSwitch = 0;
+		}
+	}
+
+	switch (CarSwitch)
+	{
+	case 0: 
+		selected = Car1;
+		break;
+	case 1: 
+		selected = Car2;
+		break;
+	case 2: 
+		selected = Car3;
+		break;
+	case 3: 
+		selected = Car4;
+		break;
+	default:
+		break;
+	}
+
+	if (Application::IsKeyPressed('W'))
+	{
+		moving = true;
+		selected->SetDist(dist);
+		dist += (float)(dt * selected->GetMaxSpeed()) / 20.f;
+	}
+
+	selected->Kinematic3('u', selected->GetDist(), 0, dt, selected->GetAcceleration());
+
+	selected->SetCurrentSpeed(selected->GetCurrentSpeed() / 20.f);
+
+	if (selected->GetCurrentSpeed() <= 0 || moving == false)
+	{
+		selected->SetCurrentSpeed(0);
+	}
+
+	float Cameraspeed = 50.f;
 	if (Application::IsKeyPressed('A'))
 	{
 		Yaw += Cameraspeed * dt * 2;
@@ -253,7 +293,7 @@ void SceneInterior::Update(double dt)
 	if (Application::IsKeyPressed('R'))
 	{
 		Yaw = 0;
-	}*/
+	}
 	if (rotate <= 360)
 	{
 		rotate += (float)(dt * LSPEED);
@@ -263,6 +303,7 @@ void SceneInterior::Update(double dt)
 		}
 	}
 
+	moving = false;
 	fpsCamera.Update(dt);
 }
 
@@ -315,23 +356,55 @@ void SceneInterior::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
-	/*modelStack.PushMatrix();
+
+	RenderSkybox();
+
+	modelStack.PushMatrix();
 	///scale, translate, rotate 
 	modelStack.Translate(0.f, -1.f, 0.f);
 	modelStack.Scale(200.f, 200.f, 200.f);
 	modelStack.Rotate(-90.f, 1.f, 0.f, 0.f);
-	modelStack.PushMatrix();
-	modelStack.Rotate(90.f, 0.f, 0.f, 1.f);
-	RenderMesh(meshList[GEO_FLOOR], false);
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();*/
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0,0,0);
-	RenderMesh(meshList[GEO_CAR], false);
+		modelStack.PushMatrix();
+		modelStack.Rotate(90.f, 0.f, 0.f, 1.f);
+		RenderMesh(meshList[GEO_FLOOR], false);
+		modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
-	RenderSkybox();
+	RenderRoom();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
+		modelStack.PushMatrix();
+			modelStack.Rotate(Yaw, 0, 1, 0);
+			modelStack.PushMatrix();
+				modelStack.Translate(-4, -13, -0.2);
+				RenderMesh(meshList[GEO_CAR], false);
+			modelStack.PopMatrix();
+		modelStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	std::string text = "Speed: " + std::to_string(selected->GetCurrentSpeed());
+	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 0);
+
+	text = "Distance: " + std::to_string(selected->GetDist());
+	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 1);
+
+	text = "CarModel#: " + std::to_string(CarSwitch + 1);
+	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 29);
+}
+
+void SceneInterior::RenderRoom()
+{
+	for (int wallIndex = 0; wallIndex < Wall::getNumOfWall(); wallIndex++)
+	{
+		Wall* wall = Wall::getWall(wallIndex);
+		modelStack.PushMatrix();
+		modelStack.Translate(wall->getPosition().x, wall->getPosition().y, wall->getPosition().z);
+		modelStack.Rotate(90 - wall->getWallNormalRotation(), 0, 1, 0);
+		modelStack.Scale(wall->getLength(), wall->getHeight(), wall->getDepth());
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+	}
 }
 
 void SceneInterior::Exit()
@@ -394,7 +467,8 @@ void SceneInterior::RenderSkybox()
 {
 	modelStack.PushMatrix();
 	///scale, translate, rotate
-	modelStack.Translate(-50.f, 24.5f, 0.f);
+	modelStack.Translate(-100.f, 40.f, 0.f);
+	modelStack.Scale(200.f, 200.f, 200.f);
 	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
