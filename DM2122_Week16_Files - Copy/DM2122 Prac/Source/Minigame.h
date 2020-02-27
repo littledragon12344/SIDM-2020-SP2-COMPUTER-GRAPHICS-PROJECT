@@ -5,12 +5,13 @@
 #include "Scene.h"
 #include <MatrixStack.h>
 #include "Camera2.h"
-#include "Camera3.h"
+//#include "Camera3.h"
 #include "TopDownCamera.h"
 #include "Mesh.h"
 #include "Light.h"
 #include "CarAI.h"
 #include "CarMinigame.h"
+#include "FirstPersonCamera.h"
 #include "Wall.h"
 
 
@@ -36,6 +37,7 @@ class Minigame : public Scene
 		GEO_WALL,
 		GEO_TEXT,
 		GEO_POINTER,
+		GEO_STARTLIGHT,
 		NUM_GEOMETRY,
 	};
 
@@ -93,14 +95,14 @@ private:
 	int SwitchCamera;
 	float LegAngle;
 	float Yaw;
+	bool Pause;
 
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];
 
-	Camera2 FPScamera;
+	Camera2 FPScamera;//Testing cameras
 	Camera Frecamera;
-	Camera3 TPSCamera;
-	TopDownCamera TopCamera;
+	TopDownCamera TopCamera;//Main camera
 
 	Path path1;
 	CarAi Car1;
@@ -109,6 +111,7 @@ private:
 	float lightcolor;
 	bool switchcolor;
 	int AmounttoPOP;
+	float StartTime;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
