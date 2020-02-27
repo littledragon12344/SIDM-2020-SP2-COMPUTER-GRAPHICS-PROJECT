@@ -16,11 +16,15 @@ public:
 	Vector3 defaultTarget;
 	Vector3 defaultUp;
 
+	float cameraSpeed;
+
 	FirstPersonCamera();
 	~FirstPersonCamera();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
 	virtual void Reset();
 	virtual void Update(double dt);
+
+	void SetCameraSpeed(float speed);
 };
 
 #endif

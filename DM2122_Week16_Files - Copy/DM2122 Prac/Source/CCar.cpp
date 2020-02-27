@@ -1,6 +1,8 @@
 #include "CCar.h"
 #include "Utility.h"
 
+CCar* CCar::s_instance;
+
 CCar::CCar()
 	: current_speed(-1), max_speed(-1), acceleration(-1), distance(-1)
 {
@@ -10,6 +12,18 @@ CCar::CCar()
 CCar::~CCar()
 {
 	
+}
+
+CCar* CCar::instance()
+{
+	if (!s_instance)
+	{
+		s_instance = new CCar;
+		return s_instance;
+	}
+
+	else
+	return nullptr;
 }
 
 //setting the car position

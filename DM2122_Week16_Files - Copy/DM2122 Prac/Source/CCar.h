@@ -9,10 +9,13 @@ class CCar
 	float acceleration;
 	float distance;
 	Position carPos;
+	static CCar* s_instance;
 
 public: 
 	CCar();
 	~CCar();
+
+	static CCar* instance();
 
 	//getting the values
 	float GetCurrentSpeed();

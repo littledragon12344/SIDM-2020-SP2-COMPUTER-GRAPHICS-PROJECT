@@ -158,8 +158,17 @@ void SceneInterior::Init()
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("Floor", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//showroom_floor.tga");
 
-	meshList[GEO_CAR] = MeshBuilder::GenerateOBJ("car1Interior", "OBJ//car1Interior.obj");
-	meshList[GEO_CAR]->textureID = LoadTGA("Image//carZX_Interior.tga");
+	meshList[GEO_CAR1] = MeshBuilder::GenerateOBJ("car1Interior", "OBJ//car1Interior.obj");
+	meshList[GEO_CAR1]->textureID = LoadTGA("Image//car1Interior.tga");
+
+	meshList[GEO_CAR2] = MeshBuilder::GenerateOBJ("car2Interior", "OBJ//car2Interior.obj");
+	meshList[GEO_CAR2]->textureID = LoadTGA("Image//car2Interior.tga");
+
+	meshList[GEO_CAR3] = MeshBuilder::GenerateOBJ("carZX_Interior", "OBJ//carZX_Interior.obj");
+	meshList[GEO_CAR3]->textureID = LoadTGA("Image//carZX_Interior.tga");
+
+	meshList[GEO_CAR4] = MeshBuilder::GenerateOBJ("carGrayInterior", "OBJ//gray.obj");
+	meshList[GEO_CAR4]->textureID = LoadTGA("Image//car_cyan.tga");
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
@@ -223,7 +232,7 @@ void SceneInterior::Update(double dt)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	//light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
+	light[1].position.Set(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
 	if (Application::IsKeyPressed('I'))
 		light[0].position.z -= (float)(LSPEED * dt);
 	if (Application::IsKeyPressed('K'))
@@ -237,14 +246,25 @@ void SceneInterior::Update(double dt)
 	if (Application::IsKeyPressed('P'))
 		light[0].position.y += (float)(LSPEED * dt);
 
-	if (Application::IsKeyPressed('B'))
+	if (Application::IsKeyPressed(VK_NUMPAD1))
 	{
 		dist = 0;
-		CarSwitch++;
-		if (CarSwitch > 3)
-		{
-			CarSwitch = 0;
-		}
+		CarSwitch = 0;
+	}
+	if (Application::IsKeyPressed(VK_NUMPAD2))
+	{
+		dist = 0;
+		CarSwitch = 1;
+	}
+	if (Application::IsKeyPressed(VK_NUMPAD3))
+	{
+		dist = 0;
+		CarSwitch = 2;
+	}
+	if (Application::IsKeyPressed(VK_NUMPAD4))
+	{
+		dist = 0;
+		CarSwitch = 3;
 	}
 
 	switch (CarSwitch)
@@ -264,6 +284,8 @@ void SceneInterior::Update(double dt)
 	default:
 		break;
 	}
+
+	fpsCamera.SetCameraSpeed(selected->GetMaxSpeed());
 
 	if (Application::IsKeyPressed('W'))
 	{
@@ -293,14 +315,6 @@ void SceneInterior::Update(double dt)
 	if (Application::IsKeyPressed('R'))
 	{
 		Yaw = 0;
-	}
-	if (rotate <= 360)
-	{
-		rotate += (float)(dt * LSPEED);
-		if (rotate == 360)
-		{
-			rotate = 0;
-		}
 	}
 
 	moving = false;
@@ -372,16 +386,69 @@ void SceneInterior::Render()
 
 	RenderRoom();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
+	if (CarSwitch == 0)
+	{
 		modelStack.PushMatrix();
-			modelStack.Rotate(Yaw, 0, 1, 0);
+		modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
 			modelStack.PushMatrix();
+			modelStack.Rotate(Yaw, 0, 1, 0);
+				modelStack.PushMatrix();
 				modelStack.Translate(-4, -13, -0.2);
-				RenderMesh(meshList[GEO_CAR], false);
+				RenderMesh(meshList[GEO_CAR1], false);
+				modelStack.PopMatrix();
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
-	modelStack.PopMatrix();
+	}
+	else if (CarSwitch == 1)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
+			modelStack.PushMatrix();
+			modelStack.Rotate(Yaw, 0, 1, 0);
+				modelStack.PushMatrix();
+				modelStack.Scale(0.05, 0.05, 0.05);
+					modelStack.PushMatrix();
+					modelStack.Translate(-0.3, -3.3, -0.8);
+					RenderMesh(meshList[GEO_CAR2], false);
+					modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			modelStack.PopMatrix();
+		modelStack.PopMatrix();
+	}
+	else if (CarSwitch == 2)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
+		modelStack.PushMatrix();
+			modelStack.Rotate(Yaw, 0, 1, 0);
+				modelStack.PushMatrix();
+				modelStack.Rotate(180, 0, 1, 0);
+				modelStack.Scale(3, 3, 3);
+				modelStack.PushMatrix();
+					modelStack.Translate(-0.2, -1.9, 0);
+					RenderMesh(meshList[GEO_CAR3], false);
+					modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			modelStack.PopMatrix();
+		modelStack.PopMatrix();
+	}
+	else if (CarSwitch == 3)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
+		modelStack.PushMatrix();
+			modelStack.Rotate(Yaw, 0, 1, 0);
+				modelStack.PushMatrix();
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(0.05, 0.05, 0.05);
+					modelStack.PushMatrix();
+					modelStack.Translate(-1, -1.3, 0);
+					RenderMesh(meshList[GEO_CAR4], false);
+					modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			modelStack.PopMatrix();
+		modelStack.PopMatrix();
+	}
 
 	std::string text = "Speed: " + std::to_string(selected->GetCurrentSpeed());
 	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 0);
