@@ -22,6 +22,7 @@ public:
 	static Mesh* GenerateTorus(const std::string& meshName, Color color, unsigned numStack, unsigned numSlice, float outerR, float innerR);
 	static Mesh* GenerateOBJ(const std::string& meshName, const std::string& file_path);
 	static Mesh* GenerateText(const std::string& meshName, unsigned numRow, unsigned numCol);
+	static Mesh* GenerateTextureUI(const std::string& meshName, unsigned numRow, unsigned numCol);
 };
 
 #endif

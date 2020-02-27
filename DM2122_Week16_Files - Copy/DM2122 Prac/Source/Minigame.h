@@ -35,6 +35,7 @@ class Minigame : public Scene
 		GEO_PLAYER,
 		GEO_WALL,
 		GEO_TEXT,
+		GEO_POINTER,
 		NUM_GEOMETRY,
 	};
 
@@ -107,14 +108,16 @@ private:
 
 	float lightcolor;
 	bool switchcolor;
+	int AmounttoPOP;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
 	void RenderPlayer();
 	void RenderEnviroment();
+	void RenderUI();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	void RenderMeshOnScreen(Mesh* mesh, Color color, float sizex, float sizey, float x, float y,int animFrames);
+	void RenderMeshOnScreen(Mesh* mesh, Color color, float sizex, float sizey, float x, float y,int animFrames, float Rotation);
 
 public:
 	Minigame();

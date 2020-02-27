@@ -13,6 +13,8 @@ public:
 	~Application();
 	void Init();
 	void Run();
+	/*float MouseMovedX();
+	float MouseMovedY();*/
 	void Exit();
 	void ChangeScene(Mesh* Playercar,CCar* Carstats,int scenenum);
 	static bool IsKeyPressed(unsigned short key);

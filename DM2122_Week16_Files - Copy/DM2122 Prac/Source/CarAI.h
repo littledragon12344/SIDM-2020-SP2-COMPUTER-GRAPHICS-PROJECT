@@ -8,7 +8,6 @@
 class CarAi
 {
 private:
-public:
 	Vector3 position;
 	Vector3 target;
 	Vector3 up;
@@ -21,6 +20,7 @@ public:
 	int start;
 	float Tempangle;
 	float rotationSpeed;
+public:
 
 	Path *PathToGo;//Get Path information
 
@@ -37,6 +37,8 @@ public:
 	float distance(Vector3 Num);
 	void init(Vector3 position, Vector3 Target, Vector3 UP, float RotateSpeed,Path *paths);
 	Vector3 GetTargetpos();
+	Vector3 GetPosition();
+	float GetRotation();
 };
 
 #endif

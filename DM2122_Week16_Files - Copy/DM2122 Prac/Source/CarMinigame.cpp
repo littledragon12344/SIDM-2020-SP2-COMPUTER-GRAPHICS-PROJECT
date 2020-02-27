@@ -24,7 +24,11 @@ void CarMinigame::Updates(float dt)
 	static const float Rotation = 50.f;
 	if (Application::IsKeyPressed('S'))
 	{
-		Speed -= 15.f*dt;
+		Speed -= 25.f*dt;
+		if (Speed <= 0)
+		{
+			Speed = 0;
+		}
 	}
 	if (Application::IsKeyPressed('W'))
 	{

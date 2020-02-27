@@ -4,7 +4,7 @@
 #include "Mtx44.h"
 
 
-CarAi::CarAi():rotationSpeed(0.f),PathToGo(NULL)
+CarAi::CarAi() :rotationSpeed(0.f), PathToGo(NULL), Tempangle(0.f), rotationy(0.f), start(1), angleFromx(0)
 {
 }
 
@@ -17,7 +17,6 @@ void CarAi::Updates(float dt)
 	Vector3 Temp = PathToGo->Point[start];//Get Start of each point
 	if (position == defaultPosition)//Starting angle			//Initializing of car ai pos can put in init() honestly
 	{
-		start++;
 		Vector3 Temp2 = (*PathToGo).Point[1];
 		End = Temp2;//Initialize End
 		TargetFromPos = (Temp2 - Temp).Normalized();
@@ -106,11 +105,9 @@ void CarAi::Updates(float dt)
 						//rotationy = angleFromx;
 						Tempangle = 0;
 					}
-
 				}
 				if (rotationy > (-angleFromx + rotationy) && Tempangle != 0)
 				{
-
 					Tempangle -= rotationSpeed * dt;
 					rotationy -= rotationSpeed * dt;
 					if (rotationy < (-angleFromx + rotationy))
@@ -158,10 +155,10 @@ void CarAi::Updates(float dt)
 	{
 		rotationy = rotationy + 360;
 	}
-	if (start == 0)
-	{
-		std::cout << angleFromx << std::endl;
-	}
+	//if (start == 0)
+	//{
+	//	//std::cout << angleFromx << std::endl;
+	//}
 	target = GetTargetpos();
 	Vector3 TargetView = (target - position).Normalize();
 	position += TargetView * (float)(60.f * dt);
@@ -238,4 +235,14 @@ Vector3 CarAi::GetTargetpos()//Get Target Posiiton using the angles
 	Temp.y = 0;
 	Temp = position + Temp;
 	return Temp;
+}
+
+Vector3 CarAi::GetPosition()
+{
+	return position;
+}
+
+float CarAi::GetRotation()
+{
+	return rotationy;
 }

@@ -117,6 +117,7 @@ void Application::Run()
 	{
 		scenegame->Update(m_timer.getElapsedTime());
 		scenegame->Render();
+		//SetCursorPos(750, 500);
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
@@ -129,7 +130,6 @@ void Application::Run()
 	delete scene;
 	delete scenegame;
 }
-
 void Application::Exit()
 {
 	//Close OpenGL window and terminate GLFW

@@ -39,7 +39,6 @@ void Minigame::Init()
 	Frecamera.Init(Vector3(-10, 2, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
 	TPSCamera.Init(Vector3(-30, 2, 0), FPScamera.position, FPScamera.up);
 	TopCamera.Init(Vector3(-10, 300, 0), Vector3(-10, 0, 0), Vector3(0, 0, -1));
-
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
@@ -167,8 +166,11 @@ void Minigame::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	meshList[GEO_SPEEDMETER] = MeshBuilder::GenerateText("Meter", 1, 1);
+	meshList[GEO_SPEEDMETER] = MeshBuilder::GenerateTextureUI("Meter", 1, 1);
 	meshList[GEO_SPEEDMETER]->textureID = LoadTGA("Image//SpeedMeter.tga");
+
+	meshList[GEO_POINTER] = MeshBuilder::GenerateTextureUI("Pointer", 1, 1);
+	meshList[GEO_POINTER]->textureID = LoadTGA("Image//Pointer.tga");
 
 	meshList[GEO_CARAI] = MeshBuilder::GenerateOBJ("Car", "OBJ//car_frame.obj");
 	meshList[GEO_CARAI]->textureID = LoadTGA("Image//CarBody_texture.tga");
@@ -176,7 +178,7 @@ void Minigame::Init()
 	meshList[GEO_PLAYER] = MeshBuilder::GenerateOBJ("Car", "OBJ//car_frame.obj");
 	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//CarBody_texture.tga");
 
-	meshList[GEO_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//Wall.obj");
+	meshList[GEO_WALL] = MeshBuilder::GenerateCuboid("wall", Color(1, 1, 1), 1, 1, 1);
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//CarBody_texture.tga");
 
 	Wall::generateWalls("OBJ//Wall.obj");
@@ -185,6 +187,7 @@ void Minigame::Init()
 	meshList[GEO_ROAD]->textureID = LoadTGA("Image//RoadTexture.tga");
 
 	path1.GeneratePath("OBJ//Path.obj",2.5,Vector3(10,0,0));//PathObj , scale, Offset
+	Wall::createWall(path1.Point[1], Vector3(0, 0, 1), 3, 2, 10);
 	Car1.init(path1.Point[0], Vector3(0, 0, 100), Vector3(0, 1, 0),200.f,&path1);
 	Player.init(Vector3(0, 0, 0), Vector3(1, 0, 0), Vector3(0, 1, 0), 150.f);
 	SwitchCamera = 4;
@@ -198,10 +201,13 @@ void Minigame::InitPlayerCar()
 
 void Minigame::Update(double dt)
 {
-	if (Wall::carWallCollision(Player.position, Player.target, 5, 3))
+	ShowCursor(false);
+	if (Wall::carWallCollision(Car1.GetPosition(), Car1.GetTargetpos(), 5, 3))
+	{
 		std::cout << "Collide\n";
+	}
 	else
-		std::cout << "\n";
+		//std::cout << "\n";
 
 	if (lightcolor >= 0 && !switchcolor)//Switching color
 	{
@@ -388,8 +394,8 @@ void Minigame::Render()
 	RenderEnviroment();
 	RenderPlayer();
 	modelStack.PushMatrix();
-	modelStack.Translate(Car1.position.x, Car1.position.y, Car1.position.z);
-	modelStack.Rotate(Car1.rotationy, 0, 1, 0);
+	modelStack.Translate(Car1.GetPosition().x, Car1.GetPosition().y, Car1.GetPosition().z);
+	modelStack.Rotate(Car1.GetRotation(), 0, 1, 0);
 	RenderMesh(meshList[GEO_CARAI], true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
@@ -400,13 +406,13 @@ void Minigame::Render()
 	modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z);
 	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
 	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
-	modelStack.PopMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
-	//RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 4, 9.85, 7.1);
-	RenderMeshOnScreen(meshList[GEO_TEXT],Color(1,1,1), 4, 4, 10, 7, 1);
-	RenderMeshOnScreen(meshList[GEO_SPEEDMETER], Color(1, 1, 1), 20, 20, 0,0, 0);
+	//modelStack.PushMatrix();
+	//RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
+	//modelStack.PopMatrix();
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
+	////RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 4, 9.85, 7.1);
+	//RenderMeshOnScreen(meshList[GEO_TEXT],Color(1,1,1), 4, 4, 10, 7, 1);
+	RenderUI();
 	for (int wallIndex = 0; wallIndex < Wall::getNumOfWall(); ++wallIndex)
 	{
 		Wall* wall = Wall::getWall(wallIndex);
@@ -562,7 +568,7 @@ void Minigame::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,stati
 	//RenderMesh(meshList[GEO_CARTARGET], false);
 	//modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(10,0,0);
+	modelStack.Translate(10,-1,0);
 	modelStack.Scale(2.5,2.5,2.5);
 	RenderMesh(meshList[GEO_ROAD], false);
 	modelStack.PopMatrix();
@@ -570,6 +576,13 @@ void Minigame::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,stati
 	modelStack.Translate(Car1.Point[0].x, Car1.Point[0].y, Car1.Point[0].z);
 	RenderMesh(meshList[GEO_PLAYER], false);
 	modelStack.PopMatrix();*/
+}
+
+void Minigame::RenderUI()
+{
+	RenderMeshOnScreen(meshList[GEO_SPEEDMETER], Color(1, 1, 1), 20, 20, 10, 10, 0,0);
+	float rotate = (Player.Speed * 4) / 360 * 270;
+	RenderMeshOnScreen(meshList[GEO_POINTER], Color(1, 1, 1), 20, 20, 10, 10, 0, rotate);
 }
 
 void Minigame::RenderText(Mesh* mesh, std::string text, Color color)
@@ -637,7 +650,7 @@ void Minigame::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, flo
 
 	glEnable(GL_DEPTH_TEST);
 }
-void Minigame::RenderMeshOnScreen(Mesh* mesh, Color color, float sizex,float sizey, float x, float y,int animFrames)
+void Minigame::RenderMeshOnScreen(Mesh* mesh, Color color, float sizex,float sizey, float x, float y,int animFrames,float Rotation)
 {
 	if (!mesh || mesh->textureID <= 0)
 		return;
@@ -651,6 +664,7 @@ void Minigame::RenderMeshOnScreen(Mesh* mesh, Color color, float sizex,float siz
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
 	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(Rotation, 0, 0, -1);
 	modelStack.Scale(sizex, sizey,1);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
 	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
@@ -667,4 +681,5 @@ void Minigame::RenderMeshOnScreen(Mesh* mesh, Color color, float sizex,float siz
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
+
 }
