@@ -49,5 +49,5 @@ public:
 	// Returns:
 	//		bool,	returns true if collide with any walls,
 	//		returns	false if never collide with any wall
-	static bool carWallCollision(Vector3 pos, Vector3 fwd, float len, float width);
+	static Wall* carWallCollision(Vector3 pos, Vector3 fwd, float len, float width);
 };
