@@ -7,6 +7,8 @@
 #include "Camera2.h"
 #include "Camera3.h"
 #include "Mesh.h"
+#include "SceneCarSelection.h"
+#include "CCar.h"
 #include "Light.h"
 
 class SceneSkybox : public Scene
