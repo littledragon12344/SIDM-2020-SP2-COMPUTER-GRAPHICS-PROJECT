@@ -28,10 +28,10 @@ void Camera2::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 void Camera2::Update(double dt)
 {
 	
-	static const float CAMERA_SPEED = 50.f;
+	static const float CAMERA_SPEED = 15.f;
 	if(Application::IsKeyPressed(VK_LEFT))
 	{
-		float yaw = (float)(CAMERA_SPEED * dt*2);
+		float yaw = (float)(CAMERA_SPEED * dt* 5);
 		Mtx44 rotation;
 		rotation.SetToRotation(yaw, 0, 1, 0);
 		xzTarget = rotation * xzTarget;
@@ -41,7 +41,7 @@ void Camera2::Update(double dt)
 	}
 	if(Application::IsKeyPressed(VK_RIGHT))
 	{
-		float yaw = (float)(-CAMERA_SPEED * dt*2);
+		float yaw = (float)(-CAMERA_SPEED * dt*5);
 		Mtx44 rotation;
 		rotation.SetToRotation(yaw, 0, 1, 0);
 		xzTarget = rotation * xzTarget;
@@ -79,7 +79,8 @@ void Camera2::Update(double dt)
 		TargetFromPos = rotation * TargetFromPos;
 		target =TargetFromPos + Temp;
 	}
-	if(Application::IsKeyPressed('S'))
+
+	/*if(Application::IsKeyPressed('S'))
 	{
 		Vector3 direction = position - target;
 			Vector3 view = xzTarget.Normalized();
@@ -109,7 +110,8 @@ void Camera2::Update(double dt)
 		viewRight = Vector3(cos(Math::DegreeToRadian(90)) * view.x - sin(Math::DegreeToRadian(90)) * view.z, 0, cos(Math::DegreeToRadian(90)) * view.z + sin(Math::DegreeToRadian(90)) * view.x);
 		target += viewRight * (float)(10.f * dt);
 		position += viewRight * (float)(10.f * dt);
-	}
+	}*/
+
 	if(Application::IsKeyPressed('R'))
 	{
 		Reset();

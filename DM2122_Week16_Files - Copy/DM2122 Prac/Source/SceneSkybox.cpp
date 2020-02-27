@@ -30,6 +30,8 @@ void SceneSkybox::Init()
 	rotate = 0;
 	translateY1 = 0.7f;
 	translateY2 = -0.3f;
+	translateY3 = 1.4f;
+	translateY4 = 0.3f;
 	Cameraspeed = 25.f;
 
 	// Generate a default VAO for now
@@ -193,6 +195,11 @@ void SceneSkybox::Init()
 	meshList[GEO_PLAYER] = MeshBuilder::GenerateCuboid("Player", Color(1, 1, 1), 1.f, 1.f,1.f);
 	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//Bush.tga");
 
+	meshList[GEO_WALL] = MeshBuilder::GenerateCuboid("wall", Color(1, 1, 1), 1, 1, 1);
+	Wall::generateWalls("Obj//wall_room.obj");
+
+	meshList[GEO_ROOF] = MeshBuilder::GenerateCuboid("roof", Color(0, 0, 0.5), 130.f, 1.f, 130.f);
+
 	meshList[GEO_LIGHTSPHERE1] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_LIGHTSPHERE2] = MeshBuilder::GenerateSphere("lightBall2", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
@@ -342,6 +349,26 @@ void SceneSkybox::Update(double dt)
 		translateY2 = -0.3f;
 	}
 
+	if (translateY3 > 1.2f)
+	{
+		translateY3 -= (float)(dt * 0.1);
+	}
+
+	else if (translateY3 <= 1.2f)
+	{
+		translateY3 = 1.4f;
+	}
+
+	if (translateY4 > 0.1f)
+	{
+		translateY4 -= (float)(dt * 0.1);
+	}
+
+	else if (translateY4 <= 0.1f)
+	{
+		translateY4 = 0.3f;
+	}
+
 }
 
 void SceneSkybox::Render()
@@ -407,6 +434,7 @@ void SceneSkybox::Render()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	RenderSkybox();
+	RenderRoom();
 	RenderEnviroment();
 	modelStack.PushMatrix();
 	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
@@ -421,7 +449,6 @@ void SceneSkybox::Render()
 	//modelStack.PopMatrix();
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 4, 10, 7.5);
-	RenderRoom();
 }
 
 void SceneSkybox::Exit()
@@ -540,13 +567,28 @@ void SceneSkybox::RenderPlayer()
 
 void SceneSkybox::RenderRoom()
 {
-	
+	for (int wallIndex = 0; wallIndex < Wall::getNumOfWall(); wallIndex++)
+	{
+		Wall* wall = Wall::getWall(wallIndex);
+		modelStack.PushMatrix();
+		modelStack.Translate(wall->getPosition().x, wall->getPosition().y, wall->getPosition().z);
+		modelStack.Rotate(90 - wall->getWallNormalRotation(), 0, 1, 0);
+		modelStack.Scale(wall->getLength(), wall->getHeight(), wall->getDepth());
+		RenderMesh(meshList[GEO_WALL], true);
+		modelStack.PopMatrix();
+	}
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 30.f, -5.f);
+	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
+	RenderMesh(meshList[GEO_ROOF], true);
+	modelStack.PopMatrix();
 }
 
 void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,station car,booth ,plants, well anything static
 {
 	modelStack.PushMatrix();
-	modelStack.Translate(10.f, -0.5f, 10.f);
+	modelStack.Translate(10.f, -0.5f, 20.f);
 	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], false);
 	modelStack.PushMatrix();
@@ -578,7 +620,7 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(10.f, -0.5f, -10.f);
+	modelStack.Translate(10.f, -0.5f, -20.f);
 	modelStack.Rotate(-rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], false);
 	modelStack.PushMatrix();
@@ -606,11 +648,11 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-10.f, -0.5f, 20.f);
+	modelStack.Translate(-20.f, -0.5f, 20.f);
 	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], false);
 	modelStack.PushMatrix();
-	modelStack.Translate(0.f, 1.2f, 0.f);
+	modelStack.Translate(0.f, translateY3, 0.f);
 	modelStack.Scale(0.5f, 0.5f, 0.5f);
 	RenderMesh(meshList[GEO_CAR3], false);
 	modelStack.PushMatrix();
@@ -635,11 +677,11 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-10.f, -0.3f, -20.f);
+	modelStack.Translate(-20.f, -0.3f, -20.f);
 	modelStack.Rotate(-rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], false);
 	modelStack.PushMatrix();
-	modelStack.Translate(0.f, 0.1f, 0.f);
+	modelStack.Translate(0.f, translateY4, 0.f);
 	RenderMesh(meshList[GEO_CAR4], false);
 	modelStack.PushMatrix();
 	modelStack.Translate(2.2f, 0.2f, 0.3f);

@@ -29,9 +29,6 @@ public:
 	void SetCarPos(float carPosx, float carPosy, float carPosz);
 	float GetCarPos(char pos);
 
-	//car name and texture
-	Mesh* CarInfo(std::string file_name, std::string texture_name);
-
 	//kinematic formulas
 	float Kinematic1(char mode, float v, float u, float a, float t);
 	float Kinematic2(char mode, float s, float u, float v, float t);
