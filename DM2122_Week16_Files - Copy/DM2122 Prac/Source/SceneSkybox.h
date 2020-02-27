@@ -7,9 +7,12 @@
 #include "Camera2.h"
 #include "Camera3.h"
 #include "Mesh.h"
-#include "SceneCarSelection.h"
-#include "CCar.h"
 #include "Light.h"
+#include "NPC.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
 
 class SceneSkybox : public Scene
 {
@@ -39,6 +42,9 @@ class SceneSkybox : public Scene
 		GEO_LIGHTSPHERE1,
 		GEO_LIGHTSPHERE2,
 		GEO_TEXT,
+		GEO_NPCB,
+		GEO_NPCW,
+		GEO_TEXTBOX,
 		NUM_GEOMETRY,
 	};
 
@@ -100,6 +106,13 @@ private:
 	float translateY2;
 	float translateY3;
 	float translateY4;
+	float movetocar1;
+	float movetocar2x;
+	float movetocar2z;
+	float movetocar3x;
+	float movetocar3z;
+	float movetocar4x;
+	float movetocar4z;
 	float Cameraspeed;
 
 	MS modelStack, viewStack, projectionStack;
@@ -118,6 +131,34 @@ private:
 	void RenderEnviroment();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderTextBox();
+	void RenderNPCText();
+	
+
+	NPC NPC[1];
+	string NPCtext;
+	string NPCDialogue();
+
+	void InteractionUpdate(int i);
+	
+
+	bool NearNPC();
+	bool DuringConvo();
+
+	bool SpeakIntro;
+	bool Speak1;
+	bool Speak2;
+	bool Speak3;
+	bool Speak4;
+	bool nearPlatform;
+	bool duringconvo;
+	bool move1;
+	bool move2;
+	bool move3;
+	bool move4;
+
+	double bounceTime;
+	float timer;
 
 public:
 	SceneSkybox();
