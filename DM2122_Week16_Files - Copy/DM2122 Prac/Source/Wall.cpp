@@ -71,7 +71,7 @@ bool Wall::generateWalls(const char* file_path)
 				if (up != Vector3(0, 0, 0) && front != Vector3(0, 0, 0))
 					break;
 			}
-			
+
 			// Skip to the next object if up is not set in the loop above as it would mean that the shape is rotated in either x or z axis.
 			if (up == Vector3(0, 0, 0))
 			{
@@ -81,7 +81,7 @@ bool Wall::generateWalls(const char* file_path)
 
 			// Don't need to find front vector as it should be up cross product with right.
 			right = up.Cross(front).Normalized();
-			
+
 			for (int i = 0; i < temp_vertices.size(); ++i)
 			{
 				// Add up all vertices and divide it by the size to find average.
@@ -94,7 +94,7 @@ bool Wall::generateWalls(const char* file_path)
 
 					// Getting the length, height and depth
 					for (int index = 0; index < temp_vertices.size(); ++index)
-					{	
+					{
 						if (temp_vertices[i] == temp_vertices[index])
 							continue;
 						tmp = temp_vertices[i] - temp_vertices[index];
@@ -197,7 +197,7 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 			&&
 			((abs(parallelDist) < maxWallPlayerLengthDist) || // If next position is inside the wall in the wall parallel direction
 			((parallelDist * (position.Dot(wallPara) - wall.position.Dot(wallPara))) < 0)) // If the point is moving very fast and it passes than the wall's length
-		)
+			)
 		{
 			// If collided with 2 walls, don't move
 			if (numWallsCollided == 1)
@@ -208,7 +208,7 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 			// If the perpendicular distance of the current position of the object is more than the depth,
 			// It is on the length (x-axis) side of the object
 			// Need to round the value to 4.d.p because for rotated walls, the value might have some accuracy error like floating point errors
-			if (roundf(abs(position.Dot(wall.normal) - wall.position.Dot(wall.normal)) * 1000) / 1000 >= (roundf(maxWallPlayerDepthDist) * 1000) / 1000.f)
+			if (roundf(abs(position.Dot(wall.normal) - wall.position.Dot(wall.normal)) * 1000) / 1000 >= maxWallPlayerDepthDist)
 			{
 				// Flip wallPara to the other direction if the displacement is the other direction of wallPara.
 				// wallPara will be 90 degrees anti-clockwise to the normal
@@ -249,7 +249,7 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 //		bool,	returns true if collide with any walls,
 //		returns	false if never collide with any wall
 // Method used: separating axis theorem (from online)
-bool Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
+Wall* Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 {
 	fwd.Normalize();
 	Vector3 rectRight;
@@ -337,7 +337,7 @@ bool Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 		// Do the same as above (from calculating the wallCornerPos to if statement above) but do the calculations on the rect's foward vector instead
 		// Set both largest and smallest to distance of top right corner of the rectangle in wall normal axis.
 		largest = smallest = rectCornerPos[0].Dot(wall.normal);
-		
+
 		// Getting largest and smallest distance of rectangle's corner position in wall normal axis.
 		for (int i = 1; i < 4; ++i)
 		{
@@ -400,8 +400,8 @@ bool Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 			continue; // continue to next wall
 
 		// If it runs here, it means that it has collided with the wall in wallIndex.
-		return true;
+		return allWalls[wallIndex];
 	}
 
-	return false;
+	return NULL;
 }
