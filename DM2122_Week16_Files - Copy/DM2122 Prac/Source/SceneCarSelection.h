@@ -3,9 +3,10 @@
 
 #include "Scene.h"
 #include <MatrixStack.h>
-#include "FPCamera.h"
 #include "Mesh.h"
+#include "Camera2.h"
 #include "Light.h"
+#include "CCar.h"
 
 class SceneCarSelection : public Scene
 {
@@ -71,16 +72,7 @@ private:
 	MS modelStack, viewStack, projectionStack;
 	Light light[1];
 
-	FPCamera camera;
-
-	// ===========================================
-	// Temporary variables * Remember to delete *
-	// ===========================================
-	// Temporary variable to store the acceleration and top speed of the car. 
-	// Replace it when have the car class and car stats.
-	float accel; 
-	float topSpd;
-	// ===========================================
+	Camera2 camera;
 
 	float carAngle;
 	float animAngle;
