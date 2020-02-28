@@ -32,6 +32,11 @@ public:
 	CarAi();
 	~CarAi();
 	void Updates(float dt);
+	//Temporary
+	float acceration;
+	float speed;
+	float maxspeed;
+	//Temporary
 	//void GeneratePath(const std::string& file_path, float scale, Vector3 Offset);
 	float dot(Vector3 Fstnum, Vector3 sndNum);
 	float distance(Vector3 Num);

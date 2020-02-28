@@ -9,7 +9,9 @@
 #include <stdlib.h>
 
 #include "Application.h"
-#include "SceneManager.h"
+//#include "SceneManager.h"
+#include "SceneSkybox.h"
+#include"Minigame.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -34,7 +36,6 @@ void resize_callback(GLFWwindow* window, int w, int h)
 	//update opengl new window size
 	glViewport(0, 0, w, h);
 }
-
 bool Application::IsKeyPressed(unsigned short key)
 {
 	

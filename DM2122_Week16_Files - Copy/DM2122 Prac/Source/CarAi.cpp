@@ -14,6 +14,11 @@ CarAi::~CarAi()
 
 void CarAi::Updates(float dt)
 {
+	speed += acceration*dt;
+	if (speed > maxspeed)
+	{
+		speed = maxspeed;
+	}
 	Vector3 Temp = PathToGo->Point[start];//Get Start of each point
 	if (position == defaultPosition)//Starting angle			//Initialize Car ai Target pos and rotation
 	{
@@ -159,9 +164,13 @@ void CarAi::Updates(float dt)
 	//{
 	//	//std::cout << angleFromx << std::endl;
 	//}
+	if (rotationy != angleFromx)
+	{
+		speed -= 4.f*dt;
+	}
 	target = GetTargetpos();
 	Vector3 TargetView = (target - position).Normalize();
-	position += TargetView * (float)(60.f * dt);
+	position += TargetView * (float)(speed * dt);
 //	target = GetTargetpos();
 
 }
@@ -211,6 +220,9 @@ float CarAi::distance(Vector3 Num)// vector math to find distance ||
 
 void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up,float RotateSpeed, Path *paths)//Initiallizing
 {
+	acceration = 10.f;
+	speed = 0.f;
+	maxspeed = 60.f;
 	PathToGo = paths;
 	start = 0;
 	rotationSpeed = RotateSpeed;
