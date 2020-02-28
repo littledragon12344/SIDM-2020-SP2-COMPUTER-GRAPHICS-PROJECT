@@ -9,9 +9,7 @@
 #include <stdlib.h>
 
 #include "Application.h"
-//#include "SceneManager.h"
-#include "SceneSkybox.h"
-#include"Minigame.h"
+#include "SceneManager.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
