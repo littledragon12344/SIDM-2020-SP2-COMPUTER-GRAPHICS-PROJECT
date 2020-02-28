@@ -12,7 +12,6 @@ class CCar
 	float distance;
 	Position carPos;
 
-
 public: 
 	CCar();
 	~CCar();
@@ -21,7 +20,7 @@ public:
 
 	std::vector<CCar*>GetAllCar();
 
-	static void CreateCar(float max_speed,float acceleration);
+	static void CreateCar(Mesh* car_mesh, Mesh* wheel_mesh, float max_speed,float acceleration);
 
 	//getting the values
 	float GetCurrentSpeed();
@@ -35,10 +34,6 @@ public:
 	void SetDist(float dist);
 
 	//kinematic formulas
-	float Kinematic1(char mode, float v, float u, float a, float t);
-	float Kinematic2(char mode, float s, float u, float v, float t);
-	float Kinematic3(char mode, float s, float u, float t, float a);
-	float Kinematic4(char mode, float v, float u, float a, float s);
-
+	void CalculateSpeed(float a, float u, float t);
 };
 

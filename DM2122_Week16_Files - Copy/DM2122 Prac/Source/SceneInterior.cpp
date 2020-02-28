@@ -175,10 +175,10 @@ void SceneInterior::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	CCar::CreateCar(30.f, 3.f);
-	CCar::CreateCar(25.f, 4.f);
-	CCar::CreateCar(40.f, 2.f);
-	CCar::CreateCar(50.f, 1.f);
+	CCar::CreateCar(meshList[GEO_CAR1], nullptr, 60.f, 6.f);
+	CCar::CreateCar(meshList[GEO_CAR2], nullptr, 50.f, 8.f);
+	CCar::CreateCar(meshList[GEO_CAR3], nullptr, 80.f, 4.f);
+	CCar::CreateCar(meshList[GEO_CAR4], nullptr, 100.f, 2.f);
 
 	lightcolor = 0.f;
 
@@ -225,20 +225,7 @@ void SceneInterior::Update(double dt)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	light[1].position.Set(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
-	if (Application::IsKeyPressed('I'))
-		light[0].position.z -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('K'))
-		light[0].position.z += (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('J'))
-		light[0].position.x -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('L'))
-		light[0].position.x += (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('O'))
-		light[0].position.y -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('P'))
-		light[0].position.y += (float)(LSPEED * dt);
-
+	
 	if (Application::IsKeyPressed(VK_NUMPAD1))
 	{
 		dist = 0;
@@ -260,23 +247,27 @@ void SceneInterior::Update(double dt)
 		CarSwitch = 3;
 	}
 
-	fpsCamera.SetCameraSpeed(CCar::AllCar[CarSwitch]->GetMaxSpeed());
 
 	if (Application::IsKeyPressed('W'))
 	{
 		moving = true;
+		dist += (float)(dt * CCar::AllCar[CarSwitch]->GetCurrentSpeed());
 		CCar::AllCar[CarSwitch]->SetDist(dist);
-		dist += (float)(dt * CCar::AllCar[CarSwitch]->GetMaxSpeed()) / 20.f;
 	}
 
-	CCar::AllCar[CarSwitch]->Kinematic3('u', CCar::AllCar[CarSwitch]->GetDist(), 0, dt, CCar::AllCar[CarSwitch]->GetAcceleration());
+	CCar::AllCar[CarSwitch]->CalculateSpeed(CCar::AllCar[CarSwitch]->GetAcceleration(), CCar::AllCar[CarSwitch]->GetCurrentSpeed(), dt);
 
-	CCar::AllCar[CarSwitch]->SetCurrentSpeed(CCar::AllCar[CarSwitch]->GetCurrentSpeed() / 20.f);
+	CCar::AllCar[CarSwitch]->SetCurrentSpeed(CCar::AllCar[CarSwitch]->GetCurrentSpeed());
 
-	if (CCar::AllCar[CarSwitch]->GetCurrentSpeed() <= 0 || moving == false)
+	if (CCar::AllCar[CarSwitch]->GetCurrentSpeed() < 0 || moving == false)
 	{
 		CCar::AllCar[CarSwitch]->SetCurrentSpeed(0);
 	}
+	if (CCar::AllCar[CarSwitch]->GetCurrentSpeed() >= CCar::AllCar[CarSwitch]->GetMaxSpeed())
+	{
+		CCar::AllCar[CarSwitch]->SetCurrentSpeed(CCar::AllCar[CarSwitch]->GetMaxSpeed());
+	}
+	fpsCamera.SetCameraSpeed(CCar::AllCar[CarSwitch]->GetCurrentSpeed());
 
 	float Cameraspeed = 50.f;
 	if (Application::IsKeyPressed('A'))
@@ -290,6 +281,8 @@ void SceneInterior::Update(double dt)
 	if (Application::IsKeyPressed('R'))
 	{
 		Yaw = 0;
+		dist = 0;
+		CCar::AllCar[CarSwitch]->SetDist(dist);
 	}
 
 	moving = false;

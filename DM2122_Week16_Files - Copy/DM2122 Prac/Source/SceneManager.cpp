@@ -2,7 +2,7 @@
 
 SceneManager* SceneManager::instance = 0;
 
-SceneManager::SceneManager() : currSceneID(0)
+SceneManager::SceneManager() : currentSceneID(SCENE_SKYBOX)
 {
 	
 }
@@ -12,6 +12,13 @@ SceneManager* SceneManager::getInstance()
 	if (!instance)
 	{
 		instance = new SceneManager();
+		instance->scene_list[SCENE_SKYBOX] = new SceneSkybox();
+		instance->scene_list[SCENE_CAR_SELECTION] = new SceneCarSelection();
+		instance->scene_list[SCENE_MINIGAME] = new Minigame();
+		instance->scene_list[SCENE_INTERIOR] = new SceneInterior();
+
+		instance->scene_list[SCENE_SKYBOX]->Init();
+
 		return instance;
 	}
 	else
@@ -20,32 +27,25 @@ SceneManager* SceneManager::getInstance()
 	}
 }
 
-void SceneManager::AddScene(Scene* scene)
+void SceneManager::SetNextScene(SCENES_TYPES sceneID)
 {
-	scene->Init();
-	scenes.push_back(scene);
-}
-void SceneManager::SetNextScene(int sceneID)
-{
-	if (sceneID != currSceneID)
+	if (sceneID != currentSceneID)
 	{
-		scenes[currSceneID]->Exit();
-		currSceneID = sceneID;
-		scenes[currSceneID]->Init();
+		scene_list[currentSceneID]->Exit();
+		currentSceneID = sceneID;
+		scene_list[currentSceneID]->Init();
 	}
 }
 
 void SceneManager::Update(double dt)
 {
-	scenes[currSceneID]->Update(dt);
-	scenes[currSceneID]->Render();
+	scene_list[currentSceneID]->Update(dt);
+	scene_list[currentSceneID]->Render();
 }
 
 void SceneManager::DeleteAllScenes()
 {
-	scenes[currSceneID]->Exit();
-	for (int i = 0; i < scenes.size(); ++i)
-		delete scenes[i];
-	
-	scenes.clear();
+	scene_list[currentSceneID]->Exit();
+	for (int i = 0; i < NUM_SCENES; ++i)
+		delete scene_list[i];
 }
