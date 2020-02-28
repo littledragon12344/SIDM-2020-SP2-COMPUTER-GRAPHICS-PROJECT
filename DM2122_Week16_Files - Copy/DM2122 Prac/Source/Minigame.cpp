@@ -25,6 +25,7 @@ Minigame::~Minigame()
 
 void Minigame::Init()
 {
+	StartTime = 3.5f;
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 	// Generate a default VAO for now
@@ -37,7 +38,7 @@ void Minigame::Init()
 
 	FPScamera.Init(Vector3(-10, 2, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
 	Frecamera.Init(Vector3(-10, 2, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
-	TPSCamera.Init(Vector3(-30, 2, 0), FPScamera.position, FPScamera.up);
+	//TPSCamera.Init(Vector3(-30, 2, 0), FPScamera.position, FPScamera.up);
 	TopCamera.Init(Vector3(-10, 300, 0), Vector3(-10, 0, 0), Vector3(0, 0, -1));
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -172,6 +173,9 @@ void Minigame::Init()
 	meshList[GEO_POINTER] = MeshBuilder::GenerateTextureUI("Pointer", 1, 1);
 	meshList[GEO_POINTER]->textureID = LoadTGA("Image//Pointer.tga");
 
+	meshList[GEO_STARTLIGHT] = MeshBuilder::GenerateTextureUI("Startlight", 4, 1);
+	meshList[GEO_STARTLIGHT]->textureID = LoadTGA("Image//StartLight.tga");
+
 	meshList[GEO_CARAI] = MeshBuilder::GenerateOBJ("Car", "OBJ//car_frame.obj");
 	meshList[GEO_CARAI]->textureID = LoadTGA("Image//CarBody_texture.tga");
 
@@ -181,13 +185,13 @@ void Minigame::Init()
 	meshList[GEO_WALL] = MeshBuilder::GenerateCuboid("wall", Color(1, 1, 1), 1, 1, 1);
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//CarBody_texture.tga");
 
-	Wall::generateWalls("OBJ//Wall.obj");
+	//Wall::generateWalls("OBJ//Wall.obj");
 
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Car", "OBJ//Road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Image//RoadTexture.tga");
 
 	path1.GeneratePath("OBJ//Path.obj",2.5,Vector3(10,0,0));//PathObj , scale, Offset
-	Wall::createWall(path1.Point[1], Vector3(0, 0, 1), 3, 2, 10);
+	//Wall::createWall(path1.Point[1], Vector3(0, 0, 1), 3, 2, 10);
 	Car1.init(path1.Point[0], Vector3(0, 0, 100), Vector3(0, 1, 0),200.f,&path1);
 	Player.init(Vector3(0, 0, 0), Vector3(1, 0, 0), Vector3(0, 1, 0), 150.f);
 	SwitchCamera = 4;
@@ -201,7 +205,7 @@ void Minigame::InitPlayerCar()
 
 void Minigame::Update(double dt)
 {
-	ShowCursor(false);
+	//ShowCursor(false);
 	if (Wall::carWallCollision(Car1.GetPosition(), Car1.GetTargetpos(), 5, 3))
 	{
 		std::cout << "Collide\n";
@@ -209,10 +213,10 @@ void Minigame::Update(double dt)
 	else
 		//std::cout << "\n";
 
-	if (lightcolor >= 0 && !switchcolor)//Switching color
-	{
-		lightcolor += 0.5 * dt;
-	}
+		if (lightcolor >= 0 && !switchcolor)//Switching color
+		{
+			lightcolor += 0.5 * dt;
+		}
 	if (lightcolor >= 1.f)
 	{
 		lightcolor = 1.f;
@@ -226,6 +230,15 @@ void Minigame::Update(double dt)
 	{
 		lightcolor = 0.f;
 		switchcolor = false;
+	}
+	if (Application::IsKeyPressed('P'))//Button to switch
+	{
+		Pause = true;
+	}
+	//dt = 0;
+	if (Pause == true)
+	{
+		dt = 0;
 	}
 	if (Application::IsKeyPressed('J'))//Button to switch
 	{
@@ -278,10 +291,10 @@ void Minigame::Update(double dt)
 	{
 		SwitchCamera = 3;
 	}
-	if (Application::IsKeyPressed('V'))
+	/*if (Application::IsKeyPressed('V'))
 	{
 		SwitchCamera = 4;
-	}
+	}*/
 	if (Application::IsKeyPressed('5'))
 	{
 		//to do: switch light type to POINT and pass the information to
@@ -312,18 +325,25 @@ void Minigame::Update(double dt)
 	}
 	if (SwitchCamera == 2)
 		Frecamera.Update(dt);
-	else if (SwitchCamera==4)
+	else if (SwitchCamera == 4)
 	{
 		TopCamera.Update(dt);
 	}
 	else
 	{
 		FPScamera.Update(dt);
-		TPSCamera.Update(dt);
+		//TPSCamera.Update(dt);
 	}
-	light[1].position.Set(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);
-	Player.Updates(dt);
-	Car1.Updates(dt);
+	if (StartTime <= 0)
+	{
+		light[1].position.Set(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);
+		Player.Updates(dt);
+		Car1.Updates(dt);
+	}
+	else
+	{
+		StartTime -= dt;
+	}
 }
 
 void Minigame::Render()
@@ -336,8 +356,8 @@ void Minigame::Render()
 		viewStack.LookAt(Frecamera.position.x, Frecamera.position.y, Frecamera.position.z, Frecamera.target.x, Frecamera.target.y, Frecamera.target.z, Frecamera.up.x, Frecamera.up.y, Frecamera.up.z);
 	else if (SwitchCamera == 1)
 		viewStack.LookAt(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z, FPScamera.target.x, FPScamera.target.y, FPScamera.target.z, FPScamera.up.x, FPScamera.up.y, FPScamera.up.z);
-	else if(SwitchCamera==3)
-		viewStack.LookAt(TPSCamera.position.x, TPSCamera.position.y, TPSCamera.position.z, TPSCamera.target.x, TPSCamera.target.y, TPSCamera.target.z, TPSCamera.up.x, TPSCamera.up.y, TPSCamera.up.z);
+	//else if(SwitchCamera==3)
+	//	viewStack.LookAt(TPSCamera.position.x, TPSCamera.position.y, TPSCamera.position.z, TPSCamera.target.x, TPSCamera.target.y, TPSCamera.target.z, TPSCamera.up.x, TPSCamera.up.y, TPSCamera.up.z);
 	else//Main camera in use
 		viewStack.LookAt(TopCamera.position.x, TopCamera.position.y, TopCamera.position.z, TopCamera.target.x, TopCamera.target.y, TopCamera.target.z, TopCamera.up.x, TopCamera.up.y, TopCamera.up.z);
 	modelStack.LoadIdentity();
@@ -583,6 +603,9 @@ void Minigame::RenderUI()
 	RenderMeshOnScreen(meshList[GEO_SPEEDMETER], Color(1, 1, 1), 20, 20, 10, 10, 0,0);
 	float rotate = (Player.Speed * 4) / 360 * 270;
 	RenderMeshOnScreen(meshList[GEO_POINTER], Color(1, 1, 1), 20, 20, 10, 10, 0, rotate);
+	float temp = 3.5;
+	temp -=StartTime;
+	RenderMeshOnScreen(meshList[GEO_STARTLIGHT], Color(1, 1, 1), 20, 7.5, 43, 55, (int)temp, 0);
 }
 
 void Minigame::RenderText(Mesh* mesh, std::string text, Color color)
