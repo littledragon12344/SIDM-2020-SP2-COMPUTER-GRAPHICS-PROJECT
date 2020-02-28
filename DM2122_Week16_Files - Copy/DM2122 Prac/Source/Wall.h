@@ -25,8 +25,9 @@ public:
 	Vector3 getPosition();
 	float getLength();
 	float getHeight();
-	float getDepth();
-	static int getNumOfWall();
+	float getDepth();	
+	static void deleteWalls(); // Deletes all walls
+	static int getNumOfWall();	
 	static Wall* getWall(int index); // Get the wall at the index position
 	float getWallNormalRotation(); // Rotation of the wall normal in the xz plane
 
