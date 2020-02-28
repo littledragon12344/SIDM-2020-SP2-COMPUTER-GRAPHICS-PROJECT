@@ -133,6 +133,7 @@
     <ClInclude Include="Source\CarAI.h" />
     <ClInclude Include="Source\CarMinigame.h" />
     <ClInclude Include="Source\CCar.h" />
+    <ClInclude Include="Source\FirstPersonCamera.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
     <ClInclude Include="Source\LoadTGA.h" />
@@ -142,6 +143,9 @@
     <ClInclude Include="Source\Minigame.h" />
     <ClInclude Include="Source\Path.h" />
     <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\SceneCarSelection.h" />
+    <ClInclude Include="Source\SceneInterior.h" />
+    <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\SceneSkybox.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\TopDownCamera.h" />
@@ -157,6 +161,7 @@
     <ClCompile Include="Source\CarAi.cpp" />
     <ClCompile Include="Source\CarMinigame.cpp" />
     <ClCompile Include="Source\CCar.cpp" />
+    <ClCompile Include="Source\FirstPersonCamera.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -164,6 +169,9 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Minigame.cpp" />
     <ClCompile Include="Source\Path.cpp" />
+    <ClCompile Include="Source\SceneCarSelection.cpp" />
+    <ClCompile Include="Source\SceneInterior.cpp" />
+    <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\SceneSkybox.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\TopDownCamera.cpp" />

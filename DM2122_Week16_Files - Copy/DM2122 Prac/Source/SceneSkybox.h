@@ -138,6 +138,7 @@ private:
 	float translateY3;
 	float translateY4;
 	float Cameraspeed;
+	bool movesUp;
 
 	MS modelStack, viewStack, projectionStack;
 	Light light[5];

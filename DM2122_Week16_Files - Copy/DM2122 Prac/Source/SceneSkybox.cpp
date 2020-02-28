@@ -33,6 +33,7 @@ void SceneSkybox::Init()
 	translateY3 = 1.4f;
 	translateY4 = 0.3f;
 	Cameraspeed = 25.f;
+	movesUp = false;
 
 	// Generate a default VAO for now
 	glGenVertexArrays(1, &m_vertexArrayID);
@@ -400,46 +401,98 @@ void SceneSkybox::Update(double dt)
 		rotate = 0;
 	}
 
-	if (translateY1 > 0.4f)
+	if (translateY1 > 0.4f && !movesUp)
 	{
 		translateY1 -= (float)(dt * 0.1);
+
 	}
 
-	else if (translateY1 <= 0.4f)
+	if (translateY1 <= 0.4f)
 	{
-		translateY1 = 0.7f;
+		translateY1 = 0.4;
+		movesUp = true;
 	}
 
-	if (translateY2 > -0.6f)
+	if (translateY1 < 0.8f && movesUp)
+	{
+		translateY1 += (float)(dt * 0.1);
+	}
+
+	if (translateY1 >= 0.8f)
+	{
+		translateY1 = 0.8f;
+		movesUp = false;
+	}
+
+	if (translateY2 > -0.7f && !movesUp)
 	{
 		translateY2 -= (float)(dt * 0.1);
+
 	}
 
-	else if (translateY2 <= -0.6f)
+	if (translateY2 <= -0.7f)
 	{
-		translateY2 = -0.3f;
+		translateY2 = -0.7;
+		movesUp = true;
 	}
 
-	if (translateY3 > 1.2f)
+	if (translateY2 < -0.2f && movesUp)
+	{
+		translateY2 += (float)(dt * 0.1);
+	}
+
+	if (translateY2 >= -0.2f)
+	{
+		translateY2 = -0.2f;
+		movesUp = false;
+	}
+
+
+	if (translateY3 > 1.f && !movesUp)
 	{
 		translateY3 -= (float)(dt * 0.1);
+
 	}
 
-	else if (translateY3 <= 1.2f)
+	if (translateY3 <= 1.f)
+	{
+		translateY3 = 1.f;
+		movesUp = true;
+	}
+
+	if (translateY3 < 1.4f && movesUp)
+	{
+		translateY3 += (float)(dt * 0.1);
+	}
+
+	if (translateY3 >= 1.4f)
 	{
 		translateY3 = 1.4f;
+		movesUp = false;
 	}
 
-	if (translateY4 > 0.1f)
+	if (translateY4 > -0.1f && !movesUp)
 	{
 		translateY4 -= (float)(dt * 0.1);
+
 	}
 
-	else if (translateY4 <= 0.1f)
+	if (translateY4 <= -0.1f)
+	{
+		translateY4 = -0.1f;
+		movesUp = true;
+	}
+
+	if (translateY4 < 0.3f && movesUp)
+	{
+		translateY4 += (float)(dt * 0.1);
+	}
+
+	if (translateY4 >= 0.3f)
 	{
 		translateY4 = 0.3f;
+		movesUp = false;
 	}
-
 }
 
 void SceneSkybox::Render()
