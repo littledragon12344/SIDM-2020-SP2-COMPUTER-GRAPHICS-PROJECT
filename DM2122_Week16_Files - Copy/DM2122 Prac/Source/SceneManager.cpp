@@ -48,4 +48,5 @@ void SceneManager::DeleteAllScenes()
 	scene_list[currentSceneID]->Exit();
 	for (int i = 0; i < NUM_SCENES; ++i)
 		delete scene_list[i];
+	delete instance;
 }
