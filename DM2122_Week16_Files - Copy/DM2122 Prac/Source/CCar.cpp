@@ -1,7 +1,12 @@
 #include "CCar.h"
-#include "Utility.h"
+#include <fstream>
 
-CCar* CCar::s_instance;
+std::vector<CCar*>CCar:: AllCar;
+
+std::vector<CCar*>CCar::GetAllCar()
+{
+	return AllCar;
+}
 
 CCar::CCar()
 	: current_speed(-1), max_speed(-1), acceleration(-1), distance(-1)
@@ -14,39 +19,12 @@ CCar::~CCar()
 	
 }
 
-CCar* CCar::instance()
+void CCar::CreateCar(float max_speed, float acceleration)
 {
-	if (!s_instance)
-	{
-		s_instance = new CCar;
-		return s_instance;
-	}
-
-	else
-	return nullptr;
-}
-
-//setting the car position
-void CCar::SetCarPos(float carPosx, float carPosy, float carPosz)
-{
-	carPos.x = carPosx;
-	carPos.y = carPosy;
-	carPos.z = carPosz;
-}
-
-float CCar::GetCarPos(char pos)		//pass in the x, y, or z character to get the position
-{
-	switch (pos)
-	{
-	case 'x':
-		return carPos.x;
-	case 'y':
-		return carPos.y;
-	case 'z':
-		return carPos.z;
-	default:
-		break;
-	}
+	CCar* temp = new CCar;
+	temp->SetMaxSpeed(max_speed);
+	temp->SetAcceleration(acceleration);
+	AllCar.push_back(temp);
 }
 
 //===================Setters & Getters===================
