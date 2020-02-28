@@ -225,20 +225,7 @@ void SceneInterior::Update(double dt)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	light[1].position.Set(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
-	if (Application::IsKeyPressed('I'))
-		light[0].position.z -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('K'))
-		light[0].position.z += (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('J'))
-		light[0].position.x -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('L'))
-		light[0].position.x += (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('O'))
-		light[0].position.y -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('P'))
-		light[0].position.y += (float)(LSPEED * dt);
-
+	
 	if (Application::IsKeyPressed(VK_NUMPAD1))
 	{
 		dist = 0;
