@@ -141,6 +141,13 @@ float Wall::getHeight() { return height; }
 
 float Wall::getDepth() { return depth; }
 
+void Wall::deleteWalls()
+{
+	for (int i = 0; i < allWalls.size(); ++i)
+		delete allWalls[i];
+	allWalls.clear();
+}
+
 int Wall::getNumOfWall() { return allWalls.size(); }
 
 Wall* Wall::getWall(int index)

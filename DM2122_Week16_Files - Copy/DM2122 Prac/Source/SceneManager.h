@@ -1,5 +1,5 @@
+
 #pragma once
-#include <vector>
 #include "SceneSkybox.h"
 #include "SceneCarSelection.h"
 #include "Minigame.h"
@@ -8,22 +8,14 @@
 class SceneManager
 {
 private:
-    enum SCENES_TYPES
-    {
-        SCENE_SKYBOX,
-        SCENE_CAR_SELECTION,
-        SCENE_MINIGAME,
-        SCENE_INTERIOR,
-        NUM_SCENES,
-    };
-    static SceneManager* instance;
-    static Scene* scene_list[NUM_SCENES];
-    static Scene* currentScene;
-    SceneManager();
+	int currSceneID;
+	std::vector<Scene*> scenes;
+	static SceneManager* instance;	
+	SceneManager();
 public:
-    static SceneManager* getInstance();
-    static Scene* getCurrentScene();
-    static void SceneInitialise();
-    static void SceneUpdate(double dt);
-    static void DeleteAllScenes();
+	static SceneManager* getInstance();
+	void AddScene(Scene* scene);
+	void SetNextScene(int sceneID);
+	void Update(double dt);
+	void DeleteAllScenes();
 };

@@ -2,6 +2,8 @@
 #include "Vertex.h"
 #include "Mesh.h"
 
+#include <vector>
+
 class CCar
 {
 	float current_speed;
@@ -9,13 +11,17 @@ class CCar
 	float acceleration;
 	float distance;
 	Position carPos;
-	static CCar* s_instance;
+
 
 public: 
 	CCar();
 	~CCar();
 
-	static CCar* instance();
+	static std::vector<CCar*>AllCar;
+
+	std::vector<CCar*>GetAllCar();
+
+	static void CreateCar(float max_speed,float acceleration);
 
 	//getting the values
 	float GetCurrentSpeed();
@@ -27,10 +33,6 @@ public:
 	void SetMaxSpeed(float speed);
 	void SetAcceleration(float acceleration);
 	void SetDist(float dist);
-
-	//car position management
-	void SetCarPos(float carPosx, float carPosy, float carPosz);
-	float GetCarPos(char pos);
 
 	//kinematic formulas
 	float Kinematic1(char mode, float v, float u, float a, float t);

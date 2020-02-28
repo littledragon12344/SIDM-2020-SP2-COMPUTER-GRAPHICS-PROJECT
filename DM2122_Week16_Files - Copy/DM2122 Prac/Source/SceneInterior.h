@@ -23,7 +23,10 @@ class SceneInterior : public Scene
 		GEO_FRONT,
 		GEO_BACK,
 		GEO_FLOOR,
-		GEO_CAR,
+		GEO_CAR1,
+		GEO_CAR2,
+		GEO_CAR3,
+		GEO_CAR4,
 		GEO_WALL,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
@@ -94,14 +97,6 @@ private:
 	Light light[2];
 
 	FirstPersonCamera fpsCamera;
-
-	//initialize
-	CCar* Car1 = new CCar();
-	CCar* Car2 = new CCar();
-	CCar* Car3 = new CCar();
-	CCar* Car4 = new CCar();
-
-	CCar* selected;
 
 	float lightcolor;
 	bool switchcolor;
