@@ -428,8 +428,11 @@ void SceneInterior::Render()
 	std::string text = "Speed: " + std::to_string(CCar::AllCar[CarSwitch]->GetCurrentSpeed());
 	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 0);
 
-	text = "Distance: " + std::to_string(CCar::AllCar[CarSwitch]->GetDist());
+	text = "Accerleration: " + std::to_string(CCar::AllCar[CarSwitch]->GetAcceleration());
 	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 1);
+
+	text = "Distance: " + std::to_string(CCar::AllCar[CarSwitch]->GetDist());
+	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 2);
 
 	text = "CarModel#: " + std::to_string(CarSwitch + 1);
 	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 29);
