@@ -47,7 +47,7 @@ bool Wall::generateWalls(const char* file_path)
 			temp_normals.push_back(normal);
 		}
 		// if it has "g Wall" or "g wall" in the buffer, it means that the vertices and normals in temp_vertices and temp_normals are for walls.
-		else if (strncmp("g Wall", buf, 6) == 0 || strncmp("g wall", buf, 6) == 0)
+		else if (std::string(buf).find("Wall") != std::string::npos || std::string(buf).find("wall") != std::string::npos)
 		{
 			// Get the middle position of the wall
 			Vector3 position;
@@ -171,6 +171,7 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 	int numWallsCollided = 0;
 	Vector3 nextPos = position + displacement;
 	Vector3 finalPosDisplacement = displacement; // If never collide with any walls.
+
 	for (int wallIndex = 0; wallIndex < allWalls.size(); ++wallIndex)
 	{
 		Wall wall = *allWalls[wallIndex]; // Get the current wall in the loop for easier access.
@@ -191,10 +192,10 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 		float parallelDist = nextPos.Dot(wallPara) - wall.position.Dot(wallPara);
 
 		if (
-			((abs(perpendicularDist) < wall.depth / 2.f) ||  // If next position is inside the wall in the wall normal direction
+			((abs(perpendicularDist) < maxWallPlayerDepthDist) ||  // If next position is inside the wall in the wall normal direction
 			((perpendicularDist * (position.Dot(wall.normal) - wall.position.Dot(wall.normal))) < 0)) // If the point is moving very fast and it passes than the wall's depth
 			&&
-			((abs(parallelDist) < wall.length / 2.0f) || // If next position is inside the wall in the wall parallel direction
+			((abs(parallelDist) < maxWallPlayerLengthDist) || // If next position is inside the wall in the wall parallel direction
 			((parallelDist * (position.Dot(wallPara) - wall.position.Dot(wallPara))) < 0)) // If the point is moving very fast and it passes than the wall's length
 			)
 		{
@@ -207,7 +208,7 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 			// If the perpendicular distance of the current position of the object is more than the depth,
 			// It is on the length (x-axis) side of the object
 			// Need to round the value to 4.d.p because for rotated walls, the value might have some accuracy error like floating point errors
-			if (roundf(abs(position.Dot(wall.normal) - wall.position.Dot(wall.normal)) * 1000) / 1000 >= maxWallPlayerDepthDist)
+			if (roundf(abs(position.Dot(wall.normal) - wall.position.Dot(wall.normal)) * 1000) / 1000 >= (roundf(maxWallPlayerDepthDist) * 1000) / 1000.f)
 			{
 				// Flip wallPara to the other direction if the displacement is the other direction of wallPara.
 				// wallPara will be 90 degrees anti-clockwise to the normal
@@ -216,9 +217,9 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 				finalPosDisplacement = (1 - abs(displacement.Normalize().Dot(wall.normal))) * wallPara * displacement.Length();
 
 				if (displacement.Normalize().Dot(wall.normal) < 0)
-					finalPosDisplacement = finalPosDisplacement - (abs((position + finalPosDisplacement).Dot(wall.normal) - wall.position.Dot(wall.normal)) - wall.depth / 2.f) * wall.normal;
+					finalPosDisplacement = finalPosDisplacement - (abs((position + finalPosDisplacement).Dot(wall.normal) - wall.position.Dot(wall.normal)) - maxWallPlayerDepthDist) * wall.normal;
 				else
-					finalPosDisplacement = finalPosDisplacement + (abs((position + finalPosDisplacement).Dot(wall.normal) - wall.position.Dot(wall.normal)) - wall.depth / 2.0) * wall.normal;
+					finalPosDisplacement = finalPosDisplacement + (abs((position + finalPosDisplacement).Dot(wall.normal) - wall.position.Dot(wall.normal)) - maxWallPlayerDepthDist) * wall.normal;
 			}
 			// Else, it is on the depth (z-axis) side of the object
 			else
@@ -229,9 +230,9 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 					finalPosDisplacement = -(abs(displacement.Normalize().Dot(wall.normal))) * wall.normal * displacement.Length();
 
 				if (wall.normal.z * displacement.x - wall.normal.x * displacement.z > 0)
-					finalPosDisplacement = finalPosDisplacement + (abs((position + finalPosDisplacement).Dot(wallPara) - wall.position.Dot(wallPara)) - wall.length / 2.0) * wallPara;
+					finalPosDisplacement = finalPosDisplacement + (abs((position + finalPosDisplacement).Dot(wallPara) - wall.position.Dot(wallPara)) - maxWallPlayerLengthDist) * wallPara;
 				else
-					finalPosDisplacement = finalPosDisplacement - (abs((position + finalPosDisplacement).Dot(wallPara) - wall.position.Dot(wallPara)) - wall.length / 2.0) * wallPara;
+					finalPosDisplacement = finalPosDisplacement - (abs((position + finalPosDisplacement).Dot(wallPara) - wall.position.Dot(wallPara)) - maxWallPlayerLengthDist) * wallPara;
 			}
 		}
 	}
