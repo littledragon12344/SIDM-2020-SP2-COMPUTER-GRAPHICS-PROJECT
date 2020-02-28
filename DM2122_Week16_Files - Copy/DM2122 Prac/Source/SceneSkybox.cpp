@@ -198,7 +198,7 @@ void SceneSkybox::Init()
 	meshList[GEO_WALL] = MeshBuilder::GenerateCuboid("wall", Color(1, 1, 1), 1, 1, 1);
 	Wall::generateWalls("Obj//wall_room.obj");
 
-	meshList[GEO_ROOF] = MeshBuilder::GenerateCuboid("roof", Color(1, 1, 1), 130.f, 1.f, 130.f);
+	meshList[GEO_ROOF] = MeshBuilder::GenerateCuboid("roof", Color(0, 0, 0.5), 130.f, 1.f, 130.f);
 
 	meshList[GEO_LIGHTSPHERE1] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
