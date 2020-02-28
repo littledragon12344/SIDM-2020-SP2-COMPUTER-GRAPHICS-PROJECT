@@ -175,6 +175,9 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 	{
 		Wall wall = *allWalls[wallIndex]; // Get the current wall in the loop for easier access.
 
+		float maxWallPlayerDepthDist = wall.depth / 2.f + 2.f;
+		float maxWallPlayerLengthDist = wall.length / 2.f + 2.f;
+
 		// Distance of the nextPos to the wall's center in the wall's normal direction
 		float perpendicularDist = nextPos.Dot(wall.normal) - wall.position.Dot(wall.normal);
 
