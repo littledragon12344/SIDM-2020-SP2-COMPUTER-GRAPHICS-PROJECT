@@ -93,7 +93,8 @@ void FirstPersonCamera::Update(double dt)
 void FirstPersonCamera::Reset()
 {
 	position = defaultPosition;
-	target = defaultTarget;
+	TargetFromPos = defaultTarget;
+	target = TargetFromPos + position;
 	xzTarget = defaultUp;
 	up = defaultUp;
 }
