@@ -15,11 +15,11 @@ CarAi::~CarAi()
 void CarAi::Updates(float dt)
 {
 	Vector3 Temp = PathToGo->Point[start];//Get Start of each point
-	if (position == defaultPosition)//Starting angle			//Initialize Car ai Target pos and rotation
+	if (position == defaultPosition)//Starting angle			//Initializing of car ai pos can put in init() honestly
 	{
 		Vector3 Temp2 = (*PathToGo).Point[1];
 		End = Temp2;//Initialize End
-		TargetFromPos = (Temp2 - position).Normalized();
+		TargetFromPos = (Temp2 - Temp).Normalized();
 		//position = Temp;
 		Vector3 view = (End - position).Normalized();
 		//float num = dot(view, Vector3(1, 0, 0)) / (distance(view) * distance(Vector3(1, 0, 0)));//Check distance of start to next End
@@ -43,8 +43,8 @@ void CarAi::Updates(float dt)
 	}
 	Vector3 view = (End -position).Normalized();
 	//float num = dot(view, Vector3(1, 0, 0)) / (distance(view) * distance(Vector3(1, 0, 0)));
-	angleFromx = Math::RadianToDegree(atan2(1*view.z-0*view.x,1*view.x+0));//Get angel accordin to x 180< angleFromx <-180
-	angleFromx = -angleFromx;//for convinent use
+	angleFromx = Math::RadianToDegree(atan2(1*view.z-0*view.x,1*view.x+0));
+	angleFromx = -angleFromx;
 	if ((rotationy > 0 && angleFromx > 0)||(rotationy<0&&angleFromx<0))
 	{
 		if (rotationy < angleFromx)
