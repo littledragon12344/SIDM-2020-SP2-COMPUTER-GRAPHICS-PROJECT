@@ -156,6 +156,7 @@ private:
 	bool move2;
 	bool move3;
 	bool move4;
+	bool interactable;
 
 	double bounceTime;
 	float timer;

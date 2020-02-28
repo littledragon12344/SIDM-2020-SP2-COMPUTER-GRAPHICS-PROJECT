@@ -394,26 +394,31 @@ void SceneSkybox::Update(double dt)
 		translateY4 = 0.3f;
 	}
 
-
+	//Car 1: (-15, -15)
 	if (SpeakIntro == true && Speak1 == false && movetocar1 != -15.0f && movetocar1 > -15.0f && move1 == true)
 	{
 		movetocar1 -= (float)(dt * 10.f);
 		NPC->setCoords(movetocar1, movetocar1);
-	}
+		timer = 1;
 
+		
+	}
+	//Car 2: (-15, 15)
 	if (Speak1 == true && Speak2 == false && movetocar2x != -15.0f && movetocar2z < 15.0f && move2 == true)
 	{
 			
 			movetocar2z -= (float)(dt * -10.f);
 			NPC->setCoords(movetocar2x, movetocar2z);
-		
-	}
+			timer = 1;
 
+	}
+	//Car 3: (15, 15)
 	if (Speak2 == true && Speak3 == false && movetocar3x != 15.0f && movetocar3x < 15.0f && move3 == true)
 	{
 
 		movetocar3x -= (float)(dt * -10.f);
 		NPC->setCoords(movetocar3x, movetocar3z);
+		timer = 1;
 
 	}
 	//Car 4: (15, -15)
@@ -421,84 +426,91 @@ void SceneSkybox::Update(double dt)
 	{
 		movetocar4z -= (float)(dt * 10.f);
 		NPC->setCoords(movetocar4x, movetocar4z);
+		timer = 1;
 	}
 
 	if (timer < 0 && SpeakIntro == true)
 	{
 		move1 = true;
+		NPC[0].Interact(0);
 	}
 
 	if (timer < 0 && Speak1 == true)
 	{
 		move2 = true;
+		NPC[0].Interact(0);
 	}
 
 	if (timer < 0 && Speak2 == true)
 	{
 		move3 = true;
+		NPC[0].Interact(0);
 	}
 
 	if (timer < 0 && Speak3 == true)
 	{
 		move4 = true;
+		NPC[0].Interact(0);
 	}
 
-
-	if (Application::IsKeyPressed('E') && NearNPC() && bounceTime <= 0 && SpeakIntro == false)
+	if (SpeakIntro == false || timer <= 0)
 	{
-		timer = 0.5;
+		interactable = true;
+	}
+	else
+	{
+		interactable = false;
+	}
+	if (Application::IsKeyPressed('E') && NearNPC() && bounceTime <= 0 && SpeakIntro == false && interactable == true)
+	{
+		RenderTextBox();
+		timer = 3;
 		bounceTime = 0.5f;
 		NPCtext = NPCDialogue();
 		NPC[0].Interact(1);
 		SpeakIntro = true;
 	}
 
-	if (Application::IsKeyPressed('E') && NearNPC() && bounceTime <= 0 && SpeakIntro == true && Speak1 == false)
+	if (Application::IsKeyPressed('E') && NearNPC() && bounceTime <= 0 && SpeakIntro == true && Speak1 == false && interactable == true)
 	{
 		movetocar2z = movetocar1;
 		movetocar2x = movetocar1;
-		timer = 0.5;
+		timer = 3;
 		bounceTime = 0.5f;
 		NPCtext = NPCDialogue();
 		NPC[0].Interact(1);
 		Speak1 = true;
 	}
 
-	if (Application::IsKeyPressed('E') && NearNPC() && bounceTime <= 0 && Speak1 == true && Speak2 == false)
+	if (Application::IsKeyPressed('E') && NearNPC() && bounceTime <= 0 && Speak1 == true && Speak2 == false && interactable == true)
 	{
 		movetocar3z = movetocar2z;
 		movetocar3x = movetocar2x;
-		timer = 0.5;
+		timer = 3;
 		bounceTime = 0.5f;
 		NPCtext = NPCDialogue();
 		NPC[0].Interact(1);
 		Speak2 = true;
 	}
 
-	if (Application::IsKeyPressed('E') && NearNPC() && bounceTime <= 0 && Speak2 == true && Speak3 == false)
+	if (Application::IsKeyPressed('E') && NearNPC() && bounceTime <= 0 && Speak2 == true && Speak3 == false && interactable == true)
 	{
 		movetocar4z = movetocar3z;
 		movetocar4x = movetocar3x;
-		timer = 0.5;
+		timer = 3;
 		bounceTime = 0.5f;
 		NPCtext = NPCDialogue();
 		NPC[0].Interact(1);
 		Speak3 = true;
 	}
 
-	if (Application::IsKeyPressed('E') && NearNPC() && bounceTime <= 0 && Speak3 == true && Speak4 == false)
+	if (Application::IsKeyPressed('E') && NearNPC() && bounceTime <= 0 && Speak3 == true && Speak4 == false && interactable == true)
 	{
-		timer = 0.5;
+		timer = 3;
 		bounceTime = 0.5f;
 		NPCtext = NPCDialogue();
 		NPC[0].Interact(1);
-		Speak3 = true;
-	}
-
-
-	if (!NearNPC())
-	{
-			NPC[0].Interact(0);
+		Speak4 = true;
 	}
 
 }
@@ -631,7 +643,7 @@ void SceneSkybox::Render()
 		modelStack.PopMatrix();
 	}
 
-	if (NearNPC() && !NPC[0].IsInteracting())
+	if (NearNPC()  && interactable == true)
 	{
 			RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact", Color(1, 1, 1), 3.5, 1.3, 1.5);
 	}
@@ -1003,9 +1015,9 @@ void SceneSkybox::InteractionUpdate(int i)
 
 bool SceneSkybox::NearNPC() //To check if player is close to NPC
 {
-		if (FPScamera.position.x >= NPC[0].getX() - 5.f && FPScamera.position.x <= NPC[0].getX() + 5.f)
+		if (FPScamera.position.x >= NPC[0].getX() - 8.f && FPScamera.position.x <= NPC[0].getX() + 8.f)
 		{
-			if (FPScamera.position.z >= NPC[0].getZ() - 5.f && FPScamera.position.z <= NPC[0].getZ() + 5.f)
+			if (FPScamera.position.z >= NPC[0].getZ() - 8.f && FPScamera.position.z <= NPC[0].getZ() + 8.f)
 			{
 				return true;
 
@@ -1018,29 +1030,28 @@ void SceneSkybox::RenderTextBox()
 {
 	if (SpeakIntro == true)
 	{
-		modelStack.PushMatrix();
-		modelStack.Translate(NPC[0].getX() - 1, 1, NPC[0].getZ());
-		modelStack.Rotate(-90, 0, 1, 0);
-		modelStack.Scale(1, 0.5, 1.1);
-		RenderMesh(meshList[GEO_TEXTBOX], true);
-		modelStack.Translate(-1.2, 0, 0);
-		modelStack.Scale(0.2, 0.4, 0.2);
-		RenderText(meshList[GEO_TEXT], NPCtext, Color(1, 1, 1));
-		modelStack.PopMatrix();
+			modelStack.PushMatrix();
+			modelStack.Translate(NPC[0].getX() - 1, 1, NPC[0].getZ());
+			modelStack.Rotate(-90, 0, 1, 0);
+			modelStack.Scale(1, 0.5, 1.1);
+			RenderMesh(meshList[GEO_TEXTBOX], true);
+			modelStack.Translate(-1.2, 0, 0);
+			modelStack.Scale(0.2, 0.4, 0.2);
+			RenderText(meshList[GEO_TEXT], NPCtext, Color(1, 1, 1));
+			modelStack.PopMatrix();
 	}
 
-	if ((SpeakIntro == true) && (Speak1 == true))
-		{
-		modelStack.PushMatrix();
-		modelStack.Translate(NPC[0].getX() - 1, 1, NPC[0].getZ());
-		modelStack.Rotate(120, 0, 1, 0);			modelStack.Scale(1, 0.5, 1.1);
-		RenderMesh(meshList[GEO_TEXTBOX], true);
-		modelStack.Translate(-1.2, 0, 0);
-		modelStack.Scale(0.2, 0.3, 0.2);
-		RenderText(meshList[GEO_TEXT], NPCtext, Color(1, 1, 1));
-		modelStack.PopMatrix();
+	if (Speak1 == true)
+	{
+			modelStack.PushMatrix();
+			modelStack.Translate(NPC[0].getX() - 1, 1, NPC[0].getZ());
+			modelStack.Rotate(120, 0, 1, 0);			modelStack.Scale(1, 0.5, 1.1);
+			RenderMesh(meshList[GEO_TEXTBOX], true);
+			modelStack.Translate(-1.2, 0, 0);
+			modelStack.Scale(0.2, 0.3, 0.2);
+			RenderText(meshList[GEO_TEXT], NPCtext, Color(1, 1, 1));
+			modelStack.PopMatrix();
 	}
-
 }
 
 void SceneSkybox::RenderNPCText()
