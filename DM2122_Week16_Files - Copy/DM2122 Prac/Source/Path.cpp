@@ -21,5 +21,5 @@ void Path::GeneratePath(const std::string& file_path, float scale, Vector3 Offse
 			Point.push_back(vertex);
 		}
 	}
-
+	fileStream.close();
 }

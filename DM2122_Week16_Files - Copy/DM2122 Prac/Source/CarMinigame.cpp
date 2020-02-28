@@ -25,24 +25,31 @@ void CarMinigame::Updates(float dt)
 	if (Application::IsKeyPressed('S'))
 	{
 		Speed -= 25.f*dt;
-		if (Speed <= 0)
-		{
-			Speed = 0;
-		}
+		
 	}
-	if (Application::IsKeyPressed('W'))
+	else if (Application::IsKeyPressed('W'))
 	{
 		Speed += 10.f*dt;
+	}
+	else
+	{
+		Speed -= 3 * dt;
 	}
 	if (Application::IsKeyPressed('A'))
 	{
 		rotationy += 300.f * dt;
 		target = GetTargetpos();
+		Speed -= 5 * dt;
 	}
 	if (Application::IsKeyPressed('D'))
 	{
 		rotationy -= 300.f * dt;
 		target = GetTargetpos();
+		Speed -= 5 * dt;
+	}
+	if (Speed <= 0)
+	{
+		Speed = 0;
 	}
 	target += view * (float)(Speed * dt);
 	position += view * (float)(Speed * dt);

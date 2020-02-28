@@ -462,7 +462,7 @@ void SceneSkybox::Exit()
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
-
+	Wall::deleteWalls();
 }
 
 void SceneSkybox::RenderMesh(Mesh* mesh, bool enableLight)

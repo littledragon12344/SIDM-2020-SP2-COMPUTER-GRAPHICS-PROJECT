@@ -325,7 +325,7 @@ void Minigame::Update(double dt)
 	}
 	if (SwitchCamera == 2)
 		Frecamera.Update(dt);
-	else if (SwitchCamera == 4)
+	else if (SwitchCamera = 3)
 	{
 		TopCamera.Update(dt);
 	}
@@ -456,7 +456,7 @@ void Minigame::Exit()
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
-
+	Wall::deleteWalls();
 }
 
 void Minigame::RenderMesh(Mesh* mesh, bool enableLight)

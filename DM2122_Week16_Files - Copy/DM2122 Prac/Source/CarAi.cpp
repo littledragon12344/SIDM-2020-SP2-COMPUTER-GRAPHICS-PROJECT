@@ -14,11 +14,6 @@ CarAi::~CarAi()
 
 void CarAi::Updates(float dt)
 {
-	speed += acceration*dt;
-	if (speed > maxspeed)
-	{
-		speed = maxspeed;
-	}
 	Vector3 Temp = PathToGo->Point[start];//Get Start of each point
 	if (position == defaultPosition)//Starting angle			//Initialize Car ai Target pos and rotation
 	{
@@ -50,6 +45,16 @@ void CarAi::Updates(float dt)
 	//float num = dot(view, Vector3(1, 0, 0)) / (distance(view) * distance(Vector3(1, 0, 0)));
 	angleFromx = Math::RadianToDegree(atan2(1*view.z-0*view.x,1*view.x+0));//Get angel accordin to x 180< angleFromx <-180
 	angleFromx = -angleFromx;//for convinent use
+	if (Tempangle == 0)
+	{
+		Vector3 view = (End - position).Normalized();
+		Vector3 view2 = (position - target).Normalize();
+		float num = dot(view, view2) / (distance(view) * distance(view2));
+		//Tempangle = Math::RadianToDegree(acos(num));
+		Tempangle = Math::RadianToDegree(atan2(view2.x * view.z - view2.z * view.x, view2.z * view.x + view2.x * view.z));
+		if (Tempangle < 0)
+			Tempangle = -Tempangle;
+	}
 	if ((rotationy > 0 && angleFromx > 0)||(rotationy<0&&angleFromx<0))
 	{
 		if (rotationy < angleFromx)
@@ -67,16 +72,6 @@ void CarAi::Updates(float dt)
 	}
 	else  
 	{
-		if (Tempangle == 0)
-		{
-			Vector3 view = (End - position).Normalized();
-			Vector3 view2 = (position - target).Normalize();
-			float num = dot(view, view2) / (distance(view) * distance(view2));
-			//Tempangle = Math::RadianToDegree(acos(num));
-			Tempangle = Math::RadianToDegree(atan2(view2.x * view.z - view2.z * view.x, view2.z * view.x + view2.x*view.z));
-			if(Tempangle<0)
-				Tempangle = -Tempangle;
-		}
 		if (rotationy - angleFromx > 180 || rotationy - angleFromx < -180) 
 		{
 			if (rotationy > 90 && angleFromx < -90)//Check for acute
@@ -166,7 +161,19 @@ void CarAi::Updates(float dt)
 	//}
 	if (rotationy != angleFromx)
 	{
-		speed -= 4.f*dt;
+		if (Tempangle > 90)//if angel is big slow down
+		{
+			acceration = -rotationSpeed / maxspeed;
+		}
+		else//else coutinue allerate
+		{
+			acceration = 10.f;
+		}
+	}
+	speed += acceration * dt;
+	if (speed > maxspeed)
+	{
+		speed = maxspeed;
 	}
 	target = GetTargetpos();
 	Vector3 TargetView = (target - position).Normalize();
