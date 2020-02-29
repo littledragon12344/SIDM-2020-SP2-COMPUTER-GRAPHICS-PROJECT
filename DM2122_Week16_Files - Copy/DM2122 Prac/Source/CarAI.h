@@ -5,6 +5,7 @@
 #include <vector>
 #include <MyMath.h>
 #include "Path.h"
+#include "Wall.h"
 class CarAi
 {
 private:
@@ -45,6 +46,8 @@ public:
 	Vector3 GetPosition();
 	float GetRotation();
 	Vector3 GetRandomizePoint();
+	Vector3 Getforward();
+	void Collidewithwall(std::vector<Wall*> wallcollide);
 };
 
 #endif

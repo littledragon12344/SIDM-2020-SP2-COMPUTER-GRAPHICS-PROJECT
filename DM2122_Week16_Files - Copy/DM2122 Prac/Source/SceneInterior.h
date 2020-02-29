@@ -91,7 +91,7 @@ private:
 	float rotate;
 	float dist;
 
-	int CarSwitch;
+	//int CarSwitch;
 
 	bool moving;
 
