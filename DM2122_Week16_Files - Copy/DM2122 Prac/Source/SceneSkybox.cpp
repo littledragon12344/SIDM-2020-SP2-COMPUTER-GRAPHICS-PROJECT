@@ -589,9 +589,9 @@ void SceneSkybox::Render()
 	modelStack.Translate(light[3].position.x, light[3].position.y, light[3].position.z);
 	RenderMesh(meshList[GEO_LIGHTSPHERE1], false);
 	modelStack.PopMatrix();
-	RenderTextOnScreen(meshList[GEO_TEXT], "Current Frames Per Second: \n\n", Color(0, 1, 0), 1, 0, 1);
-	RenderTextOnScreen(meshList[GEO_TEXT], num, Color(0, 1, 0), 1, 0, 0);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Press L to go to selection menu.", Color(0, 1, 0), 2, 0, 2);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Current Frames Per Second: \n\n", Color(0, 0, 0), 2, 0, 1);
+	RenderTextOnScreen(meshList[GEO_TEXT], num, Color(0, 0, 0), 2, 0, 0);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Press L to go to selection menu.", Color(0, 0, 0), 2, 0, 2);
 	//modelStack.PushMatrix();
 	//RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
 	//modelStack.PopMatrix();
