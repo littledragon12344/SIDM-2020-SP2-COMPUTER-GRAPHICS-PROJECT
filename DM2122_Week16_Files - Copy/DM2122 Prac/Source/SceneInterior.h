@@ -8,6 +8,7 @@
 #include "Camera3.h"
 #include "FirstPersonCamera.h"
 #include "TopDownCamera.h"
+#include "SceneManager.h"
 #include "Mesh.h"
 #include "Light.h"
 #include "CCar.h"

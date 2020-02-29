@@ -229,7 +229,7 @@ void SceneInterior::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 
-	if (Application::IsKeyPressed(VK_SHIFT) && Application::IsKeyPressed(0x31)) //0x31 is 1 key
+	if (Application::IsKeyPressed(VK_SHIFT) && Application::IsKeyPressed(0x31)) //0x31 is 1 key/;
 	{
 		dist = 0;
 		CarSwitch = 0;

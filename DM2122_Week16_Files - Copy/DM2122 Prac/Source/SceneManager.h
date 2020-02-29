@@ -36,7 +36,7 @@ private:
 	Scene* scene_list[NUM_SCENES];
 	static SceneManager* instance;
 	SceneManager();
-	SceneManager(SCENES_TYPES type);
+	SceneManager(SCENES_TYPES currentScene);
 public:
 	static SceneManager* getInstance();
 	Mesh* meshList[NUM_GEOMETRY];

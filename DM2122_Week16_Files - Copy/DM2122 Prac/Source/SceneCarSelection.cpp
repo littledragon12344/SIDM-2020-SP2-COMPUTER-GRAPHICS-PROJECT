@@ -222,6 +222,16 @@ void SceneCarSelection::Update(double dt)
 	{
 		bPressesd = false;
 	}
+
+	if (Application::IsKeyPressed('N'))
+	{
+		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_SKYBOX);
+	}
+
+	if (Application::IsKeyPressed('M'))
+	{
+		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_MINIGAME);
+	}
 }
 
 void SceneCarSelection::Render()

@@ -493,6 +493,11 @@ void SceneSkybox::Update(double dt)
 		translateY4 = 0.3f;
 		movesUp = false;
 	}
+
+	if (Application::IsKeyPressed('L'))
+	{
+		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_CAR_SELECTION);
+	}
 }
 
 void SceneSkybox::Render()
@@ -537,6 +542,20 @@ void SceneSkybox::Render()
 	Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
 	glUniform3fv(m_parameters[U_LIGHT4_POSITION], 1, &lightDirection_cameraspace.x);
 
+	static float framesPerSecond = -0.0f;
+	static int fps;
+	static float lastTime = 0.0f;
+	float currentTime = GetTickCount() * 0.001f;
+
+	++framesPerSecond;
+	if (currentTime - lastTime > 1.0f)
+	{
+		lastTime = currentTime;
+		fps = (int)framesPerSecond;
+		framesPerSecond = 0;
+	}
+	std::string num = std::to_string(fps);
+
 	modelStack.PushMatrix();
 	///scale, translate, rotate 
 	modelStack.Translate(0.f, -1.f, 0.f);
@@ -570,6 +589,8 @@ void SceneSkybox::Render()
 	modelStack.Translate(light[3].position.x, light[3].position.y, light[3].position.z);
 	RenderMesh(meshList[GEO_LIGHTSPHERE1], false);
 	modelStack.PopMatrix();
+	RenderTextOnScreen(meshList[GEO_TEXT], "Current Frames Per Second: \n\n", Color(0, 1, 0), 2, 0, 1);
+	RenderTextOnScreen(meshList[GEO_TEXT], num, Color(0, 1, 0), 2, 0, 0);
 	//modelStack.PushMatrix();
 	//RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
 	//modelStack.PopMatrix();
@@ -689,6 +710,10 @@ void SceneSkybox::RenderPlayer()
 	modelStack.Translate(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);
 	RenderMesh(meshList[GEO_PLAYER], false);
 	modelStack.PopMatrix();
+}
+
+void SceneSkybox::RenderNPC()
+{
 }
 
 void SceneSkybox::RenderRoom()

@@ -7,8 +7,9 @@
 #include "Camera2.h"
 #include "Camera3.h"
 #include "Mesh.h"
-#include "SceneCarSelection.h"
+#include "SceneManager.h"
 #include "CCar.h"
+#include "NPC.h"
 #include "Light.h"
 
 class SceneSkybox : public Scene
@@ -153,6 +154,7 @@ private:
 	void RenderSkybox();
 	void RenderRoom();
 	void RenderPlayer();
+	void RenderNPC();
 	void RenderEnviroment();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
