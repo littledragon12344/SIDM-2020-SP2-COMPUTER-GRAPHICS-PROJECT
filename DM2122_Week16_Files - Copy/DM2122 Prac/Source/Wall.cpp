@@ -47,8 +47,10 @@ bool Wall::generateWalls(const char* file_path)
 			temp_normals.push_back(normal);
 		}
 		// if it has "g Wall" or "g wall" in the buffer, it means that the vertices and normals in temp_vertices and temp_normals are for walls.
-		else if (std::string(buf).find("Wall") != std::string::npos || std::string(buf).find("wall") != std::string::npos)
+		else if (strncmp("f ", buf, 2) == 0)
 		{
+			if (temp_vertices.size() == 0 || temp_normals.size() == 0)
+				continue;
 			// Get the middle position of the wall
 			Vector3 position;
 
@@ -72,12 +74,9 @@ bool Wall::generateWalls(const char* file_path)
 					break;
 			}
 
-			// Skip to the next object if up is not set in the loop above as it would mean that the shape is rotated in either x or z axis.
+			// Skip to the next object if 'up' is not set in the loop above as it would mean that the shape is rotated in either x or z axis.
 			if (up == Vector3(0, 0, 0))
-			{
-				std::cout << "Obj rotated in x or z axis";
 				continue;
-			}
 
 			// Don't need to find front vector as it should be up cross product with right.
 			right = up.Cross(front).Normalized();
@@ -214,16 +213,16 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 
 			// If the perpendicular distance of the current position of the object is more than the depth,
 			// It is on the length (x-axis) side of the object
-			// Need to round the value to 4.d.p because for rotated walls, the value might have some accuracy error like floating point errors
-			if (roundf(abs(position.Dot(wall.normal) - wall.position.Dot(wall.normal)) * 1000) / 1000 >= (roundf(maxWallPlayerDepthDist) * 1000) / 1000.f)
+			// Need to round the value because for some walls, the value might have some accuracy error like floating point errors
+			if (roundf(abs(position.Dot(wall.normal) - wall.position.Dot(wall.normal)) * 1000) / 1000 >= (roundf(maxWallPlayerDepthDist * 1000)) / 1000.f)
 			{
 				// Flip wallPara to the other direction if the displacement is the other direction of wallPara.
 				// wallPara will be 90 degrees anti-clockwise to the normal
 				if (wall.normal.z * displacement.x - wall.normal.x * displacement.z < 0)
 					wallPara = -wallPara;
-				finalPosDisplacement = (1 - abs(displacement.Normalize().Dot(wall.normal))) * wallPara * displacement.Length();
+				finalPosDisplacement = (1 - abs(displacement.Normalized().Dot(wall.normal))) * wallPara * displacement.Length();
 
-				if (displacement.Normalize().Dot(wall.normal) < 0)
+				if (displacement.Normalized().Dot(wall.normal) < 0)
 					finalPosDisplacement = finalPosDisplacement - (abs((position + finalPosDisplacement).Dot(wall.normal) - wall.position.Dot(wall.normal)) - maxWallPlayerDepthDist) * wall.normal;
 				else
 					finalPosDisplacement = finalPosDisplacement + (abs((position + finalPosDisplacement).Dot(wall.normal) - wall.position.Dot(wall.normal)) - maxWallPlayerDepthDist) * wall.normal;
@@ -231,10 +230,10 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 			// Else, it is on the depth (z-axis) side of the object
 			else
 			{
-				if (displacement.Normalize().Dot(wall.normal) > 0)
-					finalPosDisplacement = (abs(displacement.Normalize().Dot(wall.normal))) * wall.normal * displacement.Length();
+				if (displacement.Normalized().Dot(wall.normal) > 0)
+					finalPosDisplacement = (abs(displacement.Normalized().Dot(wall.normal))) * wall.normal * displacement.Length();
 				else
-					finalPosDisplacement = -(abs(displacement.Normalize().Dot(wall.normal))) * wall.normal * displacement.Length();
+					finalPosDisplacement = -(abs(displacement.Normalized().Dot(wall.normal))) * wall.normal * displacement.Length();
 
 				if (wall.normal.z * displacement.x - wall.normal.x * displacement.z > 0)
 					finalPosDisplacement = finalPosDisplacement + (abs((position + finalPosDisplacement).Dot(wallPara) - wall.position.Dot(wallPara)) - maxWallPlayerLengthDist) * wallPara;
