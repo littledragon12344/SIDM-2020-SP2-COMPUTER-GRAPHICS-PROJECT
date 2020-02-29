@@ -103,13 +103,6 @@ void SceneCarSelection::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibriBoldItalic.tga");
 
-	// Generating all cars
-
-	CCar::CreateCar(meshList[GEO_CAR_FRAME_0], nullptr, 60.f, 6.f);
-	CCar::CreateCar(meshList[GEO_CAR_FRAME_1], nullptr, 50.f, 8.f);
-	CCar::CreateCar(meshList[GEO_CAR_FRAME_2], nullptr, 80.f, 5.f);
-	CCar::CreateCar(meshList[GEO_CAR_FRAME_3], nullptr, 100.f, 4.f);
-
 	// Car 0
 	meshList[GEO_CAR_FRAME_0] = MeshBuilder::GenerateOBJ("car1", "Obj//car_frame.obj");
 	meshList[GEO_CAR_FRAME_0]->textureID = LoadTGA("Image//CarBody_texture.tga");
