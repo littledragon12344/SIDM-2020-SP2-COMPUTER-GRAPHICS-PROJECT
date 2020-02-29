@@ -141,6 +141,7 @@
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Minigame.h" />
+    <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\Path.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneCarSelection.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Minigame.cpp" />
+    <ClCompile Include="Source\NPC.cpp" />
     <ClCompile Include="Source\Path.cpp" />
     <ClCompile Include="Source\SceneCarSelection.cpp" />
     <ClCompile Include="Source\SceneInterior.cpp" />
