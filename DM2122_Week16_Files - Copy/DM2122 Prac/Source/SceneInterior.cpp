@@ -212,39 +212,39 @@ void SceneInterior::Update(double dt)
 		light[1].color.Set(0 + lightcolor, 1 - lightcolor, lightcolor / 2);
 		glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
 	}
-	if (Application::IsKeyPressed(0x31))
+	if (Application::IsKeyPressed(0x31) && !Application::IsKeyPressed(VK_SHIFT))
 	{
 		glDisable(GL_CULL_FACE);
 	}
-	else if (Application::IsKeyPressed(0x32))
+	else if (Application::IsKeyPressed(0x32) && !Application::IsKeyPressed(VK_SHIFT))
 	{
 		glEnable(GL_CULL_FACE);
 	}
-	else if (Application::IsKeyPressed(0x33))
+	else if (Application::IsKeyPressed(0x33) && !Application::IsKeyPressed(VK_SHIFT))
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
-	else if (Application::IsKeyPressed(0x34))
+	else if (Application::IsKeyPressed(0x34) && !Application::IsKeyPressed(VK_SHIFT))
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 
-	if (Application::IsKeyPressed(VK_NUMPAD1))
+	if (Application::IsKeyPressed(VK_SHIFT) && Application::IsKeyPressed(0x31)) //0x31 is 1 key
 	{
 		dist = 0;
 		CarSwitch = 0;
 	}
-	if (Application::IsKeyPressed(VK_NUMPAD2))
+	if (Application::IsKeyPressed(VK_SHIFT) && Application::IsKeyPressed(0x32))
 	{
 		dist = 0;
 		CarSwitch = 1;
 	}
-	if (Application::IsKeyPressed(VK_NUMPAD3))
+	if (Application::IsKeyPressed(VK_SHIFT) && Application::IsKeyPressed(0x33))
 	{
 		dist = 0;
 		CarSwitch = 2;
 	}
-	if (Application::IsKeyPressed(VK_NUMPAD4))
+	if (Application::IsKeyPressed(VK_SHIFT) && Application::IsKeyPressed(0x34))
 	{
 		dist = 0;
 		CarSwitch = 3;
@@ -289,11 +289,11 @@ void SceneInterior::Update(double dt)
 	}
 
 	moving = false;
-    if (Application::IsKeyPressed(VK_NUMPAD7) && SwitchCamera != 1)
+    if (Application::IsKeyPressed(0x37) && SwitchCamera != 1)
     {
         SwitchCamera = 1;
     }
-	if (Application::IsKeyPressed(VK_NUMPAD8))
+	if (Application::IsKeyPressed(0x38))
     {
         freeCamera.position = fpsCamera.position;
 		freeCamera.TargetFromPos = fpsCamera.TargetFromPos;
@@ -302,9 +302,9 @@ void SceneInterior::Update(double dt)
 		freeCamera.xzTarget = fpsCamera.xzTarget;
         SwitchCamera = 2;
     }
-    if (Application::IsKeyPressed(VK_NUMPAD9))//the key can change
+    if (Application::IsKeyPressed(0x39))
     {
-        SwitchCamera = 3;//this is top , the num can change
+        SwitchCamera = 3;
     }
 
 	if (SwitchCamera == 2)

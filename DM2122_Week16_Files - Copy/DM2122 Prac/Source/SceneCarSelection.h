@@ -4,7 +4,7 @@
 #include "Scene.h"
 #include <MatrixStack.h>
 #include "Mesh.h"
-#include "Camera2.h"
+#include "Camera.h"
 #include "Light.h"
 #include "CCar.h"
 
@@ -12,17 +12,17 @@ class SceneCarSelection : public Scene
 {
 	enum GEOMETRY_TYPE
 	{
-		GEO_BACKGROUND = 0,
-		GEO_TEXT,
-		// Car
+		GEO_TEXT= 0,
+		GEO_BACKGROUND,
+		// Cars and wheels
+		GEO_CAR_FRAME_0,
+		GEO_CAR_WHEEL_0,
 		GEO_CAR_FRAME_1,
 		GEO_CAR_WHEEL_1,
 		GEO_CAR_FRAME_2,
 		GEO_CAR_WHEEL_2,
 		GEO_CAR_FRAME_3,
 		GEO_CAR_WHEEL_3,
-		GEO_CAR_FRAME_4,
-		GEO_CAR_WHEEL_4,
 		// User Interface
 		GEO_UI_BASE,
 		GEO_UI_GRAY_BAR,
@@ -45,13 +45,13 @@ class SceneCarSelection : public Scene
 		U_LIGHT0_KC,
 		U_LIGHT0_KL,
 		U_LIGHT0_KQ,
-		U_LIGHTENABLED,
 		//add these enum in UNIFORM_TYPE before U_TOTAL
 		U_LIGHT0_TYPE,
 		U_LIGHT0_SPOTDIRECTION,
 		U_LIGHT0_COSCUTOFF,
 		U_LIGHT0_COSINNER,
 		U_LIGHT0_EXPONENT,
+		U_LIGHTENABLED,
 		U_NUMLIGHTS,
 		// add these enum for texture
 		U_COLOR_TEXTURE_ENABLED,
@@ -64,31 +64,31 @@ class SceneCarSelection : public Scene
 private:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
-	/*unsigned m_indexBuffer;*/
 	Mesh* meshList[NUM_GEOMETRY];
 
 	unsigned m_parameters[U_TOTAL];
-		
+
 	MS modelStack, viewStack, projectionStack;
 	Light light[1];
 
-	Camera2 camera;
+	Camera camera;
 
-	float carAngle;
-	float animAngle;
-	int currentCarNo;
-	int numOfCars;
+	float carAngle; // Car rotation angle
+	float animAngle; // Animation angle when switching car
 	int backgroundNo;
 	bool bPressesd;
-	float accel;
-	float topSpd;
+
+	// use reference so no need copy the data over
+	std::vector<CCar*>& allCars = CCar::AllCar;
+	int currentCarIndex;
+
+	float currentCarMaxSpd, currentCarAccel;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
 
 	void RenderCar(int carNo);
 
-	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();
 

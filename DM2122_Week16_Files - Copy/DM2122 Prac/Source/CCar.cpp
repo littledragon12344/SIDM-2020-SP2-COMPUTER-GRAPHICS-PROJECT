@@ -9,7 +9,7 @@ std::vector<CCar*>CCar::GetAllCar()
 }
 
 CCar::CCar()
-	: current_speed(-1), max_speed(-1), acceleration(-1), distance(-1)
+	: current_speed(-1), max_speed(-1), acceleration(-1), distance(-1), car_mesh(nullptr), wheel_mesh(nullptr)
 {
 
 }
@@ -19,12 +19,22 @@ CCar::~CCar()
 	
 }
 
-void CCar::CreateCar(Mesh* car_mesh, Mesh* wheel_mesh, float max_speed, float acceleration)
+void CCar::CreateCar(Mesh* car_mesh, Mesh* wheel_mesh, Mesh* interior_mesh, float max_speed, float acceleration)
 {
 	CCar* temp = new CCar;
+	temp->SetCarMesh(car_mesh);
+	temp->SetWheelMesh(wheel_mesh);
+	temp->SetInteriorMesh(interior_mesh);
 	temp->SetMaxSpeed(max_speed);
 	temp->SetAcceleration(acceleration);
 	AllCar.push_back(temp);
+}
+
+void CCar::DeleteAllCar()
+{
+	for (int i = 0; i < AllCar.size(); ++i)
+		delete AllCar[i];
+	AllCar.clear();
 }
 
 //===================Setters & Getters===================
@@ -47,6 +57,21 @@ float CCar::GetDist()
 	return distance;
 }
 
+Mesh* CCar::GetCarMesh()
+{
+	return car_mesh;
+}
+
+Mesh* CCar::GetWheelMesh()
+{
+	return wheel_mesh;
+}
+
+Mesh* CCar::GetInteriorMesh()
+{
+	return interior_mesh;
+}
+
 void CCar::SetCurrentSpeed(float speed)
 {
 	this->current_speed = speed;
@@ -65,6 +90,21 @@ void CCar::SetDist(float dist)
 void CCar::SetAcceleration(float acceleration)
 {
 	this->acceleration = acceleration;
+}
+
+void CCar::SetCarMesh(Mesh* mesh)
+{
+	car_mesh = mesh;
+}
+
+void CCar::SetWheelMesh(Mesh* mesh)
+{
+	wheel_mesh = mesh;
+}
+
+void CCar::SetInteriorMesh(Mesh* mesh)
+{
+	interior_mesh = mesh;
 }
 //=======================================================
 
