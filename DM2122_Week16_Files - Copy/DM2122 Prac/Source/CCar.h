@@ -11,6 +11,9 @@ class CCar
 	float acceleration;
 	float distance;
 	Position carPos;
+	Mesh* car_mesh;
+	Mesh* wheel_mesh;
+	Mesh* interior_mesh;
 
 public: 
 	CCar();
@@ -20,7 +23,15 @@ public:
 
 	std::vector<CCar*>GetAllCar();
 
-	static void CreateCar(Mesh* car_mesh, Mesh* wheel_mesh, float max_speed,float acceleration);
+	static void CreateCar(Mesh* car_mesh, Mesh* wheel_mesh, Mesh* interior_mesh, float max_speed,float acceleration);
+
+	Mesh* GetCarMesh();
+	Mesh* GetWheelMesh();
+	Mesh* GetInteriorMesh();
+
+	void SetCarMesh(Mesh* mesh);
+	void SetWheelMesh(Mesh* mesh);
+	void SetInteriorMesh(Mesh* mesh);
 
 	//getting the values
 	float GetCurrentSpeed();
