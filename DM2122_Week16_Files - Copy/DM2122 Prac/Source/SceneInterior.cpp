@@ -318,6 +318,10 @@ void SceneInterior::Update(double dt)
         fpsCamera.Update(dt);
     }
 
+	if (Application::IsKeyPressed('L'))
+	{
+		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_CAR_SELECTION);
+	}
 }
 
 void SceneInterior::Render()
