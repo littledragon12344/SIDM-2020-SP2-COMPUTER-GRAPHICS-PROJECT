@@ -40,7 +40,7 @@ private:
 public:
 	static SceneManager* getInstance();
 	Mesh* meshList[NUM_GEOMETRY];
-	void SetNextScene(SCENES_TYPES sceneID);
+	void SetNextScene(SCENES_TYPES currentScene);
 	void Update(double dt);
 	void DeleteAllScenes();
 	void InitCar();
