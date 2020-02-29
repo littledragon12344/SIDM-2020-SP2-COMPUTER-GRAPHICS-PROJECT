@@ -49,6 +49,7 @@ void SceneManager::DeleteAllScenes()
 	for (int i = 0; i < NUM_SCENES; ++i)
 		delete scene_list[i];
 	delete instance;
+	CCar::DeleteAllCar();
 }
 #include "GL\glew.h"
 #include "LoadTGA.h"
