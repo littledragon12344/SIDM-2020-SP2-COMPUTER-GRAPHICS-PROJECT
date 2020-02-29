@@ -20,7 +20,8 @@ public:
 	~CCar();
 
 	static std::vector<CCar*>AllCar;
-
+	static void DeleteAllCar();
+	
 	std::vector<CCar*>GetAllCar();
 
 	static void CreateCar(Mesh* car_mesh, Mesh* wheel_mesh, Mesh* interior_mesh, float max_speed,float acceleration);
