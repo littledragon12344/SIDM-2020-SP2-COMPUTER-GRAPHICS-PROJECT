@@ -51,8 +51,24 @@ void CarMinigame::Updates(float dt)
 	{
 		Speed = 0;
 	}
-	target += view * (float)(Speed * dt);
-	position += view * (float)(Speed * dt);
+	if (position.x > 90)
+	{
+		position.x = 90;
+	}
+	else if (position.z > 90)
+	{
+		position.z = 90;
+	}
+	else if (position.x < -90)
+	{
+		position.x = -90;
+	}
+	else if (position.z < -90)
+	{
+		position.z = -90;
+	}
+		target += view * (float)(Speed * dt);
+		position += view * (float)(Speed * dt);
 }
 Vector3 CarMinigame::GetTargetpos()
 {

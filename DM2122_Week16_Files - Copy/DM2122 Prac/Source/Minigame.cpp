@@ -207,6 +207,19 @@ void Minigame::InitPlayerCar()
 
 void Minigame::Update(double dt)
 {
+	if (Application::IsKeyPressed('P'))//Button to switch
+	{
+		Pause = true;
+	}
+	//dt = 0;
+	if (Pause == true)
+	{
+		if (Application::IsKeyPressed(' '))
+		{
+			Pause = false;
+		}
+		dt = 0;
+	}
 	//ShowCursor(false);
 	if (Wall::carWallCollision(Car1.GetPosition(), Car1.GetTargetpos(), 5, 3))
 	{
@@ -233,15 +246,7 @@ void Minigame::Update(double dt)
 		lightcolor = 0.f;
 		switchcolor = false;
 	}
-	if (Application::IsKeyPressed('P'))//Button to switch
-	{
-		Pause = true;
-	}
-	//dt = 0;
-	if (Pause == true)
-	{
-		dt = 0;
-	}
+	
 	if (Application::IsKeyPressed('J'))//Button to switch
 	{
 		light[1].color.Set(0 + lightcolor, 1 - lightcolor, lightcolor / 2);
@@ -327,7 +332,7 @@ void Minigame::Update(double dt)
 	}
 	if (SwitchCamera == 2)
 		Frecamera.Update(dt);
-	else if (SwitchCamera = 3)
+	else if (SwitchCamera == 3)
 	{
 		TopCamera.Update(dt);
 	}
