@@ -30,6 +30,13 @@ void CCar::CreateCar(Mesh* car_mesh, Mesh* wheel_mesh, Mesh* interior_mesh, floa
 	AllCar.push_back(temp);
 }
 
+void CCar::DeleteAllCar()
+{
+	for (int i = 0; i < AllCar.size(); ++i)
+		delete AllCar[i];
+	AllCar.clear();
+}
+
 //===================Setters & Getters===================
 float CCar::GetCurrentSpeed()
 {
