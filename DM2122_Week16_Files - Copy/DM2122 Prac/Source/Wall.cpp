@@ -83,7 +83,7 @@ bool Wall::generateWalls(const char* file_path)
 
 			for (int i = 0; i < temp_vertices.size(); ++i)
 			{
-				// Add up all vertices and divide it by the size to find average.
+				// Add up all vertices and divide it by the size to find center position
 				position += temp_vertices[i];
 
 				// If either length, height or depth haven't been set,
@@ -161,9 +161,9 @@ Wall* Wall::getWall(int index)
 float Wall::getWallNormalRotation()
 {
 	if (normal.x < 0)
-		return atan(normal.z / normal.x) * 180.0 / 3.1415926535f;
+		return atan(normal.z / normal.x) * 180.0 / 3.141592653f;
 	else
-		return 180 + atan(normal.z / normal.x) * 180.0 / 3.1415926535f;
+		return 180 + atan(normal.z / normal.x) * 180.0 / 3.141592653f;
 }
 
 // For player and wall collision detection in xz plane / top-down view
@@ -265,10 +265,12 @@ Wall* Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 
 	bool collided = false;
 
+	// Array index numbers for all corners:
 	// 0 - top left corner
 	// 1 - top right corner
 	// 2 - bottom left corner
 	// 3 - bottom right corner
+
 	// Corner position of rectangle relative to the world axis / position looking top down
 	// Will make it faster to calculate the rectCornerPos relative to the wall
 	Vector3 rectCornerWorldPos[4];
@@ -289,10 +291,6 @@ Wall* Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 
 		// Getting corner positions of rectangle and wall
 
-		// 0 - top left corner
-		// 1 - top right corner
-		// 2 - bottom left corner
-		// 3 - bottom right corner
 		// Corner position of rectangle relative to the wall's position looking top down
 		Vector3 rectCornerPos[4];
 		rectCornerPos[0] = rectCornerWorldPos[0] - wall.position;
@@ -300,10 +298,6 @@ Wall* Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 		rectCornerPos[2] = rectCornerWorldPos[2] - wall.position;
 		rectCornerPos[3] = rectCornerWorldPos[3] - wall.position;
 
-		// 0 - top left corner
-		// 1 - top right corner
-		// 2 - bottom left corner
-		// 3 - bottom right corner
 		// Corner position of rectangle relative to the rectangle's position looking top down
 		Vector3 wallCornerPos[4];
 		wallCornerPos[0] = (wall.position - (wall.length / 2.f) * wallRight + (wall.depth / 2.f) * wall.normal - pos);
@@ -311,11 +305,7 @@ Wall* Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 		wallCornerPos[2] = (wall.position - (wall.length / 2.f) * wallRight - (wall.depth / 2.f) * wall.normal - pos);
 		wallCornerPos[3] = (wall.position + (wall.length / 2.f) * wallRight - (wall.depth / 2.f) * wall.normal - pos);
 
-
-
-		// --------------------------------
-		// Checking in the wall's axis
-		// --------------------------------
+		// ==================== Checking in the wall's axis ==================== 
 
 		// Get the largest and smallest distance of the corners to the rectangle's center / wall's center depending on which is being calculated.
 		float largest, smallest;
@@ -361,11 +351,7 @@ Wall* Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 		if (largest < -wall.depth / 2.f || smallest > wall.depth / 2.f)
 			continue; // continue to next wall
 
-
-
-		// --------------------------------
-		// Checking in the rectangle's axis
-		// --------------------------------
+		// ==================== Checking in the rectangle's axis ==================== 
 
 		// Set both largest and smallest to distance of top right corner of the wall in rectRight axis.
 		largest = smallest = wallCornerPos[0].Dot(rectRight);
