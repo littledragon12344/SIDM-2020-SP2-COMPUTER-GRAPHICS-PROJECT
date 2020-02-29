@@ -255,8 +255,10 @@ Vector3 Wall::playerWallCollision(Vector3 position, Vector3 displacement)
 //		bool,	returns true if collide with any walls,
 //		returns	false if never collide with any wall
 // Method used: separating axis theorem (from online)
-Wall* Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
+std::vector<Wall*> Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 {
+	std::vector<Wall*> collidedWalls;
+
 	fwd.Normalize();
 	Vector3 rectRight;
 	rectRight.x = fwd.z;
@@ -392,8 +394,8 @@ Wall* Wall::carWallCollision(Vector3 pos, Vector3 fwd, float width, float len)
 			continue; // continue to next wall
 
 		// If it runs here, it means that it has collided with the wall in wallIndex.
-		return allWalls[wallIndex];
+		collidedWalls.push_back(allWalls[wallIndex]);
 	}
 
-	return NULL;
+	return collidedWalls;
 }
