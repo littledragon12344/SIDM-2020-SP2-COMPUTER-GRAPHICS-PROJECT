@@ -642,6 +642,13 @@ void SceneSkybox::Render()
 		RenderMesh(meshList[GEO_NPCB], true);
 		modelStack.PopMatrix();
 	}
+	else	
+	{	
+		modelStack.PushMatrix();	
+		modelStack.Translate(movetocar4x, 0, movetocar4z);	
+		RenderMesh(meshList[GEO_NPCB], true);	
+		modelStack.PopMatrix();	
+	}
 
 	if (NearNPC()  && interactable == true)
 	{
