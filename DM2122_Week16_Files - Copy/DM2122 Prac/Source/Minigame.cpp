@@ -185,13 +185,15 @@ void Minigame::Init()
 	meshList[GEO_WALL] = MeshBuilder::GenerateCuboid("wall", Color(1, 1, 1), 1, 1, 1);
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//CarBody_texture.tga");
 
-	//Wall::generateWalls("OBJ//Wall.obj");
 
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Car", "OBJ//Road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Image//RoadTexture.tga");
 
 	path1.GeneratePath("OBJ//Path.obj",2.5,Vector3(10,0,0));//PathObj , scale, Offset
+
 	Wall::createWall(path1.Point[1], Vector3(0, 0, 1), 3, 2, 10);
+	Wall::generateWalls("OBJ//Wall.obj");
+
 	Car1.init(path1.Point[0] + Vector3(0, 0, -3), Vector3(0, 0, 100), Vector3(0, 1, 0),200.f,&path1);
 	Player.init(path1.Point[0]+Vector3(0, 0, 3), Vector3(1, 0, 0), Vector3(0, 1, 0), 150.f);
 	SwitchCamera = 4;
