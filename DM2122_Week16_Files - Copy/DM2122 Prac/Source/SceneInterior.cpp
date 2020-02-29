@@ -31,7 +31,6 @@ void SceneInterior::Init()
 
 	SwitchCamera = 1;
 	rotate = 0;
-	CarSwitch = 0;
 
 	// Generate a default VAO for now
 	glGenVertexArrays(1, &m_vertexArrayID);
@@ -232,45 +231,45 @@ void SceneInterior::Update(double dt)
 	if (Application::IsKeyPressed(VK_SHIFT) && Application::IsKeyPressed(0x31)) //0x31 is 1 key/;
 	{
 		dist = 0;
-		CarSwitch = 0;
+		CCar::CarSwitch = 0;
 	}
 	if (Application::IsKeyPressed(VK_SHIFT) && Application::IsKeyPressed(0x32))
 	{
 		dist = 0;
-		CarSwitch = 1;
+		CCar::CarSwitch = 1;
 	}
 	if (Application::IsKeyPressed(VK_SHIFT) && Application::IsKeyPressed(0x33))
 	{
 		dist = 0;
-		CarSwitch = 2;
+		CCar::CarSwitch = 2;
 	}
 	if (Application::IsKeyPressed(VK_SHIFT) && Application::IsKeyPressed(0x34))
 	{
 		dist = 0;
-		CarSwitch = 3;
+		CCar::CarSwitch = 3;
 	}
 
 
 	if (Application::IsKeyPressed('W') && SwitchCamera == 1)
 	{
 		moving = true;
-		dist += (float)(dt * CCar::AllCar[CarSwitch]->GetCurrentSpeed());
-		CCar::AllCar[CarSwitch]->SetDist(dist);
+		dist += (float)(dt * CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed());
+		CCar::AllCar[CCar::CarSwitch]->SetDist(dist);
 	}
 
-	CCar::AllCar[CarSwitch]->CalculateSpeed(CCar::AllCar[CarSwitch]->GetAcceleration(), CCar::AllCar[CarSwitch]->GetCurrentSpeed(), dt);
+	CCar::AllCar[CCar::CarSwitch]->CalculateSpeed(CCar::AllCar[CCar::CarSwitch]->GetAcceleration(), CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed(), dt);
 
-	CCar::AllCar[CarSwitch]->SetCurrentSpeed(CCar::AllCar[CarSwitch]->GetCurrentSpeed());
+	CCar::AllCar[CCar::CarSwitch]->SetCurrentSpeed(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed());
 
-	if (CCar::AllCar[CarSwitch]->GetCurrentSpeed() < 0 || moving == false)
+	if (CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() < 0 || moving == false)
 	{
-		CCar::AllCar[CarSwitch]->SetCurrentSpeed(0);
+		CCar::AllCar[CCar::CarSwitch]->SetCurrentSpeed(0);
 	}
-	if (CCar::AllCar[CarSwitch]->GetCurrentSpeed() >= CCar::AllCar[CarSwitch]->GetMaxSpeed())
+	if (CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() >= CCar::AllCar[CCar::CarSwitch]->GetMaxSpeed())
 	{
-		CCar::AllCar[CarSwitch]->SetCurrentSpeed(CCar::AllCar[CarSwitch]->GetMaxSpeed());
+		CCar::AllCar[CCar::CarSwitch]->SetCurrentSpeed(CCar::AllCar[CCar::CarSwitch]->GetMaxSpeed());
 	}
-	fpsCamera.SetCameraSpeed(CCar::AllCar[CarSwitch]->GetCurrentSpeed());
+	fpsCamera.SetCameraSpeed(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed());
 
 	float Cameraspeed = 50.f;
 	if (Application::IsKeyPressed('A') && SwitchCamera == 1)
@@ -285,7 +284,7 @@ void SceneInterior::Update(double dt)
 	{
 		Yaw = 0;
 		dist = 0;
-		CCar::AllCar[CarSwitch]->SetDist(dist);
+		CCar::AllCar[CCar::CarSwitch]->SetDist(dist);
 	}
 
 	moving = false;
@@ -399,7 +398,7 @@ void SceneInterior::Render()
 
 	RenderRoom();
 
-	if (CarSwitch == 0)
+	if (CCar::CarSwitch == 0)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
@@ -412,7 +411,7 @@ void SceneInterior::Render()
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
 	}
-	else if (CarSwitch == 1)
+	else if (CCar::CarSwitch == 1)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
@@ -428,7 +427,7 @@ void SceneInterior::Render()
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
 	}
-	else if (CarSwitch == 2)
+	else if (CCar::CarSwitch == 2)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
@@ -445,7 +444,7 @@ void SceneInterior::Render()
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
 	}
-	else if (CarSwitch == 3)
+	else if (CCar::CarSwitch == 3)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
@@ -463,16 +462,16 @@ void SceneInterior::Render()
 		modelStack.PopMatrix();
 	}
 
-	std::string text = "Speed: " + std::to_string(CCar::AllCar[CarSwitch]->GetCurrentSpeed());
+	std::string text = "Speed: " + std::to_string(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed());
 	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), TEXT_SIZE, 0, 0);
 
-	text = "Accerleration: " + std::to_string(CCar::AllCar[CarSwitch]->GetAcceleration());
+	text = "Accerleration: " + std::to_string(CCar::AllCar[CCar::CarSwitch]->GetAcceleration());
 	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), TEXT_SIZE, 0, 1);
 
-	text = "Distance: " + std::to_string(CCar::AllCar[CarSwitch]->GetDist());
+	text = "Distance: " + std::to_string(CCar::AllCar[CCar::CarSwitch]->GetDist());
 	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), TEXT_SIZE, 0, 2);
 
-	text = "CarModel#: " + std::to_string(CarSwitch + 1);
+	text = "CarModel#: " + std::to_string(CCar::CarSwitch + 1);
 	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), TEXT_SIZE, 0, 19);
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Camera: ", Color(0, 1, 0), TEXT_SIZE, 0, 18);

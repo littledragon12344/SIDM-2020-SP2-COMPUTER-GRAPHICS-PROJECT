@@ -19,6 +19,8 @@ public:
 	CCar();
 	~CCar();
 
+	static int CarSwitch;
+
 	static std::vector<CCar*>AllCar;
 	static void DeleteAllCar();
 	
