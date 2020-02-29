@@ -18,7 +18,7 @@ void CarAi::Updates(float dt)
 	if (position == defaultPosition)//Starting angle			//Initialize Car ai Target pos and rotation
 	{
 		Vector3 Temp2 = (*PathToGo).Point[1];
-		End = Temp2;//Initialize End
+		End = Temp2+GetRandomizePoint()*2;//Initialize End
 		TargetFromPos = (Temp2 - position).Normalized();
 		//position = Temp;
 		Vector3 view = (End - position).Normalized();
@@ -38,7 +38,7 @@ void CarAi::Updates(float dt)
 			//End = Vector3(Point[0].x, Point[0].y, Point[0].z);	//End = first start vector
 		}
 		Vector3 Temp2 = PathToGo->Point[start];//get next End
-		End = Temp2;//end = next end
+		End = Temp2 + GetRandomizePoint() * 2;//end = next end
 		//target = Temp*2;
 	}
 	Vector3 view = (End -position).Normalized();
@@ -173,10 +173,12 @@ void CarAi::Updates(float dt)
 		speed = maxspeed;
 	}
 	target = GetTargetpos();
+	
+	//std::cout << "\n";
+	Collidewithwall(Wall::carWallCollision(GetPosition(), GetTargetpos(), 7, 2.5));
 	Vector3 TargetView = (target - position).Normalize();
 	position += TargetView * (float)(speed * dt);
 //	target = GetTargetpos();
-
 }
 
 //PAth only works idthe vertices is in the rite order best to start with 2d triangle and increase the amount of vertices on it using multicutTool
@@ -249,6 +251,7 @@ Vector3 CarAi::GetTargetpos()//Get Target Posiiton using the angles
 	Temp.x = cos(Math::DegreeToRadian(-rotationy)) * xDir.x - sin(Math::DegreeToRadian(-rotationy)) * xDir.z;
 	Temp.z = sin(Math::DegreeToRadian(-rotationy)) * xDir.x + cos(Math::DegreeToRadian(-rotationy)) * xDir.z;
 	Temp.y = 0;
+	TargetFromPos = Temp;
 	Temp = position + Temp;
 	return Temp;
 }
@@ -268,9 +271,50 @@ Vector3 CarAi::GetRandomizePoint()
 	Vector3 Temp;
 	Vector3 xDir = Vector3(1, 0, 0);
 	int postochange = rand() % 360;
-	Temp.x = cos(Math::DegreeToRadian(-rotationy)) * xDir.x - sin(Math::DegreeToRadian(-rotationy)) * xDir.z;
-	Temp.z = sin(Math::DegreeToRadian(-rotationy)) * xDir.x + cos(Math::DegreeToRadian(-rotationy)) * xDir.z;
+	if (postochange > 180)
+	{
+		postochange = postochange-180;
+	}
+	else
+	{
+		postochange = -postochange;
+	}
+	Temp.x = cos(Math::DegreeToRadian(-postochange)) * xDir.x - sin(Math::DegreeToRadian(-postochange)) * xDir.z;
+	Temp.z = sin(Math::DegreeToRadian(-postochange)) * xDir.x + cos(Math::DegreeToRadian(-postochange)) * xDir.z;
 	Temp.y = 0;
-	Temp = position + Temp;
-	return Vector3();
+	return Temp;
+}
+
+Vector3 CarAi::Getforward()
+{
+	return TargetFromPos;
+}
+
+void CarAi::Collidewithwall(std::vector<Wall*> wallcollide)
+{
+	for (int i = 0; i < wallcollide.size(); i++)
+	{
+		if (wallcollide[i]->getLength() > wallcollide[i]->getDepth())
+		{
+			/*if (position.z > wallcollide[i]->getPosition().z)
+			{
+				position.z = wallcollide[i]->getPosition().z + wallcollide[i]->getLength()/2;
+			}
+			if (position.z < wallcollide[i]->getPosition().z)
+			{
+				position.z = wallcollide[i]->getPosition().z - wallcollide[i]->getLength() / 2;
+			}*/
+		}
+		if (wallcollide[i]->getLength() < wallcollide[i]->getDepth())
+		{
+			if (position.x > wallcollide[i]->getPosition().x)
+			{
+				position.x = wallcollide[i]->getPosition().x + wallcollide[i]->getDepth() / 2;
+			}
+			if (position.x < wallcollide[i]->getPosition().x)
+			{
+				position.x = wallcollide[i]->getPosition().x - wallcollide[i]->getDepth() / 2;
+			}
+		}
+	}
 }
