@@ -7,6 +7,7 @@
 #include "Camera2.h"
 #include "Camera3.h"
 #include "FirstPersonCamera.h"
+#include "TopDownCamera.h"
 #include "Mesh.h"
 #include "Light.h"
 #include "CCar.h"
@@ -97,6 +98,8 @@ private:
 	Light light[2];
 
 	FirstPersonCamera fpsCamera;
+	Camera2 freeCamera;
+	TopDownCamera topCamera;
 
 	float lightcolor;
 	bool switchcolor;

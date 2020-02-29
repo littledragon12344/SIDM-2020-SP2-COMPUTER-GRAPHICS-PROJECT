@@ -11,6 +11,7 @@
 #define ROT_LIMIT 45.f;
 #define SCALE_LIMIT 5.f;
 #define LSPEED 10.f
+#define TEXT_SIZE 3
 
 SceneInterior::SceneInterior()
 {
@@ -28,6 +29,7 @@ void SceneInterior::Init()
 {
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
+	SwitchCamera = 1;
 	rotate = 0;
 	CarSwitch = 0;
 
@@ -40,6 +42,7 @@ void SceneInterior::Init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	fpsCamera.Init(Vector3(-10, 5, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
+	topCamera.Init(Vector3(-10, 300, 0), Vector3(10, 0, 0), Vector3(0, 0, -1));
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -177,8 +180,8 @@ void SceneInterior::Init()
 
 	CCar::CreateCar(meshList[GEO_CAR1], nullptr, 60.f, 6.f);
 	CCar::CreateCar(meshList[GEO_CAR2], nullptr, 50.f, 8.f);
-	CCar::CreateCar(meshList[GEO_CAR3], nullptr, 80.f, 4.f);
-	CCar::CreateCar(meshList[GEO_CAR4], nullptr, 100.f, 2.f);
+	CCar::CreateCar(meshList[GEO_CAR3], nullptr, 80.f, 5.f);
+	CCar::CreateCar(meshList[GEO_CAR4], nullptr, 100.f, 4.f);
 
 	lightcolor = 0.f;
 
@@ -225,7 +228,7 @@ void SceneInterior::Update(double dt)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	
+
 	if (Application::IsKeyPressed(VK_NUMPAD1))
 	{
 		dist = 0;
@@ -248,7 +251,7 @@ void SceneInterior::Update(double dt)
 	}
 
 
-	if (Application::IsKeyPressed('W'))
+	if (Application::IsKeyPressed('W') && SwitchCamera == 1)
 	{
 		moving = true;
 		dist += (float)(dt * CCar::AllCar[CarSwitch]->GetCurrentSpeed());
@@ -270,15 +273,15 @@ void SceneInterior::Update(double dt)
 	fpsCamera.SetCameraSpeed(CCar::AllCar[CarSwitch]->GetCurrentSpeed());
 
 	float Cameraspeed = 50.f;
-	if (Application::IsKeyPressed('A'))
+	if (Application::IsKeyPressed('A') && SwitchCamera == 1)
 	{
 		Yaw += Cameraspeed * dt * 2;
 	}
-	if (Application::IsKeyPressed('D'))
+	if (Application::IsKeyPressed('D') && SwitchCamera == 1)
 	{
 		Yaw -= Cameraspeed * dt * 2;
 	}
-	if (Application::IsKeyPressed('R'))
+	if (Application::IsKeyPressed('R') && SwitchCamera == 1)
 	{
 		Yaw = 0;
 		dist = 0;
@@ -286,17 +289,59 @@ void SceneInterior::Update(double dt)
 	}
 
 	moving = false;
-	fpsCamera.Update(dt);
+    if (Application::IsKeyPressed(VK_NUMPAD7) && SwitchCamera != 1)
+    {
+        SwitchCamera = 1;
+    }
+	if (Application::IsKeyPressed(VK_NUMPAD8))
+    {
+        freeCamera.position = fpsCamera.position;
+		freeCamera.TargetFromPos = fpsCamera.TargetFromPos;
+		freeCamera.up = fpsCamera.up;
+		freeCamera.target = fpsCamera.target;
+		freeCamera.xzTarget = fpsCamera.xzTarget;
+        SwitchCamera = 2;
+    }
+    if (Application::IsKeyPressed(VK_NUMPAD9))//the key can change
+    {
+        SwitchCamera = 3;//this is top , the num can change
+    }
+
+	if (SwitchCamera == 2)
+		freeCamera.Update(dt);
+    else if (SwitchCamera == 3)
+    {
+        topCamera.Update(dt);
+    }
+    else
+    {
+        fpsCamera.Update(dt);
+    }
+
 }
 
 void SceneInterior::Render()
 {
 	//Clear color & depth buffer every frame
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	viewStack.LoadIdentity();
-	viewStack.LookAt(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z, fpsCamera.target.x, fpsCamera.target.y, fpsCamera.target.z, fpsCamera.up.x, fpsCamera.up.y, fpsCamera.up.z);
-	modelStack.LoadIdentity();
+	if (SwitchCamera == 1)
+	{
+		viewStack.LoadIdentity();
+		viewStack.LookAt(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z, fpsCamera.target.x, fpsCamera.target.y, fpsCamera.target.z, fpsCamera.up.x, fpsCamera.up.y, fpsCamera.up.z);
+		modelStack.LoadIdentity();
+	}
+	else if (SwitchCamera == 2)
+	{
+		viewStack.LoadIdentity();
+		viewStack.LookAt(freeCamera.position.x, freeCamera.position.y, freeCamera.position.z, freeCamera.target.x, freeCamera.target.y, freeCamera.target.z, freeCamera.up.x, freeCamera.up.y, freeCamera.up.z);
+		modelStack.LoadIdentity();
+	}
+	else if (SwitchCamera == 3)
+	{
+		viewStack.LoadIdentity();
+		viewStack.LookAt(topCamera.position.x, topCamera.position.y, topCamera.position.z, topCamera.target.x, topCamera.target.y, topCamera.target.z, topCamera.up.x, topCamera.up.y, topCamera.up.z);
+		modelStack.LoadIdentity();
+	}
 
 	// passing the light direction if it is a direction light	
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
@@ -419,16 +464,32 @@ void SceneInterior::Render()
 	}
 
 	std::string text = "Speed: " + std::to_string(CCar::AllCar[CarSwitch]->GetCurrentSpeed());
-	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 0);
+	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), TEXT_SIZE, 0, 0);
 
 	text = "Accerleration: " + std::to_string(CCar::AllCar[CarSwitch]->GetAcceleration());
-	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 1);
+	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), TEXT_SIZE, 0, 1);
 
 	text = "Distance: " + std::to_string(CCar::AllCar[CarSwitch]->GetDist());
-	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 2);
+	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), TEXT_SIZE, 0, 2);
 
 	text = "CarModel#: " + std::to_string(CarSwitch + 1);
-	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 2, 0, 29);
+	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), TEXT_SIZE, 0, 19);
+
+	RenderTextOnScreen(meshList[GEO_TEXT], "Camera: ", Color(0, 1, 0), TEXT_SIZE, 0, 18);
+	switch (SwitchCamera)
+	{
+	case 1:
+		RenderTextOnScreen(meshList[GEO_TEXT], "First Person", Color(1, 0, 1), TEXT_SIZE, 8, 18);
+		break;
+	case 2:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Free Camera", Color(0, 1, 1), TEXT_SIZE, 8, 18);
+		break;
+	case 3:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Top Down Camera", Color(1, 1, 0), TEXT_SIZE, 8, 18);
+		break;
+	default:
+		break;
+	}
 }
 
 void SceneInterior::RenderRoom()

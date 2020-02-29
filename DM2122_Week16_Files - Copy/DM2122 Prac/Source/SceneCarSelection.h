@@ -80,6 +80,8 @@ private:
 	int numOfCars;
 	int backgroundNo;
 	bool bPressesd;
+	float accel;
+	float topSpd;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey);
