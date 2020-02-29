@@ -2,7 +2,7 @@
 
 SceneManager* SceneManager::instance = 0;
 
-SceneManager::SceneManager() : currentSceneID(SCENE_INTERIOR)
+SceneManager::SceneManager(SCENES_TYPES type) : currentSceneID(type)
 {
 	
 }
@@ -11,13 +11,13 @@ SceneManager* SceneManager::getInstance()
 {
 	if (!instance)
 	{
-		instance = new SceneManager();
+		instance = new SceneManager(SCENE_CAR_SELECTION);
 		instance->scene_list[SCENE_SKYBOX] = new SceneSkybox();
 		instance->scene_list[SCENE_CAR_SELECTION] = new SceneCarSelection();
 		instance->scene_list[SCENE_MINIGAME] = new Minigame();
 		instance->scene_list[SCENE_INTERIOR] = new SceneInterior();
 
-		instance->scene_list[SCENE_INTERIOR]->Init();
+		instance->scene_list[instance->currentSceneID]->Init();
 
 		return instance;
 	}
