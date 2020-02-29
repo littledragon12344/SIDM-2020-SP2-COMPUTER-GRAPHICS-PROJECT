@@ -165,7 +165,7 @@ void CarAi::Updates(float dt)
 		{
 			acceration = -rotationSpeed / maxspeed;
 		}
-		else//else coutinue allerate
+		else//else coutinue acellerate
 		{
 			acceration = 10.f;
 		}
