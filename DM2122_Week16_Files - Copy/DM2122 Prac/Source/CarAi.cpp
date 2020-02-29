@@ -225,7 +225,7 @@ float CarAi::distance(Vector3 Num)// vector math to find distance ||
 	return num;
 }
 
-void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up,float RotateSpeed, Path *paths)//Initiallizing
+void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up,float RotateSpeed, Path *paths)//Initiallizing default variable
 {
 	acceration = 10.f;
 	speed = 0.f;

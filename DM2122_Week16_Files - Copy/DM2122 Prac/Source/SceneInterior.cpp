@@ -178,10 +178,10 @@ void SceneInterior::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	CCar::CreateCar(meshList[GEO_CAR1], nullptr, 60.f, 6.f);
-	CCar::CreateCar(meshList[GEO_CAR2], nullptr, 50.f, 8.f);
-	CCar::CreateCar(meshList[GEO_CAR3], nullptr, 80.f, 5.f);
-	CCar::CreateCar(meshList[GEO_CAR4], nullptr, 100.f, 4.f);
+	//CCar::CreateCar(meshList[GEO_CAR1], nullptr, 60.f, 6.f);
+	//CCar::CreateCar(meshList[GEO_CAR2], nullptr, 50.f, 8.f);
+	//CCar::CreateCar(meshList[GEO_CAR3], nullptr, 80.f, 5.f);
+	//CCar::CreateCar(meshList[GEO_CAR4], nullptr, 100.f, 4.f);
 
 	lightcolor = 0.f;
 

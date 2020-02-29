@@ -92,8 +92,6 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();
 
-	float accel;
-	float topSpd;
 public:
 	SceneCarSelection();
 	~SceneCarSelection();

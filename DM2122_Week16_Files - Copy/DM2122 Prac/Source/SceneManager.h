@@ -7,6 +7,22 @@
 class SceneManager
 {
 public:
+	enum GEOMETRY_TYPE
+	{
+		GEO_CAR1=0,
+		GEO_CAR1WHEELS,
+		Geo_CAR1INT,
+		GEO_CAR2,
+		GEO_CAR2WHEELS,
+		Geo_CAR2INT,
+		GEO_CAR3,
+		GEO_CAR3WHEELS,
+		Geo_CAR3INT,
+		GEO_CAR4,
+		GEO_CAR4WHEELS,
+		Geo_CAR4INT,
+		NUM_GEOMETRY,
+	};
 	enum SCENES_TYPES
 	{
 		SCENE_SKYBOX = 0,
@@ -22,7 +38,9 @@ private:
 	SceneManager();
 public:
 	static SceneManager* getInstance();
+	Mesh* meshList[NUM_GEOMETRY];
 	void SetNextScene(SCENES_TYPES sceneID);
 	void Update(double dt);
 	void DeleteAllScenes();
+	void InitCar();
 };
