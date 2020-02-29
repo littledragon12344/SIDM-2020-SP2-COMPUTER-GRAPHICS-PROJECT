@@ -36,11 +36,11 @@ private:
 	Scene* scene_list[NUM_SCENES];
 	static SceneManager* instance;
 	SceneManager();
-	SceneManager(SCENES_TYPES type);
+	SceneManager(SCENES_TYPES currentScene);
 public:
 	static SceneManager* getInstance();
 	Mesh* meshList[NUM_GEOMETRY];
-	void SetNextScene(SCENES_TYPES currentScene);
+	void SetNextScene(SCENES_TYPES sceneID);
 	void Update(double dt);
 	void DeleteAllScenes();
 	void InitCar();
