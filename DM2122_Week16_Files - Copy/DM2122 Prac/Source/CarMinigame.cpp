@@ -22,6 +22,7 @@ void CarMinigame::Updates(float dt)
 {
 	Vector3 view = (target -position).Normalized();
 	static const float Rotation = 50.f;
+	target = GetTargetpos();
 	if (Application::IsKeyPressed('S'))
 	{
 		Speed -= 25.f*dt;
@@ -38,34 +39,37 @@ void CarMinigame::Updates(float dt)
 	if (Application::IsKeyPressed('A'))
 	{
 		rotationy += 300.f * dt;
-		target = GetTargetpos();
 		Speed -= 5 * dt;
 	}
 	if (Application::IsKeyPressed('D'))
 	{
 		rotationy -= 300.f * dt;
-		target = GetTargetpos();
 		Speed -= 5 * dt;
 	}
 	if (Speed <= 0)
 	{
 		Speed = 0;
 	}
+	Vector3 Temp =(target - position).Normalized();
 	if (position.x > 90)
 	{
 		position.x = 90;
+		target = Temp + position;
 	}
-	else if (position.z > 90)
+	 if (position.z > 90)
 	{
 		position.z = 90;
+		target = Temp + position;
 	}
-	else if (position.x < -90)
+	 if (position.x < -90)
 	{
 		position.x = -90;
+		target = Temp + position;
 	}
-	else if (position.z < -90)
+	 if (position.z < -90)
 	{
 		position.z = -90;
+		target = Temp + position;
 	}
 		target += view * (float)(Speed * dt);
 		position += view * (float)(Speed * dt);

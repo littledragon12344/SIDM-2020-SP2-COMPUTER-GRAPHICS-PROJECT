@@ -161,14 +161,11 @@ void CarAi::Updates(float dt)
 	//}
 	if (rotationy != angleFromx)
 	{
-		if (Tempangle > 90)//if angel is big slow down
-		{
 			acceration = -rotationSpeed / maxspeed;
-		}
-		else//else coutinue acellerate
-		{
-			acceration = 10.f;
-		}
+	}
+	else
+	{
+		acceration = 10.f;
 	}
 	speed += acceration * dt;
 	if (speed > maxspeed)
@@ -264,4 +261,16 @@ Vector3 CarAi::GetPosition()
 float CarAi::GetRotation()
 {
 	return rotationy;
+}
+
+Vector3 CarAi::GetRandomizePoint()
+{
+	Vector3 Temp;
+	Vector3 xDir = Vector3(1, 0, 0);
+	int postochange = rand() % 360;
+	Temp.x = cos(Math::DegreeToRadian(-rotationy)) * xDir.x - sin(Math::DegreeToRadian(-rotationy)) * xDir.z;
+	Temp.z = sin(Math::DegreeToRadian(-rotationy)) * xDir.x + cos(Math::DegreeToRadian(-rotationy)) * xDir.z;
+	Temp.y = 0;
+	Temp = position + Temp;
+	return Vector3();
 }

@@ -189,7 +189,7 @@ void Minigame::Init()
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Car", "OBJ//Road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Image//RoadTexture.tga");
 
-	path1.GeneratePath("OBJ//Path.obj",2.5,Vector3(10,0,0));//PathObj , scale, Offset
+	path1.GeneratePath("OBJ//Path.obj",1,Vector3(0,0,0));//PathObj , scale, Offset
 
 	Wall::createWall(path1.Point[1], Vector3(0, 0, 1), 3, 2, 10);
 	Wall::generateWalls("OBJ//Wall.obj");
@@ -220,67 +220,91 @@ void Minigame::Update(double dt)
 		}
 		dt = 0;
 	}
-	//ShowCursor(false);
-	if (Wall::carWallCollision(Car1.GetPosition(), Car1.GetTargetpos(), 5, 3))
-	{
-		std::cout << "Collide\n";
-	}
 	else
-		//std::cout << "\n";
-
-		if (lightcolor >= 0 && !switchcolor)//Switching color
+	{
+		//ShowCursor(false);
+		if (Wall::carWallCollision(Car1.GetPosition(), Car1.GetTargetpos(), 7, 2.5))
 		{
-			lightcolor += 0.5 * dt;
+			std::cout << "Collide\n";
 		}
-	if (lightcolor >= 1.f)
-	{
-		lightcolor = 1.f;
-		switchcolor = true;
+		else
+			//std::cout << "\n";
+
+			if (lightcolor >= 0 && !switchcolor)//Switching color
+			{
+				lightcolor += 0.5 * dt;
+			}
+		if (lightcolor >= 1.f)
+		{
+			lightcolor = 1.f;
+			switchcolor = true;
+		}
+		if (lightcolor <= 1.f && switchcolor)
+		{
+			lightcolor -= 0.5 * dt;
+		}
+		if (lightcolor <= 0.f)
+		{
+			lightcolor = 0.f;
+			switchcolor = false;
+		}
+
+		if (Application::IsKeyPressed('J'))//Button to switch
+		{
+			light[1].color.Set(0 + lightcolor, 1 - lightcolor, lightcolor / 2);
+			glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
+		}
+		if (Application::IsKeyPressed(0x31))
+		{
+			glDisable(GL_CULL_FACE);
+		}
+		else if (Application::IsKeyPressed(0x32))
+		{
+			glEnable(GL_CULL_FACE);
+		}
+		else if (Application::IsKeyPressed(0x33))
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		else if (Application::IsKeyPressed(0x34))
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
+		//light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
+		if (Application::IsKeyPressed('I'))
+			light[0].position.z -= (float)(LSPEED * dt);
+		if (Application::IsKeyPressed('K'))
+			light[0].position.z += (float)(LSPEED * dt);
+		if (Application::IsKeyPressed('J'))
+			light[0].position.x -= (float)(LSPEED * dt);
+		if (Application::IsKeyPressed('L'))
+			light[0].position.x += (float)(LSPEED * dt);
+		if (Application::IsKeyPressed('O'))
+			light[0].position.y -= (float)(LSPEED * dt);
+		if (Application::IsKeyPressed('P'))
+			light[0].position.y += (float)(LSPEED * dt);
+		if (SwitchCamera == 2)
+			Frecamera.Update(dt);
+		else if (SwitchCamera == 3)
+		{
+			TopCamera.Update(dt);
+		}
+		else
+		{
+			FPScamera.Update(dt);
+			//TPSCamera.Update(dt);
+		}
+		if (StartTime <= 0)
+		{
+			light[1].position.Set(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);
+			Player.Updates(dt);
+			Car1.Updates(dt);
+		}
+		else
+		{
+			StartTime -= dt;
+		}
 	}
-	if (lightcolor <= 1.f && switchcolor)
-	{
-		lightcolor -= 0.5 * dt;
-	}
-	if (lightcolor <= 0.f)
-	{
-		lightcolor = 0.f;
-		switchcolor = false;
-	}
-	
-	if (Application::IsKeyPressed('J'))//Button to switch
-	{
-		light[1].color.Set(0 + lightcolor, 1 - lightcolor, lightcolor / 2);
-		glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
-	}
-	if (Application::IsKeyPressed(0x31))
-	{
-		glDisable(GL_CULL_FACE);
-	}
-	else if (Application::IsKeyPressed(0x32))
-	{
-		glEnable(GL_CULL_FACE);
-	}
-	else if (Application::IsKeyPressed(0x33))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-	else if (Application::IsKeyPressed(0x34))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	//light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
-	if (Application::IsKeyPressed('I'))
-		light[0].position.z -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('K'))
-		light[0].position.z += (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('J'))
-		light[0].position.x -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('L'))
-		light[0].position.x += (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('O'))
-		light[0].position.y -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('P'))
-		light[0].position.y += (float)(LSPEED * dt);
 	if (Application::IsKeyPressed('Z') && SwitchCamera != 2)
 	{
 		Frecamera.position = FPScamera.position;
@@ -329,27 +353,6 @@ void Minigame::Update(double dt)
 	if (Application::IsKeyPressed('R'))
 	{
 		Yaw = 0;
-	}
-	if (SwitchCamera == 2)
-		Frecamera.Update(dt);
-	else if (SwitchCamera == 3)
-	{
-		TopCamera.Update(dt);
-	}
-	else
-	{
-		FPScamera.Update(dt);
-		//TPSCamera.Update(dt);
-	}
-	if (StartTime <= 0)
-	{
-		light[1].position.Set(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);
-		Player.Updates(dt);
-		Car1.Updates(dt);
-	}
-	else
-	{
-		StartTime -= dt;
 	}
 }
 
@@ -595,8 +598,7 @@ void Minigame::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,stati
 	//RenderMesh(meshList[GEO_CARTARGET], false);
 	//modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(10,-1,0);
-	modelStack.Scale(2.5,2.5,2.5);
+	modelStack.Translate(0,-1,0);
 	RenderMesh(meshList[GEO_ROAD], false);
 	modelStack.PopMatrix();
 	/*modelStack.PushMatrix();
@@ -613,6 +615,10 @@ void Minigame::RenderUI()
 	float temp = 3.5;
 	temp -=StartTime;
 	RenderMeshOnScreen(meshList[GEO_STARTLIGHT], Color(1, 1, 1), 20, 7.5, 43, 55, (int)temp, 0);
+	if (Pause)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT],"--Pause--",Color(0, 1, 1), 7, 10, 7.5);
+	}
 }
 
 void Minigame::RenderText(Mesh* mesh, std::string text, Color color)

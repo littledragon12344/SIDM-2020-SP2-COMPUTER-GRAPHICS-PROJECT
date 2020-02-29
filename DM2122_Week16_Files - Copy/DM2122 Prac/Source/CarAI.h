@@ -44,6 +44,7 @@ public:
 	Vector3 GetTargetpos();
 	Vector3 GetPosition();
 	float GetRotation();
+	Vector3 GetRandomizePoint();
 };
 
 #endif
