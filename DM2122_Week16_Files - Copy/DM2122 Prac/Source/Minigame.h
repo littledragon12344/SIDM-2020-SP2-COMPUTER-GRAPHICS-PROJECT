@@ -10,6 +10,7 @@
 #include "Mesh.h"
 #include "Light.h"
 #include "CarAI.h"
+#include "SceneManager.h"
 #include "CarMinigame.h"
 #include "FirstPersonCamera.h"
 #include "Wall.h"

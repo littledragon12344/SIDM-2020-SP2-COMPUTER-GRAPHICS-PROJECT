@@ -493,6 +493,11 @@ void SceneSkybox::Update(double dt)
 		translateY4 = 0.3f;
 		movesUp = false;
 	}
+
+	if (Application::IsKeyPressed('L'))
+	{
+		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_CAR_SELECTION);
+	}
 }
 
 void SceneSkybox::Render()

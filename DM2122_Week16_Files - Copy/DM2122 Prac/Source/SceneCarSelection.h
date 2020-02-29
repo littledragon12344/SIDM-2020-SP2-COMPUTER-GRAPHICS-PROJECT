@@ -5,6 +5,7 @@
 #include <MatrixStack.h>
 #include "Mesh.h"
 #include "Camera.h"
+#include "SceneManager.h"
 #include "Light.h"
 #include "CCar.h"
 
