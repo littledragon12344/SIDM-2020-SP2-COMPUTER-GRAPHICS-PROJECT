@@ -141,6 +141,11 @@ private:
 	float Cameraspeed;
 	bool movesUp;
 
+	std::vector<CCar*>& allCars = CCar::AllCar;
+	int currentCarIndex;
+
+	float currentCarMaxSpd, currentCarAccel;
+
 	MS modelStack, viewStack, projectionStack;
 	Light light[5];
 
