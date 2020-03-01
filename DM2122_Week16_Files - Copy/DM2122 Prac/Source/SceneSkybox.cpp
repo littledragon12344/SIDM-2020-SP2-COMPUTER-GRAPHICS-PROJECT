@@ -29,9 +29,9 @@ void SceneSkybox::Init()
 
 	rotate = 0;
 	translateY1 = 0.7f;
-	translateY2 = -0.3f;
-	translateY3 = 1.4f;
-	translateY4 = 0.3f;
+	translateY2 = 0.5f;
+	translateY3 = 1.2f;
+	translateY4 = 1.5f;
 	Cameraspeed = 25.f;
 	movesUp = false;
 
@@ -417,73 +417,73 @@ void SceneSkybox::Update(double dt)
 		movesUp = false;
 	}
 
-	if (translateY2 > -0.7f && !movesUp)
+	if (translateY2 > -0.2f && !movesUp)
 	{
 		translateY2 -= (float)(dt * 0.1);
 
 	}
 
-	if (translateY2 <= -0.7f)
+	if (translateY2 <= -0.2f)
 	{
-		translateY2 = -0.7;
+		translateY2 = -0.2;
 		movesUp = true;
 	}
 
-	if (translateY2 < -0.2f && movesUp)
+	if (translateY2 < 0.3f && movesUp)
 	{
 		translateY2 += (float)(dt * 0.1);
 	}
 
-	if (translateY2 >= -0.2f)
+	if (translateY2 >= 0.3f)
 	{
-		translateY2 = -0.2f;
+		translateY2 = 0.3f;
 		movesUp = false;
 	}
 
 
-	if (translateY3 > 1.f && !movesUp)
+	if (translateY3 > 0.4f && !movesUp)
 	{
 		translateY3 -= (float)(dt * 0.1);
 
 	}
 
-	if (translateY3 <= 1.f)
+	if (translateY3 <= 0.4f)
 	{
-		translateY3 = 1.f;
+		translateY3 = 0.4f;
 		movesUp = true;
 	}
 
-	if (translateY3 < 1.4f && movesUp)
+	if (translateY3 < 0.8f && movesUp)
 	{
 		translateY3 += (float)(dt * 0.1);
 	}
 
-	if (translateY3 >= 1.4f)
+	if (translateY3 >= 0.8f)
 	{
-		translateY3 = 1.4f;
+		translateY3 = 0.8f;
 		movesUp = false;
 	}
 
-	if (translateY4 > -0.1f && !movesUp)
+	if (translateY4 > 0.5f && !movesUp)
 	{
 		translateY4 -= (float)(dt * 0.1);
 
 	}
 
-	if (translateY4 <= -0.1f)
+	if (translateY4 <= 0.5f)
 	{
-		translateY4 = -0.1f;
+		translateY4 = 0.5f;
 		movesUp = true;
 	}
 
-	if (translateY4 < 0.3f && movesUp)
+	if (translateY4 < 1.5f && movesUp)
 	{
 		translateY4 += (float)(dt * 0.1);
 	}
 
-	if (translateY4 >= 0.3f)
+	if (translateY4 >= 1.5f)
 	{
-		translateY4 = 0.3f;
+		translateY4 = 1.5f;
 		movesUp = false;
 	}
 
@@ -965,23 +965,27 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	RenderMesh(meshList[GEO_STAND], true);
 	modelStack.PushMatrix();
 	modelStack.Translate(0.f, translateY2, 0.f);
-	modelStack.Scale(1.15f, 1.15f, 1.15f);
+	modelStack.Scale(0.5f, 0.5f, 0.5f);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
 	RenderMesh(CCar::AllCar[1]->GetCarMesh(), true);
 	modelStack.PushMatrix();
-	modelStack.Translate(0.f, 0.9f, 0.f);
+	modelStack.Translate(0.1f, 0.6f, 0.f);
+	modelStack.Scale(2.f, 2.f, 2.f);
 	RenderMesh(CCar::AllCar[1]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-3.0, 0.9f, 0.f);
+	modelStack.Translate(0.1f, 0.6f, -5.f);
+	modelStack.Scale(2.f, 2.f, 2.f);
 	RenderMesh(CCar::AllCar[1]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(0.f, 0.9f, -2.35f);
+	modelStack.Translate(-5.95f, 0.6f, 0.f);
+	modelStack.Scale(2.f, 2.f, 2.f);
 	RenderMesh(CCar::AllCar[1]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-3.0, 0.9f, -2.35f);
+	modelStack.Translate(-5.95f, 0.6f, -5.f);
+	modelStack.Scale(2.f, 2.f, 2.f);
 	RenderMesh(CCar::AllCar[1]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
@@ -996,21 +1000,27 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.Scale(0.5f, 0.5f, 0.5f);
 	RenderMesh(CCar::AllCar[2]->GetCarMesh(), true);
 	modelStack.PushMatrix();
-	modelStack.Translate(-2.9f, -0.6f, -4.65f);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
+	modelStack.Translate(-4.25f, 0.6f, 2.35f);
+	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
 	RenderMesh(CCar::AllCar[2]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-2.9f, -0.6f, 4.f);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
+	modelStack.Translate(-4.25f, 0.6f, -2.35f);
+	modelStack.Rotate(270.f, 0.f, 1.f, 0.f);
 	RenderMesh(CCar::AllCar[2]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(2.9f, -0.6f, -4.65f);
-	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
+	modelStack.Translate(3.7f, 0.6f, 2.35f);
+	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
 	RenderMesh(CCar::AllCar[2]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(2.9f, -0.6f, 4.f);
-	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	modelStack.Scale(1.1f, 1.1f, 1.1f);
+	modelStack.Translate(3.7f, 0.6f, -2.35f);
+	modelStack.Rotate(270.f, 0.f, 1.f, 0.f);
 	RenderMesh(CCar::AllCar[2]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
@@ -1021,22 +1031,27 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.Rotate(-rotate, 0.f, 1.f, 0.f);
 	RenderMesh(meshList[GEO_STAND], true);
 	modelStack.PushMatrix();
+	modelStack.Scale(0.45f, 0.45f, 0.45f);
 	modelStack.Translate(0.f, translateY4, 0.f);
 	RenderMesh(CCar::AllCar[3]->GetCarMesh(), true);
 	modelStack.PushMatrix();
-	modelStack.Translate(2.2f, 0.2f, 0.3f);
+	modelStack.Scale(2.9f, 2.9f, 2.9f);
+	modelStack.Translate(0.05f, -0.3f, 0.1f);
 	RenderMesh(CCar::AllCar[3]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-0.1f, 0.2f, 0.3f);
+	modelStack.Scale(2.9f, 2.9f, 2.9f);
+	modelStack.Translate(0.05f, -0.3f, -1.6f);
 	RenderMesh(CCar::AllCar[3]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(2.2f, 0.2f, -1.8f);
+	modelStack.Scale(2.9f, 2.9f, 2.9f);
+	modelStack.Translate(1.95f, -0.3f, 0.1f);
 	RenderMesh(CCar::AllCar[3]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
-	modelStack.Translate(-0.1f, 0.2f, -1.8f);
+	modelStack.Scale(2.9f, 2.9f, 2.9f);
+	modelStack.Translate(1.95f, -0.3f, -1.6f);
 	RenderMesh(CCar::AllCar[3]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
