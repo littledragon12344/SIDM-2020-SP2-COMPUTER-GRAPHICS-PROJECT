@@ -264,8 +264,6 @@ void SceneSkybox::Init()
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
 	SwitchCamera = 1;
-	switchcolor = false;
-	lightcolor = 0.f;
 
 	meshList[GEO_NPCB] = MeshBuilder::GenerateOBJ("NPC", "OBJ//NPC_Body.obj");
 	NPC[0].setCoords(0, 0);
@@ -274,29 +272,6 @@ void SceneSkybox::Init()
 
 void SceneSkybox::Update(double dt)
 {
-	if (lightcolor >= 0&&!switchcolor)//Switching color
-	{
-		lightcolor += 0.5 * dt;
-	}
-	if (lightcolor >=1.f)
-	{
-		lightcolor = 1.f;
-		switchcolor = true;
-	}
-	if (lightcolor <= 1.f && switchcolor)
-	{
-		lightcolor -= 0.5 * dt;
-	}
-	if (lightcolor <= 0.f)
-	{
-		lightcolor = 0.f;
-		switchcolor = false;
-	}
-	if (Application::IsKeyPressed('J'))//Button to switch
-	{
-		light[1].color.Set(0 + lightcolor, 1 - lightcolor, lightcolor / 2);
-		glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
-	}
 	if (Application::IsKeyPressed(0x31))
 	{
 		glDisable(GL_CULL_FACE);
@@ -313,19 +288,7 @@ void SceneSkybox::Update(double dt)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	////light[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
-	//if (Application::IsKeyPressed('I'))
-	//	light[0].position.z -= (float)(LSPEED * dt);
-	//if (Application::IsKeyPressed('K'))
-	//	light[0].position.z += (float)(LSPEED * dt);
-	//if (Application::IsKeyPressed('J'))
-	//	light[0].position.x -= (float)(LSPEED * dt);
-	//if (Application::IsKeyPressed('L'))
-	//	light[0].position.x += (float)(LSPEED * dt);
-	//if (Application::IsKeyPressed('O'))
-	//	light[0].position.y -= (float)(LSPEED * dt);
-	//if (Application::IsKeyPressed('P'))
-	//	light[0].position.y += (float)(LSPEED * dt);
+	
 	if (Application::IsKeyPressed('Z')&&SwitchCamera!=2)
 	{
 		Frecamera.position = FPScamera.position;
@@ -339,26 +302,7 @@ void SceneSkybox::Update(double dt)
 	{
 		SwitchCamera = 1;
 	}
-	if (Application::IsKeyPressed('C'))
-	{
-		SwitchCamera = 3;
-	}
-	//if (Application::IsKeyPressed('5'))
-	//{
-	//	//to do: switch light type to POINT and pass the information to
-	//	light[0].type = Light::LIGHT_POINT;
-	//}
-	//else if (Application::IsKeyPressed('6'))
-	//{
-	//	//to do: switch light type to DIRECTIONAL and pass the
-	//	light[0].type = Light::LIGHT_DIRECTIONAL;
-	//}
-	//else if (Application::IsKeyPressed('7'))
-	//{
-	//	//to do: switch light type to SPOT and pass the information to
-	//	light[0].type = Light::LIGHT_SPOT;
-	//}
-
+	
 	if (Application::IsKeyPressed('L'))
 	{
 		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_CAR_SELECTION);
@@ -718,11 +662,6 @@ void SceneSkybox::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "Current Frames Per Second: \n\n", Color(0, 0, 0), 2, 0, 1);
 	RenderTextOnScreen(meshList[GEO_TEXT], num, Color(0, 0, 0), 2, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], "Press L to go to selection menu.", Color(0, 0, 0), 2, 0, 2);
-	//modelStack.PushMatrix();
-	//RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
-	//modelStack.PopMatrix();
-	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
-	//RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(timer), Color(0, 1, 0), 4, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 4, 10, 7.5);
 
 	//for NPC
