@@ -160,17 +160,17 @@ void SceneInterior::Init()
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("Floor", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//showroom_floor.tga");
 
-	meshList[GEO_CAR1] = MeshBuilder::GenerateOBJ("car1Interior", "OBJ//car1Interior.obj");
-	meshList[GEO_CAR1]->textureID = LoadTGA("Image//car1Interior.tga");
+	//meshList[GEO_CAR1] = MeshBuilder::GenerateOBJ("car1Interior", "OBJ//car1Interior.obj");
+	//meshList[GEO_CAR1]->textureID = LoadTGA("Image//car1Interior.tga");
 
-	meshList[GEO_CAR2] = MeshBuilder::GenerateOBJ("car2Interior", "OBJ//car2Interior.obj");
-	meshList[GEO_CAR2]->textureID = LoadTGA("Image//car2Interior.tga");
+	//meshList[GEO_CAR2] = MeshBuilder::GenerateOBJ("car2Interior", "OBJ//car2Interior.obj");
+	//meshList[GEO_CAR2]->textureID = LoadTGA("Image//car2Interior.tga");
 
-	meshList[GEO_CAR3] = MeshBuilder::GenerateOBJ("carZX_Interior", "OBJ//carZX_Interior.obj");
-	meshList[GEO_CAR3]->textureID = LoadTGA("Image//carZX_Interior.tga");
+	//meshList[GEO_CAR3] = MeshBuilder::GenerateOBJ("carZX_Interior", "OBJ//carZX_Interior.obj");
+	//meshList[GEO_CAR3]->textureID = LoadTGA("Image//carZX_Interior.tga");
 
-	meshList[GEO_CAR4] = MeshBuilder::GenerateOBJ("carGrayInterior", "OBJ//gray.obj");
-	meshList[GEO_CAR4]->textureID = LoadTGA("Image//car_cyan.tga");
+	//meshList[GEO_CAR4] = MeshBuilder::GenerateOBJ("carGrayInterior", "OBJ//gray.obj");
+	//meshList[GEO_CAR4]->textureID = LoadTGA("Image//car_cyan.tga");
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
@@ -410,7 +410,7 @@ void SceneInterior::Render()
 			modelStack.Rotate(Yaw, 0, 1, 0);
 				modelStack.PushMatrix();
 				modelStack.Translate(-4, -13, -0.2);
-				RenderMesh(meshList[GEO_CAR1], false);
+				RenderMesh(CCar::AllCar[CCar::CarSwitch]->GetInteriorMesh(), false);
 				modelStack.PopMatrix();
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
@@ -425,7 +425,7 @@ void SceneInterior::Render()
 				modelStack.Scale(0.05, 0.05, 0.05);
 					modelStack.PushMatrix();
 					modelStack.Translate(-0.3, -3.3, -0.8);
-					RenderMesh(meshList[GEO_CAR2], false);
+					RenderMesh(CCar::AllCar[CCar::CarSwitch]->GetInteriorMesh(), false);
 					modelStack.PopMatrix();
 				modelStack.PopMatrix();
 			modelStack.PopMatrix();
@@ -442,7 +442,7 @@ void SceneInterior::Render()
 				modelStack.Scale(3, 3, 3);
 				modelStack.PushMatrix();
 					modelStack.Translate(-0.2, -1.9, 0);
-					RenderMesh(meshList[GEO_CAR3], false);
+					RenderMesh(CCar::AllCar[CCar::CarSwitch]->GetInteriorMesh(), false);
 					modelStack.PopMatrix();
 				modelStack.PopMatrix();
 			modelStack.PopMatrix();
@@ -459,7 +459,7 @@ void SceneInterior::Render()
 				modelStack.Scale(0.05, 0.05, 0.05);
 					modelStack.PushMatrix();
 					modelStack.Translate(-1, -1.3, 0);
-					RenderMesh(meshList[GEO_CAR4], false);
+					RenderMesh(CCar::AllCar[CCar::CarSwitch]->GetInteriorMesh(), false);
 					modelStack.PopMatrix();
 				modelStack.PopMatrix();
 			modelStack.PopMatrix();
