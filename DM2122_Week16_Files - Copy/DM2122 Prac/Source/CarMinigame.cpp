@@ -10,12 +10,16 @@ CarMinigame::~CarMinigame()
 {
 }
 
-void CarMinigame::init(Vector3 pos, Vector3 Tar, Vector3 up, float RotateSpeed)
+void CarMinigame::init(Vector3 pos, Vector3 Tar, Vector3 up, float RotateSpeed,Vector3 StartLine)
 {
 	position = pos;
 	TargetFromPos = Tar;
 	target = TargetFromPos + position;
 	rotateSpeed = RotateSpeed;
+	CCar::AllCar[CCar::CarSwitch]->SetCurrentSpeed(0);
+	this->StartLine = StartLine;
+	Acceleration = CCar::AllCar[CCar::CarSwitch]->GetAcceleration();
+	CCar::AllCar[CCar::CarSwitch]->SetCurrentSpeed(0);
 }
 
 void CarMinigame::Updates(float dt)
@@ -23,56 +27,63 @@ void CarMinigame::Updates(float dt)
 	Vector3 view = (target -position).Normalized();
 	static const float Rotation = 50.f;
 	target = GetTargetpos();
-	if (Application::IsKeyPressed('S'))
+	if (Application::IsKeyPressed('S'))//Brake
 	{
-		Speed -= 25.f*dt;
-		
+		Acceleration= CCar::AllCar[CCar::CarSwitch]->GetAcceleration()*-2;//Decellarate
 	}
-	else if (Application::IsKeyPressed('W'))
+	else if (Application::IsKeyPressed('W'))//speed up
 	{
-		Speed += 10.f*dt;
+		Acceleration = CCar::AllCar[CCar::CarSwitch]->GetAcceleration();
 	}
-	else
+	else//Fake Friciton
 	{
-		Speed -= 3 * dt;
+		Acceleration = CCar::AllCar[CCar::CarSwitch]->GetAcceleration()/-2;
 	}
-	if (Application::IsKeyPressed('A'))
+	if (Application::IsKeyPressed('A'))//Rotation Left
 	{
 		rotationy += 300.f * dt;
-		Speed -= 5 * dt;
+		Acceleration = CCar::AllCar[CCar::CarSwitch]->GetAcceleration() / -2;//Fake decelleration due to Rotation
 	}
-	if (Application::IsKeyPressed('D'))
+	if (Application::IsKeyPressed('D'))//Rotate Right
 	{
 		rotationy -= 300.f * dt;
-		Speed -= 5 * dt;
-	}
-	if (Speed <= 0)
-	{
-		Speed = 0;
+		Acceleration = CCar::AllCar[CCar::CarSwitch]->GetAcceleration() / -2;//Fake decelleration due to Rotation
 	}
 	Vector3 Temp =(target - position).Normalized();
-	if (position.x > 90)
-	{
-		position.x = 90;
-		target = Temp + position;
-	}
-	 if (position.z > 90)
-	{
-		position.z = 90;
-		target = Temp + position;
-	}
-	 if (position.x < -90)
-	{
-		position.x = -90;
-		target = Temp + position;
-	}
-	 if (position.z < -90)
-	{
-		position.z = -90;
-		target = Temp + position;
-	}
-		target += view * (float)(Speed * dt);
-		position += view * (float)(Speed * dt);
+		if (Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt)*2, TargetFromPos, 7, 2.5).size() != 0 )
+		{
+			std::vector<Wall*> Temp = Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt) * 2, GetTargetpos(), 7, 2.5);
+			for (int i = 0; i < Temp.size(); i++)
+			{
+				if (Temp[i]->getPosition() == StartLine && !Collided)
+				{
+					round++;
+				}
+			}
+			previousX = position.x;
+			previousZ = position.z;
+			Collided = true;
+		}
+		else if (Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt)*2, TargetFromPos, 7, 2.5).size() == 0)
+		{
+			Collided = false;
+		}
+		target += view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt);
+		position += view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt);
+		if (Collided == true)
+		{
+			Collidewithwall(Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt)*2, TargetFromPos, 7, 2.5));
+		}
+		CCar::AllCar[CCar::CarSwitch]->CalculateSpeed(Acceleration, CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed(), dt);
+		if (CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() < 0)
+		{
+			CCar::AllCar[CCar::CarSwitch]->SetCurrentSpeed(0);
+		}
+		if (CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() > CCar::AllCar[CCar::CarSwitch]->GetMaxSpeed())
+		{
+			CCar::AllCar[CCar::CarSwitch]->SetCurrentSpeed(CCar::AllCar[CCar::CarSwitch]->GetMaxSpeed());
+			Acceleration = 1;
+		}
 }
 Vector3 CarMinigame::GetTargetpos()
 {
@@ -85,4 +96,26 @@ Vector3 CarMinigame::GetTargetpos()
 	Temp.y = 0;
 	Temp = position + Temp;
 	return Temp;
+}
+
+void CarMinigame::Collidewithwall(std::vector<Wall*> wallcollide)
+{
+	for (int i = 0; i < wallcollide.size(); i++)
+	{
+		if (wallcollide[i]->getPosition() == StartLine)
+		{
+		}
+		else
+		{
+			Acceleration = -CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed();
+			if (wallcollide[i]->getLength() > wallcollide[i]->getDepth())
+			{
+				position.z = previousZ;
+			}
+			if (wallcollide[i]->getLength() < wallcollide[i]->getDepth())
+			{
+				position.x = previousX;
+			}
+		}
+	}
 }

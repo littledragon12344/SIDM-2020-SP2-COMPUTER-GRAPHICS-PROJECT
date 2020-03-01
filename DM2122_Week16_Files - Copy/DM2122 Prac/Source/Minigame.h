@@ -39,6 +39,8 @@ class Minigame : public Scene
 		GEO_TEXT,
 		GEO_POINTER,
 		GEO_STARTLIGHT,
+		GEO_PAUSE,
+		GEO_BLACK,
 		NUM_GEOMETRY,
 	};
 
@@ -97,6 +99,7 @@ private:
 	float LegAngle;
 	float Yaw;
 	bool Pause;
+	float selection;
 
 	MS modelStack, viewStack, projectionStack;
 	Light light[2];

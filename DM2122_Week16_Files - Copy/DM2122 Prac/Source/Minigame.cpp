@@ -6,6 +6,7 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
+#include "SceneManager.h"
 
 #define ROT_LIMIT 45.f;
 #define SCALE_LIMIT 5.f;
@@ -25,7 +26,8 @@ Minigame::~Minigame()
 
 void Minigame::Init()
 {
-	StartTime = 3.5f;
+	srand(time(NULL));
+	StartTime = 4.f;
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 	// Generate a default VAO for now
@@ -185,6 +187,11 @@ void Minigame::Init()
 	meshList[GEO_WALL] = MeshBuilder::GenerateCuboid("wall", Color(1, 1, 1), 1, 1, 1);
 	meshList[GEO_WALL]->textureID = LoadTGA("Image//StartLight.tga");
 
+	meshList[GEO_PAUSE] = MeshBuilder::GenerateTextureUI("Pause", 1, 2);
+	meshList[GEO_PAUSE]->textureID = LoadTGA("Image//UIPause.tga");
+
+	meshList[GEO_BLACK] = MeshBuilder::GenerateTextureUI("Black", 1, 1);
+	meshList[GEO_BLACK]->textureID = LoadTGA("Image//Black.tga");
 
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Car", "OBJ//Road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Image//RoadTexture.tga");
@@ -192,11 +199,12 @@ void Minigame::Init()
 	path1.GeneratePath("OBJ//Path.obj",1,Vector3(0,0,0));//PathObj , scale, Offset
 
 	Wall::createWall(path1.Point[1], Vector3(0, 0, 1), 3, 2, 10);
+	//Wall::createWall(path1.Point[7], Vector3(0, 0, 1), 3, 2, 10);
 	Wall::generateWalls("OBJ//Wall.obj");
 
-	Car1.init(path1.Point[0] + Vector3(0, 0, -3), Vector3(0, 0, 100), Vector3(0, 1, 0),200.f,&path1);
-	Player.init(path1.Point[0]+Vector3(0, 0, 3), Vector3(1, 0, 0), Vector3(0, 1, 0), 150.f);
-	SwitchCamera = 4;
+	Car1.init(path1.Point[0] + Vector3(0, 0, -3), Vector3(0, 0, 100), Vector3(0, 1, 0),150.f,&path1);
+	Player.init(path1.Point[0]+Vector3(0, 0, 3), Vector3(1, 0, 0), Vector3(0, 1, 0), 150.f,path1.Point[1]);
+	SwitchCamera = 3;
 	switchcolor = false;
 	lightcolor = 0.f;
 }
@@ -216,7 +224,30 @@ void Minigame::Update(double dt)
 	{
 		if (Application::IsKeyPressed(' '))
 		{
-			Pause = false;
+			if (selection == 0)
+			{
+				Pause = false;
+			}
+			else if(selection==1)
+			{
+				Pause = false;
+				SceneManager* sceneManager = SceneManager::getInstance();
+				sceneManager->SetNextScene(SceneManager::SCENE_CAR_SELECTION);
+			}
+		}
+		if (Application::IsKeyPressed('W'))
+		{
+			if (selection > 0)
+			{
+				selection--;
+			}
+		}
+		if (Application::IsKeyPressed('S'))
+		{
+			if (selection < 1)//current max selection is one
+			{
+				selection++;
+			}
 		}
 		dt = 0;
 	}
@@ -424,11 +455,6 @@ void Minigame::Render()
 	RenderEnviroment();
 	RenderPlayer();
 	modelStack.PushMatrix();
-	modelStack.Translate(Car1.GetPosition().x, Car1.GetPosition().y, Car1.GetPosition().z);
-	modelStack.Rotate(Car1.GetRotation(), 0, 1, 0);
-	RenderMesh(meshList[GEO_CARAI], true);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
 	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
 	modelStack.PopMatrix();
@@ -449,7 +475,8 @@ void Minigame::Render()
 		modelStack.Translate(wall->getPosition().x, wall->getPosition().y, wall->getPosition().z);
 		modelStack.Rotate(90 - wall->getWallNormalRotation(), 0, 1, 0);
 		modelStack.Scale(wall->getLength(), wall->getHeight(), wall->getDepth());
-		RenderMesh(meshList[GEO_WALL], true);
+		if(wall->getPosition()!=path1.Point[1])
+			RenderMesh(meshList[GEO_WALL], true);
 		modelStack.PopMatrix();
 	}
 	RenderUI();
@@ -569,9 +596,14 @@ void Minigame::RenderPlayer()
 	//RenderMesh(meshList[GEO_PLAYER], false);
 	//modelStack.PopMatrix();
 	modelStack.PushMatrix();
+	modelStack.Translate(Car1.GetPosition().x, Car1.GetPosition().y, Car1.GetPosition().z);
+	modelStack.Rotate(Car1.GetRotation(), 0, 1, 0);
+	RenderMesh(Car1.AiCar.GetCarMesh(), true);
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
 	modelStack.Translate(Player.position.x, Player.position.y, Player.position.z);
 	modelStack.Rotate(Player.rotationy, 0, 1, 0);
-	RenderMesh(meshList[GEO_PLAYER], false);
+	RenderMesh(CCar::AllCar[CCar::CarSwitch]->GetCarMesh(), false);
 	modelStack.PopMatrix();
 }
 
@@ -610,15 +642,21 @@ void Minigame::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,stati
 void Minigame::RenderUI()
 {
 	RenderMeshOnScreen(meshList[GEO_SPEEDMETER], Color(1, 1, 1), 20, 20, 10, 10, 0,0);
-	float rotate = (Player.Speed * 4) / 360 * 270;
+	float rotate = (CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * 4) / 360 * 270;
 	RenderMeshOnScreen(meshList[GEO_POINTER], Color(1, 1, 1), 20, 20, 10, 10, 0, rotate);
-	float temp = 3.5;
+	float temp =3.5;
 	temp -=StartTime;
 	RenderMeshOnScreen(meshList[GEO_STARTLIGHT], Color(1, 1, 1), 20, 7.5, 43, 55, (int)temp, 0);
+	RenderMeshOnScreen(meshList[GEO_BLACK], Color(1, 1, 1), 30, 5.5, 43, 5,0, 0);
+	std::string Temptxt = "CarAI Round" +std::to_string(Car1.round);
+	std::string Tempcartxt = "Player Round" + std::to_string(Player.round);
+	RenderTextOnScreen(meshList[GEO_TEXT], Temptxt, Color(1, 1, 1), 2,15, 2);
+	RenderTextOnScreen(meshList[GEO_TEXT], Tempcartxt, Color(1, 1, 1), 2, 15, 3);
 	if (Pause)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT],"--Pause--",Color(1, 0.6, 0.6), 5, 4.1, 7);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press Space To Continue", Color(1, 0.6, 0.6), 3, 3.3, 10);
+	{/*
+		RenderTextOnScreen(meshList[GEO_TEXT],"--Pause--",Color(1, 0.6, 0.6), 5, 4.1, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press Space To Continue", Color(1, 1, 1), 3, 3.3, 13);*/
+		RenderMeshOnScreen(meshList[GEO_PAUSE], Color(1, 1, 1), 50, 50, 40, 35,selection,0);
 	}
 }
 

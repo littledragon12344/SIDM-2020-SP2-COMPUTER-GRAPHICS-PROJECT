@@ -2,7 +2,7 @@
 #include <fstream>
 
 std::vector<CCar*>CCar:: AllCar;
-
+int CCar::CarSwitch;
 std::vector<CCar*>CCar::GetAllCar()
 {
 	return AllCar;

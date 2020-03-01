@@ -161,23 +161,50 @@ void CarAi::Updates(float dt)
 	//}
 	if (rotationy != angleFromx)
 	{
-			acceration = -rotationSpeed / maxspeed;
+			acceration = -rotationSpeed / AiCar.GetMaxSpeed();
 	}
 	else
 	{
-		acceration = 10.f;
+		acceration = AiCar.GetAcceleration();
 	}
-	speed += acceration * dt;
-	if (speed > maxspeed)
-	{
-		speed = maxspeed;
-	}
+
 	target = GetTargetpos();
 	
 	//std::cout << "\n";
-	Collidewithwall(Wall::carWallCollision(GetPosition(), GetTargetpos(), 7, 2.5));
 	Vector3 TargetView = (target - position).Normalize();
-	position += TargetView * (float)(speed * dt);
+	position += TargetView * (float)(AiCar.GetCurrentSpeed() * dt);
+	if (Collided == true)
+	{
+		Collidewithwall(Wall::carWallCollision(position + TargetView * (float)(AiCar.GetCurrentSpeed() * dt)*2, GetTargetpos(), 7, 2.5));
+	}
+	if (Wall::carWallCollision(position + TargetView * (float)(AiCar.GetCurrentSpeed() * dt)*2, GetTargetpos(), 7, 2.5).size() != 0)
+	{
+		std::vector<Wall*> Temp = Wall::carWallCollision(position + TargetView * (float)(AiCar.GetCurrentSpeed() * dt) * 2, GetTargetpos(), 7, 2.5);
+		for (int i = 0; i < Temp.size(); i++)
+		{
+			if (Temp[i]->getPosition() == PathToGo->Point[1]&&!Collided)
+			{
+				round++;
+			}
+		}
+		previousX = position.x;
+		previousZ = position.z;
+		Collided = true;
+	}
+	else if(Wall::carWallCollision(position + TargetView * (float)(AiCar.GetCurrentSpeed() * dt)*2, GetTargetpos(), 7, 2.5).size() == 0)
+	{
+		Collided = false;
+	}
+	AiCar.CalculateSpeed(acceration, AiCar.GetCurrentSpeed(), dt);
+	if (AiCar.GetCurrentSpeed() > AiCar.GetMaxSpeed())
+	{
+		AiCar.SetCurrentSpeed(AiCar.GetMaxSpeed());
+	}
+	if (AiCar.GetCurrentSpeed() <0 )
+	{
+		AiCar.SetCurrentSpeed(0);
+		acceration = 1;
+	}
 //	target = GetTargetpos();
 }
 
@@ -226,9 +253,6 @@ float CarAi::distance(Vector3 Num)// vector math to find distance ||
 
 void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up,float RotateSpeed, Path *paths)//Initiallizing default variable
 {
-	acceration = 10.f;
-	speed = 0.f;
-	maxspeed = 60.f;
 	PathToGo = paths;
 	start = 0;
 	rotationSpeed = RotateSpeed;
@@ -241,6 +265,9 @@ void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up,float RotateSpeed, Path *
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
+	randCar = rand() % CCar::AllCar.size();
+	AiCar = *CCar::AllCar[randCar];
+	acceration = AiCar.GetAcceleration();
 }
 
 Vector3 CarAi::GetTargetpos()//Get Target Posiiton using the angles
@@ -294,26 +321,19 @@ void CarAi::Collidewithwall(std::vector<Wall*> wallcollide)
 {
 	for (int i = 0; i < wallcollide.size(); i++)
 	{
-		if (wallcollide[i]->getLength() > wallcollide[i]->getDepth())
+		if (wallcollide[i]->getPosition() == PathToGo->Point[1])
 		{
-			/*if (position.z > wallcollide[i]->getPosition().z)
-			{
-				position.z = wallcollide[i]->getPosition().z + wallcollide[i]->getLength()/2;
-			}
-			if (position.z < wallcollide[i]->getPosition().z)
-			{
-				position.z = wallcollide[i]->getPosition().z - wallcollide[i]->getLength() / 2;
-			}*/
 		}
-		if (wallcollide[i]->getLength() < wallcollide[i]->getDepth())
+		else
 		{
-			if (position.x > wallcollide[i]->getPosition().x)
+			acceration =-AiCar.GetCurrentSpeed();
+			if (wallcollide[i]->getLength() > wallcollide[i]->getDepth())
 			{
-				position.x = wallcollide[i]->getPosition().x + wallcollide[i]->getDepth() / 2;
+				position.z = previousZ;
 			}
-			if (position.x < wallcollide[i]->getPosition().x)
+			if (wallcollide[i]->getLength() < wallcollide[i]->getDepth())
 			{
-				position.x = wallcollide[i]->getPosition().x - wallcollide[i]->getDepth() / 2;
+				position.x = previousX;
 			}
 		}
 	}
