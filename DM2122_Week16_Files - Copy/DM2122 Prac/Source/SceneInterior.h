@@ -25,10 +25,6 @@ class SceneInterior : public Scene
 		GEO_FRONT,
 		GEO_BACK,
 		GEO_FLOOR,
-		/*GEO_CAR1,
-		GEO_CAR2,
-		GEO_CAR3,
-		GEO_CAR4,*/
 		GEO_WALL,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
@@ -81,7 +77,6 @@ class SceneInterior : public Scene
 private:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
-	/*unsigned m_indexBuffer;*/
 	Mesh* meshList[NUM_GEOMETRY];
 
 	unsigned m_parameters[U_TOTAL];
@@ -91,8 +86,6 @@ private:
 	float rotate;
 	float dist;
 
-	//int CarSwitch;
-
 	bool moving;
 
 	MS modelStack, viewStack, projectionStack;
@@ -101,9 +94,6 @@ private:
 	FirstPersonCamera fpsCamera;
 	Camera2 freeCamera;
 	TopDownCamera topCamera;
-
-	float lightcolor;
-	bool switchcolor;
 
 	void RenderRoom();
 

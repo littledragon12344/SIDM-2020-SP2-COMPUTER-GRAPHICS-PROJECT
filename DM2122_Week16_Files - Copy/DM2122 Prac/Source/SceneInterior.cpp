@@ -161,57 +161,14 @@ void SceneInterior::Init()
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("Floor", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//showroom_floor.tga");
 
-	//meshList[GEO_CAR1] = MeshBuilder::GenerateOBJ("car1Interior", "OBJ//car1Interior.obj");
-	//meshList[GEO_CAR1]->textureID = LoadTGA("Image//car1Interior.tga");
-
-	//meshList[GEO_CAR2] = MeshBuilder::GenerateOBJ("car2Interior", "OBJ//car2Interior.obj");
-	//meshList[GEO_CAR2]->textureID = LoadTGA("Image//car2Interior.tga");
-
-	//meshList[GEO_CAR3] = MeshBuilder::GenerateOBJ("carZX_Interior", "OBJ//carZX_Interior.obj");
-	//meshList[GEO_CAR3]->textureID = LoadTGA("Image//carZX_Interior.tga");
-
-	//meshList[GEO_CAR4] = MeshBuilder::GenerateOBJ("carGrayInterior", "OBJ//gray.obj");
-	//meshList[GEO_CAR4]->textureID = LoadTGA("Image//car_cyan.tga");
-
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
-
-	//CCar::CreateCar(meshList[GEO_CAR1], nullptr, 60.f, 6.f);
-	//CCar::CreateCar(meshList[GEO_CAR2], nullptr, 50.f, 8.f);
-	//CCar::CreateCar(meshList[GEO_CAR3], nullptr, 80.f, 5.f);
-	//CCar::CreateCar(meshList[GEO_CAR4], nullptr, 100.f, 4.f);
-
-	lightcolor = 0.f;
-
 }
 
 void SceneInterior::Update(double dt)
 {
-	if (lightcolor >= 0 && !switchcolor)//Switching color
-	{
-		lightcolor += 0.5 * dt;
-	}
-	if (lightcolor >= 1.f)
-	{
-		lightcolor = 1.f;
-		switchcolor = true;
-	}
-	if (lightcolor <= 1.f && switchcolor)
-	{
-		lightcolor -= 0.5 * dt;
-	}
-	if (lightcolor <= 0.f)
-	{
-		lightcolor = 0.f;
-		switchcolor = false;
-	}
-	if (Application::IsKeyPressed('J'))//Button to switch
-	{
-		light[1].color.Set(0 + lightcolor, 1 - lightcolor, lightcolor / 2);
-		glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
-	}
 	if (Application::IsKeyPressed(0x31) && !Application::IsKeyPressed(VK_SHIFT))
 	{
 		glDisable(GL_CULL_FACE);
