@@ -255,6 +255,8 @@ void CarAi::init(Vector3 pos,Vector3 Target,Vector3 up,float RotateSpeed, Path *
 {
 	PathToGo = paths;
 	start = 0;
+	round = 0;
+	rotationy = 0;
 	rotationSpeed = RotateSpeed;
 	this->position = defaultPosition = pos;
 	TargetFromPos = defaultTarget = Target;

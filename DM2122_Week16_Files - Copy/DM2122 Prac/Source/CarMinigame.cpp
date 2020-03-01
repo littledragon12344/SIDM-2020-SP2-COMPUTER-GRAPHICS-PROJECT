@@ -12,6 +12,8 @@ CarMinigame::~CarMinigame()
 
 void CarMinigame::init(Vector3 pos, Vector3 Tar, Vector3 up, float RotateSpeed,Vector3 StartLine)
 {
+	round = 0;
+	rotationy = 0;
 	position = pos;
 	TargetFromPos = Tar;
 	target = TargetFromPos + position;
