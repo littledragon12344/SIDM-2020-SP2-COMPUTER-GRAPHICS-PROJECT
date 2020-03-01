@@ -237,35 +237,23 @@ void SceneSkybox::Init()
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("Floor", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//showroom_floor.tga");
 
-	meshList[GEO_CAR1] = MeshBuilder::GenerateOBJ("car1", "Obj//car_frame.obj");
-	meshList[GEO_CAR1]->textureID = LoadTGA("Image//CarBody_texture.tga");
+	meshList[GEO_CAR1] = allCars[0]->GetCarMesh();
+	meshList[GEO_CAR1WHEELS] = allCars[0]->GetWheelMesh();
 
-	meshList[GEO_CAR1WHEELS] = MeshBuilder::GenerateOBJ("car1wheels", "Obj//car1_wheels.obj");
-	meshList[GEO_CAR1WHEELS]->textureID = LoadTGA("Image//carwheels_1.tga");
+	// Car 1
+	meshList[GEO_CAR2] = allCars[1]->GetCarMesh();
+	meshList[GEO_CAR2WHEELS] = allCars[1]->GetWheelMesh();
 
-	meshList[GEO_CAR2] = MeshBuilder::GenerateOBJ("car2", "Obj//carframe2.obj");
-	meshList[GEO_CAR2]->textureID = LoadTGA("Image//spcarframe2.tga");
+	// Car 2
+	meshList[GEO_CAR3] = allCars[2]->GetCarMesh();
+	meshList[GEO_CAR3WHEELS] = allCars[2]->GetWheelMesh();
 
-	meshList[GEO_CAR2WHEELS] = MeshBuilder::GenerateOBJ("car2wheels", "Obj//spcar2_wheels.obj");
-	meshList[GEO_CAR2WHEELS]->textureID = LoadTGA("Image//spcar2_wheel.tga");
-
-	meshList[GEO_CAR3] = MeshBuilder::GenerateOBJ("car3", "Obj//gray.obj");
-	meshList[GEO_CAR3]->textureID = LoadTGA("Image//car_cyan.tga");
-
-	meshList[GEO_CAR3WHEELS] = MeshBuilder::GenerateOBJ("car3wheels", "Obj//car3_wheel.obj");
-	meshList[GEO_CAR3WHEELS]->textureID = LoadTGA("Image//car_cyan.tga");
-
-	meshList[GEO_CAR4] = MeshBuilder::GenerateOBJ("car4", "Obj//Carzx.obj");
-	meshList[GEO_CAR4]->textureID = LoadTGA("Image//Carzx.tga");
-
-	meshList[GEO_CAR4WHEELS] = MeshBuilder::GenerateOBJ("car4wheels", "Obj//Car4_Wheels.obj");
-	meshList[GEO_CAR4WHEELS]->textureID = LoadTGA("Image//car_wheels4.tga");
+	// Car 3
+	meshList[GEO_CAR4] = allCars[3]->GetCarMesh();
+	meshList[GEO_CAR4WHEELS] = allCars[3]->GetWheelMesh();
 
 	meshList[GEO_STAND] = MeshBuilder::GenerateOBJ("stand", "Obj//car_stand.obj");
 	meshList[GEO_STAND]->textureID = LoadTGA("Image//stand.tga");
-
-	meshList[GEO_PLAYER] = MeshBuilder::GenerateCuboid("Player", Color(1, 1, 1), 1.f, 1.f,1.f);
-	meshList[GEO_PLAYER]->textureID = LoadTGA("Image//Bush.tga");
 
 	meshList[GEO_WALL] = MeshBuilder::GenerateCuboid("wall", Color(1, 1, 1), 1, 1, 1);
 	Wall::generateWalls("Obj//wall_room.obj");
@@ -546,6 +534,9 @@ void SceneSkybox::Render()
 	static int fps;
 	static float lastTime = 0.0f;
 	float currentTime = GetTickCount() * 0.001f;
+
+	int x_pos = FPScamera.position.x;
+	int z_pos = FPScamera.position.z;
 
 	++framesPerSecond;
 	if (currentTime - lastTime > 1.0f)
