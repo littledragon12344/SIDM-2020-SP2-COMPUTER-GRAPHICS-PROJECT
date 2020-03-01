@@ -4,15 +4,15 @@
 #include "Utility.h"
 #include "Wall.h"
 
-Camera2::Camera2()
+MouseCamera::MouseCamera()
 {
 }
 
-Camera2::~Camera2()
+MouseCamera::~MouseCamera()
 {
 }
 
-void Camera2::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
+void MouseCamera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 {
 	this->position = defaultPosition = pos;
 	TargetFromPos = defaultTarget = target;
@@ -25,7 +25,7 @@ void Camera2::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	this->up = defaultUp = right.Cross(view).Normalized();
 }
 
-void Camera2::Update(double dt)
+void MouseCamera::Update(double dt)
 {
 
 	static const float CAMERA_SPEED = 15.f;
@@ -162,7 +162,7 @@ void Camera2::Update(double dt)
 	}
 }
 
-void Camera2::Reset()
+void MouseCamera::Reset()
 {
 	position = defaultPosition;
 	TargetFromPos = defaultTarget;
