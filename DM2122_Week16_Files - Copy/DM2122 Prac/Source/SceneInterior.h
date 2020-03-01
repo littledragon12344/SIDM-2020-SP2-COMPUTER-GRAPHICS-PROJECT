@@ -25,10 +25,10 @@ class SceneInterior : public Scene
 		GEO_FRONT,
 		GEO_BACK,
 		GEO_FLOOR,
-		GEO_CAR1,
+		/*GEO_CAR1,
 		GEO_CAR2,
 		GEO_CAR3,
-		GEO_CAR4,
+		GEO_CAR4,*/
 		GEO_WALL,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
