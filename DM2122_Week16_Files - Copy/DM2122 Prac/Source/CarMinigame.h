@@ -34,11 +34,10 @@ public:
 
 	CarMinigame();
 	~CarMinigame();
-	void init(Vector3 position, Vector3 Target, Vector3 UP, float RotateSpeed, Vector3 StartLine);
-	void GetNewSpeed(float dt, float Acceration);
+	void init(Vector3 position, Vector3 Target, Vector3 UP, float RotateSpeed, Vector3 StartLine);//Initialization
 	void Updates(float dt);
-	Vector3 GetTargetpos();
-	void Collidewithwall(std::vector<Wall*> wallcollide);
+	Vector3 GetTargetpos();//Get new target position
+	void Collidewithwall(std::vector<Wall*> wallcollide);//Colllision Outcome
 };
 
 #endif

@@ -80,7 +80,6 @@ void CarAi::Updates(float dt)
 				rotationy += rotationSpeed * dt;
 				if (rotationy > (2 * 180 + angleFromx))
 				{
-					//rotationy = angleFromx;
 					Tempangle = 0;
 				}
 			}
@@ -90,7 +89,6 @@ void CarAi::Updates(float dt)
 				rotationy -= rotationSpeed * dt;
 				if (rotationy < (-2 * 180 + angleFromx))
 				{
-				//	rotationy = angleFromx;
 					Tempangle = 0;
 				}
 			}
@@ -102,7 +100,6 @@ void CarAi::Updates(float dt)
 					rotationy += rotationSpeed * dt;
 					if (rotationy > (-angleFromx + rotationy))
 					{
-						//rotationy = angleFromx;
 						Tempangle = 0;
 					}
 				}
@@ -112,7 +109,6 @@ void CarAi::Updates(float dt)
 					rotationy -= rotationSpeed * dt;
 					if (rotationy < (-angleFromx + rotationy))
 					{
-					//	rotationy = angleFromx;
 						Tempangle = 0;
 					}
 				}
@@ -126,7 +122,6 @@ void CarAi::Updates(float dt)
 				rotationy += rotationSpeed * dt;
 				if (rotationy >angleFromx)
 				{
-					//rotationy = angleFromx;
 					Tempangle = 0;
 				}
 			}
@@ -136,18 +131,12 @@ void CarAi::Updates(float dt)
 				rotationy -= rotationSpeed * dt;
 				if (rotationy <angleFromx)
 				{
-				//	rotationy = angleFromx;
 					Tempangle = 0;
 				}
 			}
-		}/*
-		if (Tempangle < 0)
-		{
-			Tempangle = 0;
-			rotationy = angleFromx;
-		}*/
+		}
 	}
-	if (rotationy > 180)
+	if (rotationy > 180)//Make rotationy to a easier balue for the code to run and for my self to know
 	{
 		rotationy = rotationy-360;
 	}
@@ -155,10 +144,6 @@ void CarAi::Updates(float dt)
 	{
 		rotationy = rotationy + 360;
 	}
-	//if (start == 0)
-	//{
-	//	//std::cout << angleFromx << std::endl;
-	//}
 	if (rotationy != angleFromx)
 	{
 			acceration = -rotationSpeed / AiCar.GetMaxSpeed();
@@ -177,6 +162,7 @@ void CarAi::Updates(float dt)
 	{
 		Collidewithwall(Wall::carWallCollision(position + TargetView * (float)(AiCar.GetCurrentSpeed() * dt)*2, GetTargetpos(), 7, 2.5));
 	}
+	//Check Collision
 	if (Wall::carWallCollision(position + TargetView * (float)(AiCar.GetCurrentSpeed() * dt)*2, GetTargetpos(), 7, 2.5).size() != 0)
 	{
 		std::vector<Wall*> Temp = Wall::carWallCollision(position + TargetView * (float)(AiCar.GetCurrentSpeed() * dt) * 2, GetTargetpos(), 7, 2.5);
@@ -191,11 +177,11 @@ void CarAi::Updates(float dt)
 		previousZ = position.z;
 		Collided = true;
 	}
-	else if(Wall::carWallCollision(position + TargetView * (float)(AiCar.GetCurrentSpeed() * dt)*2, GetTargetpos(), 7, 2.5).size() == 0)
+	else if(Wall::carWallCollision(position + TargetView * (float)(AiCar.GetCurrentSpeed() * dt)*2, GetTargetpos(), 7, 2.5).size() == 0)//Check nolonger collide with object
 	{
 		Collided = false;
 	}
-	AiCar.CalculateSpeed(acceration, AiCar.GetCurrentSpeed(), dt);
+	AiCar.CalculateSpeed(acceration, AiCar.GetCurrentSpeed(), dt);//Find new speed Using CCar class
 	if (AiCar.GetCurrentSpeed() > AiCar.GetMaxSpeed())
 	{
 		AiCar.SetCurrentSpeed(AiCar.GetMaxSpeed());
@@ -207,32 +193,6 @@ void CarAi::Updates(float dt)
 	}
 //	target = GetTargetpos();
 }
-
-//PAth only works idthe vertices is in the rite order best to start with 2d triangle and increase the amount of vertices on it using multicutTool
-//void CarAi::GeneratePath(const std::string& file_path,float scale,Vector3 Offset)//get points on the obj
-//{
-//	std::ifstream fileStream(file_path, std::ios::binary);
-//	if (!fileStream.is_open())
-//	{
-//		std::cout << "Unable to open " << file_path << ". Are you in the right directory ?\n";
-//		return;
-//	}
-//	while (!fileStream.eof())
-//	{
-//		char buf[256];
-//		fileStream.getline(buf, 256);
-//		if (strncmp("v ", buf, 2) == 0)
-//		{
-//			Vector3 vertex;
-//			sscanf_s((buf + 2), "%f%f%f", &vertex.x, &vertex.y, &vertex.z);
-//			vertex = vertex * scale;
-//			vertex += Offset;
-//			Point.push_back(vertex);
-//		}
-//	}
-//
-//}
-
 float CarAi::dot(Vector3 Fstnum, Vector3 sndNum)//Dot product in Vector Math
 {
 	float x = Fstnum.x * sndNum.x;
@@ -285,17 +245,17 @@ Vector3 CarAi::GetTargetpos()//Get Target Posiiton using the angles
 	return Temp;
 }
 
-Vector3 CarAi::GetPosition()
+Vector3 CarAi::GetPosition()//get private variable
 {
 	return position;
 }
 
-float CarAi::GetRotation()
+float CarAi::GetRotation()//get private rotation
 {
 	return rotationy;
 }
 
-Vector3 CarAi::GetRandomizePoint()
+Vector3 CarAi::GetRandomizePoint()//Randomize the path vertices so that thr will be a slight difference int path each time the carai go around
 {
 	Vector3 Temp;
 	Vector3 xDir = Vector3(1, 0, 0);
@@ -314,19 +274,19 @@ Vector3 CarAi::GetRandomizePoint()
 	return Temp;
 }
 
-Vector3 CarAi::Getforward()
+Vector3 CarAi::Getforward()//Get front direction
 {
 	return TargetFromPos;
 }
 
-void CarAi::Collidewithwall(std::vector<Wall*> wallcollide)
+void CarAi::Collidewithwall(std::vector<Wall*> wallcollide)//Collision out come
 {
 	for (int i = 0; i < wallcollide.size(); i++)
 	{
 		if (wallcollide[i]->getPosition() == PathToGo->Point[1])
 		{
 		}
-		else
+		else//Collision out come with the longest side of the wall
 		{
 			acceration =-AiCar.GetCurrentSpeed();
 			if (wallcollide[i]->getLength() > wallcollide[i]->getDepth())

@@ -10,7 +10,7 @@ CarMinigame::~CarMinigame()
 {
 }
 
-void CarMinigame::init(Vector3 pos, Vector3 Tar, Vector3 up, float RotateSpeed,Vector3 StartLine)
+void CarMinigame::init(Vector3 pos, Vector3 Tar, Vector3 up, float RotateSpeed,Vector3 StartLine)//initializing
 {
 	round = 0;
 	rotationy = 0;
@@ -52,6 +52,7 @@ void CarMinigame::Updates(float dt)
 		Acceleration = CCar::AllCar[CCar::CarSwitch]->GetAcceleration() / -2;//Fake decelleration due to Rotation
 	}
 	Vector3 Temp =(target - position).Normalized();
+	//Check Collision
 		if (Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt)*2, target, 7, 2.5).size() != 0 )
 		{
 			std::vector<Wall*> Temp = Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt) * 2, GetTargetpos(), 7, 2.5);

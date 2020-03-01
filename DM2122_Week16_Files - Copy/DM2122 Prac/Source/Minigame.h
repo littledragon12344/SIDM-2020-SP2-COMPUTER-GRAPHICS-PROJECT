@@ -120,14 +120,14 @@ private:
 	int AmounttoPOP;
 	float StartTime;
 
-	void RenderMesh(Mesh* mesh, bool enableLight);
-	void RenderSkybox();
-	void RenderPlayer();
-	void RenderEnviroment();
-	void RenderUI();
-	void RenderText(Mesh* mesh, std::string text, Color color);
-	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	void RenderMeshOnScreen(Mesh* mesh, Color color, float sizex, float sizey, float x, float y,int animFrames, float Rotation);
+	void RenderMesh(Mesh* mesh, bool enableLight);//RenderObj Mesh
+	void RenderSkybox();//Render Background
+	void RenderPlayer();//Render charactors
+	void RenderEnviroment();//Render enviromental objs
+	void RenderUI();//Render Ui Elements
+	void RenderText(Mesh* mesh, std::string text, Color color);//Default render text
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);//Default render Tex on screen
+	void RenderMeshOnScreen(Mesh* mesh, Color color, float sizex, float sizey, float x, float y,int animFrames, float Rotation);//Render Texture on sceen include animation
 
 public:
 	Minigame();

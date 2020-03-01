@@ -37,16 +37,10 @@ public:
 	float previousX;
 	float previousZ;
 	bool Collided;
-	//std::vector<Vector3> Point;
 	CarAi();
 	~CarAi();
 	void Updates(float dt);
-	//Temporary
 	float acceration;
-	float speed;
-	float maxspeed;
-	//Temporary
-	//void GeneratePath(const std::string& file_path, float scale, Vector3 Offset);
 	float dot(Vector3 Fstnum, Vector3 sndNum);//dot product of 2 num
 	float distance(Vector3 Num);// |[]| of a vertex to find distance
 	void init(Vector3 position, Vector3 Target, Vector3 UP, float RotateSpeed,Path *paths);//Initializing
