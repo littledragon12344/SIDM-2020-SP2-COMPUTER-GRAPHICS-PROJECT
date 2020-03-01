@@ -248,21 +248,6 @@ void SceneSkybox::Init()
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("Floor", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image//showroom_floor.tga");
 
-	meshList[GEO_CAR1] = allCars[0]->GetCarMesh();
-	meshList[GEO_CAR1WHEELS] = allCars[0]->GetWheelMesh();
-
-	// Car 1
-	meshList[GEO_CAR2] = allCars[1]->GetCarMesh();
-	meshList[GEO_CAR2WHEELS] = allCars[1]->GetWheelMesh();
-
-	// Car 2
-	meshList[GEO_CAR3] = allCars[2]->GetCarMesh();
-	meshList[GEO_CAR3WHEELS] = allCars[2]->GetWheelMesh();
-
-	// Car 3
-	meshList[GEO_CAR4] = allCars[3]->GetCarMesh();
-	meshList[GEO_CAR4WHEELS] = allCars[3]->GetWheelMesh();
-
 	meshList[GEO_STAND] = MeshBuilder::GenerateOBJ("stand", "Obj//car_stand.obj");
 	meshList[GEO_STAND]->textureID = LoadTGA("Image//stand.tga");
 
@@ -733,7 +718,7 @@ void SceneSkybox::Render()
 	//RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
 	//modelStack.PopMatrix();
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 4, 0, 0);
-	RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(timer), Color(0, 1, 0), 4, 0, 0);
+	//RenderTextOnScreen(meshList[GEO_TEXT], std::to_string(timer), Color(0, 1, 0), 4, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 4, 10, 7.5);
 
 	//for NPC
@@ -796,7 +781,7 @@ void SceneSkybox::Render()
 
 	if (NearNPC() && interactable == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact", Color(1, 1, 1), 3.5, 1.3, 1.5);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press 'E' to Interact", Color(0, 0, 0), 3.5, 1.3, 1.5);
 	}
 
 	if (NPC[0].IsInteracting())
@@ -950,26 +935,26 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.Translate(0.f, translateY1, 0.f);
 	modelStack.Scale(0.5f, 0.5f, 0.5f);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_CAR1], true);
+	RenderMesh(CCar::AllCar[0]->GetCarMesh(), true);
 	modelStack.PushMatrix();
 	modelStack.Translate(0.5f, -0.3f, -0.1f);
 	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_CAR1WHEELS], true);
+	RenderMesh(CCar::AllCar[0]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(6.5f, -0.3f, -0.1f);
 	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_CAR1WHEELS], true);
+	RenderMesh(CCar::AllCar[0]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(0.5f, -0.3f, -6.1f);
 	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_CAR1WHEELS], true);
+	RenderMesh(CCar::AllCar[0]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(6.5f, -0.3f, -6.1f);
 	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_CAR1WHEELS], true);
+	RenderMesh(CCar::AllCar[0]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
@@ -982,22 +967,22 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.Translate(0.f, translateY2, 0.f);
 	modelStack.Scale(1.15f, 1.15f, 1.15f);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_CAR2], true);
+	RenderMesh(CCar::AllCar[1]->GetCarMesh(), true);
 	modelStack.PushMatrix();
 	modelStack.Translate(0.f, 0.9f, 0.f);
-	RenderMesh(meshList[GEO_CAR2WHEELS], true);
+	RenderMesh(CCar::AllCar[1]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(-3.0, 0.9f, 0.f);
-	RenderMesh(meshList[GEO_CAR2WHEELS], true);
+	RenderMesh(CCar::AllCar[1]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(0.f, 0.9f, -2.35f);
-	RenderMesh(meshList[GEO_CAR2WHEELS], true);
+	RenderMesh(CCar::AllCar[1]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(-3.0, 0.9f, -2.35f);
-	RenderMesh(meshList[GEO_CAR2WHEELS], true);
+	RenderMesh(CCar::AllCar[1]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
@@ -1009,24 +994,24 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	modelStack.PushMatrix();
 	modelStack.Translate(0.f, translateY3, 0.f);
 	modelStack.Scale(0.5f, 0.5f, 0.5f);
-	RenderMesh(meshList[GEO_CAR3], true);
+	RenderMesh(CCar::AllCar[2]->GetCarMesh(), true);
 	modelStack.PushMatrix();
 	modelStack.Translate(-2.9f, -0.6f, -4.65f);
-	RenderMesh(meshList[GEO_CAR3WHEELS], true);
+	RenderMesh(CCar::AllCar[2]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(-2.9f, -0.6f, 4.f);
-	RenderMesh(meshList[GEO_CAR3WHEELS], true);
+	RenderMesh(CCar::AllCar[2]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(2.9f, -0.6f, -4.65f);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_CAR3WHEELS], true);
+	RenderMesh(CCar::AllCar[2]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(2.9f, -0.6f, 4.f);
 	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-	RenderMesh(meshList[GEO_CAR3WHEELS], true);
+	RenderMesh(CCar::AllCar[2]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
@@ -1037,22 +1022,22 @@ void SceneSkybox::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,st
 	RenderMesh(meshList[GEO_STAND], true);
 	modelStack.PushMatrix();
 	modelStack.Translate(0.f, translateY4, 0.f);
-	RenderMesh(meshList[GEO_CAR4], true);
+	RenderMesh(CCar::AllCar[3]->GetCarMesh(), true);
 	modelStack.PushMatrix();
 	modelStack.Translate(2.2f, 0.2f, 0.3f);
-	RenderMesh(meshList[GEO_CAR4WHEELS], true);
+	RenderMesh(CCar::AllCar[3]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(-0.1f, 0.2f, 0.3f);
-	RenderMesh(meshList[GEO_CAR4WHEELS], true);
+	RenderMesh(CCar::AllCar[3]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(2.2f, 0.2f, -1.8f);
-	RenderMesh(meshList[GEO_CAR4WHEELS], true);
+	RenderMesh(CCar::AllCar[3]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 	modelStack.Translate(-0.1f, 0.2f, -1.8f);
-	RenderMesh(meshList[GEO_CAR4WHEELS], true);
+	RenderMesh(CCar::AllCar[3]->GetWheelMesh(), true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
