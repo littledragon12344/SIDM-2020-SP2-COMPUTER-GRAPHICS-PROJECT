@@ -196,8 +196,8 @@ void Minigame::Init()
 	meshList[GEO_ROAD] = MeshBuilder::GenerateOBJ("Road", "OBJ//Road.obj");
 	meshList[GEO_ROAD]->textureID = LoadTGA("Image//RoadTexture.tga");
 
-	//meshList[GEO_LAMP] = MeshBuilder::GenerateOBJ("Lamp", "OBJ//Lamps.obj");
-	//meshList[GEO_LAMP]->textureID = LoadTGA("Image//Lamp.tga");
+	meshList[GEO_LAMP] = MeshBuilder::GenerateOBJ("Lamp", "OBJ//Lamps.obj");
+	meshList[GEO_LAMP]->textureID = LoadTGA("Image//Lamp.tga");
 
 	path1.GeneratePath("OBJ//Path.obj",1,Vector3(0,0,0));//PathObj , scale, Offset
 
@@ -641,10 +641,10 @@ void Minigame::RenderEnviroment()//Put Enviromentobject here ETC Cars tand,stati
 	modelStack.Translate(0,-1,0);
 	RenderMesh(meshList[GEO_ROAD], false);
 	modelStack.PopMatrix();
-	//modelStack.PushMatrix();
-	/*modelStack.Translate(0, -1, 0);
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -1, 0);
 	RenderMesh(meshList[GEO_LAMP], false);
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 	/*modelStack.PushMatrix();
 	modelStack.Translate(Car1.Point[0].x, Car1.Point[0].y, Car1.Point[0].z);
 	RenderMesh(meshList[GEO_PLAYER], false);
