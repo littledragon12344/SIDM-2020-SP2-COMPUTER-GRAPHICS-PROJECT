@@ -15,15 +15,6 @@ class SceneCarSelection : public Scene
 	{
 		GEO_TEXT= 0,
 		GEO_BACKGROUND,
-		// Cars and wheels
-		GEO_CAR_FRAME_0,
-		GEO_CAR_WHEEL_0,
-		GEO_CAR_FRAME_1,
-		GEO_CAR_WHEEL_1,
-		GEO_CAR_FRAME_2,
-		GEO_CAR_WHEEL_2,
-		GEO_CAR_FRAME_3,
-		GEO_CAR_WHEEL_3,
 		// User Interface
 		GEO_UI_BASE,
 		GEO_UI_GRAY_BAR,
