@@ -98,7 +98,6 @@ private:
 	unsigned m_parameters[U_TOTAL];
 
 	int SwitchCamera;
-	float LegAngle;
 	float Yaw;
 	bool Pause;
 	float selection;
