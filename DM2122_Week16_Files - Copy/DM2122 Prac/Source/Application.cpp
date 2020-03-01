@@ -104,7 +104,6 @@ void Application::Run()
 	//Main Loop
 	SceneManager* sceneManager = SceneManager::getInstance();
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-		sceneManager->SetNextScene(SceneManager::SCENE_SKYBOX);
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
 		sceneManager->Update(m_timer.getElapsedTime());
