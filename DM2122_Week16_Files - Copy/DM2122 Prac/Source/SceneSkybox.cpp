@@ -376,9 +376,11 @@ void SceneSkybox::Update(double dt)
 	{
 		Yaw =0;
 	}
-	ShowCursor(true);
-	if (SwitchCamera==2)
+	if (SwitchCamera == 2)
+	{
+		ShowCursor(true);
 		Frecamera.Update(dt);
+	}
 	else
 	{
 		ShowCursor(false);

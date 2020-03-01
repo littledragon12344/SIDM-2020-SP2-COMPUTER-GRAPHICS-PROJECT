@@ -205,6 +205,8 @@ void Minigame::Init()
 	Wall::createWall(path1.Point[1], Vector3(0, 0, 1), 3, 2, 10);
 	//Wall::createWall(path1.Point[7], Vector3(0, 0, 1), 3, 2, 10);
 	Wall::generateWalls("OBJ//Wall.obj");
+	Wall::generateWalls("OBJ//PotWall.obj");
+
 
 	Car1.init(path1.Point[0] + Vector3(0, 0, -3), Vector3(0, 0, 100), Vector3(0, 1, 0),150.f,&path1);
 	Player.init(path1.Point[0]+Vector3(0, 0, 3), Vector3(1, 0, 0), Vector3(0, 1, 0), 150.f,path1.Point[1]);
