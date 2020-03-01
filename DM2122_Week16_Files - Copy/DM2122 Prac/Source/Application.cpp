@@ -10,7 +10,7 @@
 
 #include "Application.h"
 
-#include "SceneSkybox.h"
+#include "SceneSkyboxNPC.h"
 #include "Minigame.h"
 
 GLFWwindow* m_window;
@@ -106,7 +106,7 @@ void Application::Run()
 {
 	//Main Loop
 
-	Scene* scene = new SceneSkybox();
+	Scene* scene = new SceneSkyboxNPC();
 	Scene* scenegame = new Minigame();
 
 	scene->Init();
