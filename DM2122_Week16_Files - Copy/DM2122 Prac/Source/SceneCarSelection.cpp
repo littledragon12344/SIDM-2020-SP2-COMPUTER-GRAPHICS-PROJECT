@@ -292,7 +292,7 @@ void SceneCarSelection::Render()
 	RenderMeshOnScreen(meshList[GEO_UI_BLUE_BAR], 5.f + 24.f * (currentCarMaxSpd / 200.f), 50.f, 24.f * (currentCarMaxSpd / 100.f), 1.5f);
 
 	// Acceleration
-	RenderTextOnScreen(meshList[GEO_TEXT], "ACCELERATION " + std::to_string((int)currentCarAccel) + "M/S^2", Color(1, 1, 1), 2.1f, 5.f, 47.f);
+	RenderTextOnScreen(meshList[GEO_TEXT], "ACCELERATION " + std::to_string((int)currentCarAccel) + "KM/H^2", Color(1, 1, 1), 2.1f, 5.f, 47.f);
 	RenderMeshOnScreen(meshList[GEO_UI_GRAY_BAR], 17.f, 46.f, 24.f, 1.f);
 	RenderMeshOnScreen(meshList[GEO_UI_BLUE_BAR], 5.f + 24.f * (currentCarAccel / 16.f), 46.f, 24.f * (currentCarAccel / 8.f), 1.5f);
 
