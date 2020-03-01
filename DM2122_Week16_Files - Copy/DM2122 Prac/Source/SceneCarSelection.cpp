@@ -56,13 +56,13 @@ void SceneCarSelection::Init()
 	m_parameters[U_LIGHT0_KC] = glGetUniformLocation(m_programID, "lights[0].kC");
 	m_parameters[U_LIGHT0_KL] = glGetUniformLocation(m_programID, "lights[0].kL");
 	m_parameters[U_LIGHT0_KQ] = glGetUniformLocation(m_programID, "lights[0].kQ");
-	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
-	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
 	m_parameters[U_LIGHT0_TYPE] = glGetUniformLocation(m_programID, "lights[0].type");
 	m_parameters[U_LIGHT0_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[0].spotDirection");
 	m_parameters[U_LIGHT0_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[0].cosCutoff");
 	m_parameters[U_LIGHT0_COSINNER] = glGetUniformLocation(m_programID, "lights[0].cosInner");
 	m_parameters[U_LIGHT0_EXPONENT] = glGetUniformLocation(m_programID, "lights[0].exponent");
+	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
+	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
 
 	//Get a handle for our "colorTexture" uniform
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
@@ -104,32 +104,20 @@ void SceneCarSelection::Init()
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibriBoldItalic.tga");
 
 	// Car 0
-	meshList[GEO_CAR_FRAME_0] = MeshBuilder::GenerateOBJ("car1", "Obj//car_frame.obj");
-	meshList[GEO_CAR_FRAME_0]->textureID = LoadTGA("Image//CarBody_texture.tga");
-						   
-	meshList[GEO_CAR_WHEEL_0] = MeshBuilder::GenerateOBJ("car1wheels", "Obj//car1_wheels.obj");
-	meshList[GEO_CAR_WHEEL_0]->textureID = LoadTGA("Image//carwheels_1.tga");
+	meshList[GEO_CAR_FRAME_0] = allCars[0]->GetCarMesh();
+	meshList[GEO_CAR_WHEEL_0] = allCars[0]->GetWheelMesh();
 
 	// Car 1
-	meshList[GEO_CAR_FRAME_1] = MeshBuilder::GenerateOBJ("car2", "Obj//carframe2.obj");
-	meshList[GEO_CAR_FRAME_1]->textureID = LoadTGA("Image//spcarframe2.tga");
-						 
-	meshList[GEO_CAR_WHEEL_1] = MeshBuilder::GenerateOBJ("car2wheels", "Obj//spcar2_wheels.obj");
-	meshList[GEO_CAR_WHEEL_1]->textureID = LoadTGA("Image//spcar2_wheel.tga");
+	meshList[GEO_CAR_FRAME_1] = allCars[1]->GetCarMesh();
+	meshList[GEO_CAR_WHEEL_1] = allCars[1]->GetWheelMesh();
 
 	// Car 2
-	meshList[GEO_CAR_FRAME_2] = MeshBuilder::GenerateOBJ("car3", "Obj//gray.obj");
-	meshList[GEO_CAR_FRAME_2]->textureID = LoadTGA("Image//car_cyan.tga");
-						   
-	meshList[GEO_CAR_WHEEL_2] = MeshBuilder::GenerateOBJ("car3wheels", "Obj//car3_wheel.obj");
-	meshList[GEO_CAR_WHEEL_2]->textureID = LoadTGA("Image//car_cyan.tga");
+	meshList[GEO_CAR_FRAME_2] = allCars[2]->GetCarMesh();
+	meshList[GEO_CAR_WHEEL_2] = allCars[2]->GetWheelMesh();
 
 	// Car 3
-	meshList[GEO_CAR_FRAME_3] = MeshBuilder::GenerateOBJ("car4", "Obj//Carzx.obj");
-	meshList[GEO_CAR_FRAME_3]->textureID = LoadTGA("Image//Carzx.tga");
-	   
-	meshList[GEO_CAR_WHEEL_3] = MeshBuilder::GenerateOBJ("car4wheels", "Obj//Car4_Wheels.obj");
-	meshList[GEO_CAR_WHEEL_3]->textureID = LoadTGA("Image//car_wheels4.tga");
+	meshList[GEO_CAR_FRAME_3] = allCars[3]->GetCarMesh();
+	meshList[GEO_CAR_WHEEL_3] = allCars[3]->GetWheelMesh();
 
 	// User Interface / UI
 	meshList[GEO_UI_BASE] = MeshBuilder::GenerateQuad("uiBase", Color(0.55f, 0.55f, 0.55f), 1.f, 1.f);
@@ -215,14 +203,14 @@ void SceneCarSelection::Update(double dt)
 			meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//background0.tga");
 		else if (backgroundNo == 1)
 			meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//background1.tga");
-		else if (backgroundNo == 2)
+		else if (backgroundNo == 2) // background for minigame and drivable scene
 			meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//sky.tga");
 	}
 	if (!Application::IsKeyPressed('B') && bPressesd)
 	{
 		bPressesd = false;
 	}
-
+	
 	if (Application::IsKeyPressed('N'))
 	{
 		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_SKYBOX);
@@ -318,10 +306,9 @@ void SceneCarSelection::Render()
 	RenderMeshOnScreen(meshList[GEO_UI_GRAY_BAR], 17.f, 46.f, 24.f, 1.f);
 	RenderMeshOnScreen(meshList[GEO_UI_BLUE_BAR], 5.f + 24.f * (currentCarAccel / 16.f), 46.f, 24.f * (currentCarAccel / 8.f), 1.5f);
 
-	//RenderMeshOnScreen(meshList[GEO_UI_BASE], 60.f, 50.f, 1.f, 1.f);	
-	RenderMeshOnScreen(meshList[GEO_UI_BASE], 57.5f, 52.f, 42.5f, 8.75f);
-	RenderTextOnScreen(meshList[GEO_TEXT], "Controls:\n'N':Go back to showroom\n'M':Choose car for minigame", Color(1.f, 1.f, 1.f), 2.1f, 38.f, 53.2f);
-	//RenderTextOnScreen
+	RenderMeshOnScreen(meshList[GEO_UI_BASE], 55.f, 50.f, 37.5f, 17.5f);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Controls:\n'N':Go back to showroom\n'M':Select car for Minigame\n'A':Select car for to drive\n'Z'&'X':Rotating car\n'C'&'V':Changing cars\n'B':Change background", 
+		Color(1.f, 1.f, 1.f), 2.1f, 38.f, 55.2f);
 }
 
 void SceneCarSelection::Exit()
@@ -329,7 +316,8 @@ void SceneCarSelection::Exit()
 	// Cleanup here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
-		if (meshList[i] != NULL)
+		// Prevents any car frame or car wheel to be deleted
+		if (meshList[i] != NULL && (i < GEO_CAR_FRAME_0 || i > GEO_CAR_WHEEL_3))
 			delete meshList[i];
 	}
 	// Cleanup VBO here
@@ -409,11 +397,11 @@ void SceneCarSelection::RenderTextOnScreen(Mesh* mesh, std::string text, Color c
 	int column = 0;
 	for (unsigned i = 0; i < text.length(); ++i, ++column)
 	{
-		// if it is a new line, add 1 to row
+		// if it is a new line,
 		if (text[i] == '\n')
 		{
 			++row;
-			column = -1; // -1 because next loop will add 1
+			column = -1; // -1 because will add 1 in the next loop
 			continue;
 		}
 		Mtx44 characterSpacing;
@@ -556,6 +544,7 @@ void SceneCarSelection::RenderCar(int carNo)
 	case 3:
 		modelStack.PushMatrix();
 			modelStack.Translate(0.f, -0.2f, 0.f);
+			modelStack.Scale(1.2f, 1.2f, 1.2f);
 			RenderMesh(meshList[GEO_CAR_FRAME_3], true);
 			modelStack.PushMatrix();
 				modelStack.Translate(2.2f, 0.2f, 0.3f);

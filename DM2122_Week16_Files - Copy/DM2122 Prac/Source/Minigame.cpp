@@ -385,6 +385,11 @@ void Minigame::Update(double dt)
 	{
 		Yaw = 0;
 	}
+
+	if (Application::IsKeyPressed('L'))
+	{
+		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_CAR_SELECTION);
+	}
 }
 
 void Minigame::Render()
