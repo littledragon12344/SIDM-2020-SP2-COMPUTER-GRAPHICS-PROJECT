@@ -111,14 +111,14 @@ void CarMinigame::Collidewithwall(std::vector<Wall*> wallcollide)
 			if (wallcollide[i]->getLength() > wallcollide[i]->getDepth())
 			{
 				position.z = previousZ;
-				if (position.x < wallcollide[i]->getPosition().x + wallcollide[i]->getLength() && position.x < wallcollide[i]->getPosition().x - wallcollide[i]->getLength())
-					position.x = previousX;
+				/*if (position.x > wallcollide[i]->getPosition().x + wallcollide[i]->getLength() && position.x < wallcollide[i]->getPosition().x - wallcollide[i]->getLength())
+					position.x = previousX;*/
 			}
 			if (wallcollide[i]->getLength() < wallcollide[i]->getDepth())
 			{
 				position.x = previousX;
-				if (position.z < wallcollide[i]->getPosition().z + wallcollide[i]->getDepth() && position.z < wallcollide[i]->getPosition().z - wallcollide[i]->getDepth())
-					position.z = previousZ;
+			/*	if (position.z > wallcollide[i]->getPosition().z + wallcollide[i]->getDepth() && position.z < wallcollide[i]->getPosition().z - wallcollide[i]->getDepth())
+					position.z = previousZ;*/
 			}
 		}
 	}
