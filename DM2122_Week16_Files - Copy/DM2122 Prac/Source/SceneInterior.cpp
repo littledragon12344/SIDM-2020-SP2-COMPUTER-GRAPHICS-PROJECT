@@ -406,11 +406,14 @@ void SceneInterior::Render()
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(fpsCamera.position.x, fpsCamera.position.y, fpsCamera.position.z);
+		modelStack.PushMatrix();
+		modelStack.Rotate(Yaw, 0, 1, 0);
 			modelStack.PushMatrix();
-			modelStack.Rotate(Yaw, 0, 1, 0);
-				modelStack.PushMatrix();
-				modelStack.Translate(-4, -13, -0.2);
-				RenderMesh(CCar::AllCar[CCar::CarSwitch]->GetInteriorMesh(), false);
+				modelStack.Scale(0.05, 0.05, 0.05);
+					modelStack.PushMatrix();
+					modelStack.Translate(-0.3, -3.3, -0.8);
+					RenderMesh(CCar::AllCar[CCar::CarSwitch]->GetInteriorMesh(), false);
+					modelStack.PopMatrix();
 				modelStack.PopMatrix();
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
@@ -422,11 +425,8 @@ void SceneInterior::Render()
 			modelStack.PushMatrix();
 			modelStack.Rotate(Yaw, 0, 1, 0);
 				modelStack.PushMatrix();
-				modelStack.Scale(0.05, 0.05, 0.05);
-					modelStack.PushMatrix();
-					modelStack.Translate(-0.3, -3.3, -0.8);
-					RenderMesh(CCar::AllCar[CCar::CarSwitch]->GetInteriorMesh(), false);
-					modelStack.PopMatrix();
+				modelStack.Translate(-4, -13, -0.2);
+				RenderMesh(CCar::AllCar[CCar::CarSwitch]->GetInteriorMesh(), false);
 				modelStack.PopMatrix();
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();

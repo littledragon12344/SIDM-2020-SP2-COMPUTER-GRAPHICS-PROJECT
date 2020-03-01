@@ -62,15 +62,15 @@ void SceneManager::InitCar()
 	meshList[GEO_CAR1]->textureID = LoadTGA("Image//CarBody_texture.tga");
 	meshList[GEO_CAR1WHEELS] = MeshBuilder::GenerateOBJ("Car1Wheels", "OBJ//car1_wheels.obj");
 	meshList[GEO_CAR1WHEELS]->textureID = LoadTGA("Image//carwheels_1.tga");
-	meshList[Geo_CAR1INT] = MeshBuilder::GenerateOBJ("Car1Interior", "OBJ//car1Interior.obj");
-	meshList[Geo_CAR1INT]->textureID = LoadTGA("Image//car1Interior.tga");
+	meshList[Geo_CAR1INT] = MeshBuilder::GenerateOBJ("Car2Interior", "OBJ//car2Interior.obj");
+	meshList[Geo_CAR1INT]->textureID = LoadTGA("Image//car2Interior.tga");
 	
 	meshList[GEO_CAR2] = MeshBuilder::GenerateOBJ("Car2", "OBJ//carframe2.obj");
 	meshList[GEO_CAR2]->textureID = LoadTGA("Image//spcarframe2.tga");
 	meshList[GEO_CAR2WHEELS] = MeshBuilder::GenerateOBJ("Car2Wheels", "OBJ//spcar2_wheels.obj");
 	meshList[GEO_CAR2WHEELS]->textureID = LoadTGA("Image//spcar2_wheel.tga");
-	meshList[Geo_CAR2INT] = MeshBuilder::GenerateOBJ("Car2Interior", "OBJ//car2Interior.obj");
-	meshList[Geo_CAR2INT]->textureID = LoadTGA("Image//car2Interior.tga");
+	meshList[Geo_CAR2INT] = MeshBuilder::GenerateOBJ("Car1Interior", "OBJ//car1Interior.obj");
+	meshList[Geo_CAR2INT]->textureID = LoadTGA("Image//car1Interior.tga");
 
 	meshList[GEO_CAR3] = MeshBuilder::GenerateOBJ("car3", "Obj//gray.obj");
 	meshList[GEO_CAR3]->textureID = LoadTGA("Image//car_cyan.tga");\
