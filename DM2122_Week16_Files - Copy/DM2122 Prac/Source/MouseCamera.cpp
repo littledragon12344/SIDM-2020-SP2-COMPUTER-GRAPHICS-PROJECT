@@ -1,18 +1,18 @@
-#include "Camera2.h"
+#include "MouseCamera.h"
 #include "Application.h"
 #include "Mtx44.h"
 #include "Utility.h"
 #include "Wall.h"
 
-Camera2::Camera2()
+MouseCamera::MouseCamera()
 {
 }
 
-Camera2::~Camera2()
+MouseCamera::~MouseCamera()
 {
 }
 
-void Camera2::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
+void MouseCamera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 {
 	this->position = defaultPosition = pos;
 	TargetFromPos = defaultTarget = target;
@@ -25,13 +25,19 @@ void Camera2::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	this->up = defaultUp = right.Cross(view).Normalized();
 }
 
-void Camera2::Update(double dt)
+void MouseCamera::Update(double dt)
 {
-
 	static const float CAMERA_SPEED = 15.f;
-	if (Application::IsKeyPressed(VK_LEFT))
+	float DisplacementX=0;
+	float DisplacementY=0;
+	POINT mousePos;
+	GetCursorPos(&mousePos);
+	DisplacementX = mousePos.x-300;
+	DisplacementY = mousePos.y-300;
+	SetCursorPos(300, 300);
+	if (DisplacementX!=0)
 	{
-		float yaw = (float)(CAMERA_SPEED * dt * 5);
+		float yaw = (float)(DisplacementX * dt * 5);
 		Mtx44 rotation;
 		rotation.SetToRotation(yaw, 0, 1, 0);
 		xzTarget = rotation * xzTarget;
@@ -39,19 +45,9 @@ void Camera2::Update(double dt)
 		target = TargetFromPos + position;
 		up = rotation * up;
 	}
-	if (Application::IsKeyPressed(VK_RIGHT))
+	if (DisplacementY!=0)
 	{
-		float yaw = (float)(-CAMERA_SPEED * dt * 5);
-		Mtx44 rotation;
-		rotation.SetToRotation(yaw, 0, 1, 0);
-		xzTarget = rotation * xzTarget;
-		TargetFromPos = rotation * TargetFromPos;
-		target = TargetFromPos + position;
-		up = rotation * up;
-	}
-	if (Application::IsKeyPressed(VK_UP))
-	{
-		float pitch = (float)(-CAMERA_SPEED * dt);
+		float pitch = (float)(DisplacementY * dt);
 		Vector3 Temp = position;
 		Temp.y = 2;
 		Vector3 view = (position - target).Normalized();
@@ -64,53 +60,6 @@ void Camera2::Update(double dt)
 		TargetFromPos = rotation * TargetFromPos;
 		target = TargetFromPos + Temp;
 	}
-	if (Application::IsKeyPressed(VK_DOWN))
-	{
-		float pitch = (float)(CAMERA_SPEED * dt);
-		Vector3 Temp = position;
-		Temp.y = 2;
-		Vector3 view = (position - target).Normalized();
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-		Mtx44 rotation;
-		rotation.SetToRotation(pitch, right.x, right.y, right.z);
-		TargetFromPos = rotation * TargetFromPos;
-		target = TargetFromPos + Temp;
-	}
-
-	/*if(Application::IsKeyPressed('S'))
-	{
-		Vector3 direction = position - target;
-			Vector3 view = xzTarget.Normalized();
-			target -= view * (float)(10.f * dt);
-			position -= view * (float)(10.f * dt);
-	}
-	if( Application::IsKeyPressed('W'))
-	{
-		Vector3 view = xzTarget.Normalized();
-		target += view * (float)(10.f * dt);
-		position += view * (float)(10.f * dt);
-
-	}
-	if (Application::IsKeyPressed('A'))
-	{
-		Vector3 view = xzTarget.Normalized();
-		Vector3 viewLeft;
-		viewLeft = Vector3(cos(Math::DegreeToRadian(-90))*view.x-sin(Math::DegreeToRadian(-90))*view.z, 0, cos(Math::DegreeToRadian(-90)) * view.z + sin(Math::DegreeToRadian(-90)) * view.x);
-		target += viewLeft * (float)(10.f * dt);
-		position += viewLeft * (float)(10.f * dt);
-
-	}
-	if (Application::IsKeyPressed('D'))
-	{
-		Vector3 view = xzTarget.Normalized();
-		Vector3 viewRight;
-		viewRight = Vector3(cos(Math::DegreeToRadian(90)) * view.x - sin(Math::DegreeToRadian(90)) * view.z, 0, cos(Math::DegreeToRadian(90)) * view.z + sin(Math::DegreeToRadian(90)) * view.x);
-		target += viewRight * (float)(10.f * dt);
-		position += viewRight * (float)(10.f * dt);
-	}*/
 
 	if (Application::IsKeyPressed('R'))
 	{
@@ -162,7 +111,7 @@ void Camera2::Update(double dt)
 	}
 }
 
-void Camera2::Reset()
+void MouseCamera::Reset()
 {
 	position = defaultPosition;
 	TargetFromPos = defaultTarget;

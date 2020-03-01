@@ -40,6 +40,7 @@ class Minigame : public Scene
 		GEO_POINTER,
 		GEO_STARTLIGHT,
 		GEO_PAUSE,
+		GEO_LAMP,
 		GEO_BLACK,
 		NUM_GEOMETRY,
 	};
