@@ -179,8 +179,6 @@ private:
 	MouseCamera FPScamera;
 	Camera Frecamera;
 
-	float lightcolor;
-	bool switchcolor;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
