@@ -103,22 +103,6 @@ void SceneCarSelection::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibriBoldItalic.tga");
 
-	// Car 0
-	meshList[GEO_CAR_FRAME_0] = allCars[0]->GetCarMesh();
-	meshList[GEO_CAR_WHEEL_0] = allCars[0]->GetWheelMesh();
-
-	// Car 1
-	meshList[GEO_CAR_FRAME_1] = allCars[1]->GetCarMesh();
-	meshList[GEO_CAR_WHEEL_1] = allCars[1]->GetWheelMesh();
-
-	// Car 2
-	meshList[GEO_CAR_FRAME_2] = allCars[2]->GetCarMesh();
-	meshList[GEO_CAR_WHEEL_2] = allCars[2]->GetWheelMesh();
-
-	// Car 3
-	meshList[GEO_CAR_FRAME_3] = allCars[3]->GetCarMesh();
-	meshList[GEO_CAR_WHEEL_3] = allCars[3]->GetWheelMesh();
-
 	// User Interface / UI
 	meshList[GEO_UI_BASE] = MeshBuilder::GenerateQuad("uiBase", Color(0.55f, 0.55f, 0.55f), 1.f, 1.f);
 	meshList[GEO_UI_GRAY_BAR] = MeshBuilder::GenerateQuad("uiGrayBlue", Color(0.4f, 0.4f, 0.4f), 1.f, 1.f);
@@ -323,7 +307,7 @@ void SceneCarSelection::Exit()
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		// Prevents any car frame or car wheel to be deleted
-		if (meshList[i] != NULL && (i < GEO_CAR_FRAME_0 || i > GEO_CAR_WHEEL_3))
+		if (meshList[i] != NULL)
 			delete meshList[i];
 	}
 	// Cleanup VBO here
