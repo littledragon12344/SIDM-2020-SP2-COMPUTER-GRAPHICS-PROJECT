@@ -31,6 +31,7 @@ void SceneInterior::Init()
 
 	SwitchCamera = 1;
 	rotate = 0;
+	Yaw = 0;
 
 	// Generate a default VAO for now
 	glGenVertexArrays(1, &m_vertexArrayID);
