@@ -316,7 +316,8 @@ void SceneCarSelection::Exit()
 	// Cleanup here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
-		if (meshList[i] != NULL)
+		// Prevents any car frame or car wheel to be deleted
+		if (meshList[i] != NULL && (i < GEO_CAR_FRAME_0 || i > GEO_CAR_WHEEL_3))
 			delete meshList[i];
 	}
 	// Cleanup VBO here
