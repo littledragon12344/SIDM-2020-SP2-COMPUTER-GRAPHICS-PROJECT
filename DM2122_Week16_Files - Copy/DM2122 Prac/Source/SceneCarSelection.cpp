@@ -211,14 +211,20 @@ void SceneCarSelection::Update(double dt)
 		bPressesd = false;
 	}
 	
+	// Changing scenes
 	if (Application::IsKeyPressed('N'))
 	{
 		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_SKYBOX);
 	}
-
-	if (Application::IsKeyPressed('M'))
+	else if (Application::IsKeyPressed('M'))
 	{
 		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_MINIGAME);
+		CCar::CarSwitch = currentCarIndex;
+	}
+	else if (Application::IsKeyPressed('A'))
+	{
+		SceneManager::getInstance()->SetNextScene(SceneManager::SCENE_INTERIOR);
+		CCar::CarSwitch = currentCarIndex;
 	}
 }
 
@@ -243,7 +249,7 @@ void SceneCarSelection::Render()
 	{
 		modelStack.PushMatrix();
 			modelStack.Rotate(animAngle, 0, 1, 0);
-			modelStack.Translate(80.f, 0.f, 0.f);
+			modelStack.Translate(90.f, 0.f, 0.f);
 			modelStack.Rotate(carAngle, 0, 1, 0);
 			modelStack.Scale(10.f, 10.f, 10.f);
 			RenderCar((currentCarIndex - 1) % allCars.size());
@@ -251,7 +257,7 @@ void SceneCarSelection::Render()
 		
 		modelStack.PushMatrix();
 			modelStack.Rotate(animAngle - 90.f, 0, 1, 0);
-			modelStack.Translate(80.f, 0.f, 0.f);
+			modelStack.Translate(90.f, 0.f, 0.f);
 			modelStack.Rotate(carAngle, 0, 1, 0);
 			modelStack.Scale(10.f, 10.f, 10.f);
 			RenderCar(currentCarIndex);
@@ -261,7 +267,7 @@ void SceneCarSelection::Render()
 	{
 		modelStack.PushMatrix();
 			modelStack.Rotate(animAngle, 0, 1, 0);
-			modelStack.Translate(80.f, 0.f, 0.f);
+			modelStack.Translate(90.f, 0.f, 0.f);
 			modelStack.Rotate(carAngle, 0, 1, 0);
 			modelStack.Scale(10.f, 10.f, 10.f);
 			RenderCar((currentCarIndex + 1) % allCars.size());
@@ -269,7 +275,7 @@ void SceneCarSelection::Render()
 		
 		modelStack.PushMatrix();
 			modelStack.Rotate(animAngle + 90.f, 0, 1, 0);
-			modelStack.Translate(80.f, 0.f, 0.f);
+			modelStack.Translate(90.f, 0.f, 0.f);
 			modelStack.Rotate(carAngle, 0, 1, 0);
 			modelStack.Scale(10.f, 10.f, 10.f);
 			RenderCar(currentCarIndex);
@@ -278,7 +284,7 @@ void SceneCarSelection::Render()
 	else
 	{
 		modelStack.PushMatrix();
-			modelStack.Translate(80.f, 0.f, 0.f);
+			modelStack.Translate(90.f, 0.f, 0.f);
 			modelStack.Rotate(carAngle, 0, 1, 0);
 			modelStack.Scale(10.f, 10.f, 10.f);
 			RenderCar(currentCarIndex);
@@ -465,104 +471,119 @@ void SceneCarSelection::RenderCar(int carNo)
 	{
 	case 0:
 		modelStack.PushMatrix();
-			modelStack.Translate(0.f, 0.15f, 0.f);
+			modelStack.Translate(0.f, 0.f, 0.f);
 			modelStack.Scale(0.5f, 0.5f, 0.5f);
 			modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-			RenderMesh(meshList[GEO_CAR_FRAME_0], true);
+			RenderMesh(allCars[0]->GetCarMesh(), true);
 			modelStack.PushMatrix();
 				modelStack.Translate(0.5f, -0.3f, -0.1f);
 				modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_0], true);
+				RenderMesh(allCars[0]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
 				modelStack.Translate(6.5f, -0.3f, -0.1f);
 				modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_0], true);
+				RenderMesh(allCars[0]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
 				modelStack.Translate(0.5f, -0.3f, -6.1f);
 				modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_0], true);
+				RenderMesh(allCars[0]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
 				modelStack.Translate(6.5f, -0.3f, -6.1f);
 				modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_0], true);
+				RenderMesh(allCars[0]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
 		break;
 	case 1:
 		modelStack.PushMatrix();
-			modelStack.Translate(0.f, -0.785f, 0.f);
-			modelStack.Scale(1.15f, 1.15f, 1.15f);
+			modelStack.Translate(0.f, 0.f, 0.f);
+			modelStack.Scale(0.5f, 0.5f, 0.5f);
 			modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-			RenderMesh(meshList[GEO_CAR_FRAME_1], true);
+			RenderMesh(allCars[1]->GetCarMesh(), true);
 			modelStack.PushMatrix();
-				modelStack.Translate(0.f, 0.9f, 0.f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_1], true);
+				modelStack.Translate(0.1f, 0.6f, 0.f);
+				modelStack.Scale(2.f, 2.f, 2.f);
+				RenderMesh(allCars[1]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-				modelStack.Translate(-3.0, 0.9f, 0.f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_1], true);
+				modelStack.Translate(0.1f, 0.6f, -5.f);
+				modelStack.Scale(2.f, 2.f, 2.f);
+				RenderMesh(allCars[1]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-				modelStack.Translate(0.f, 0.9f, -2.35f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_1], true);
+				modelStack.Translate(-5.95f, 0.6f, 0.f);
+				modelStack.Scale(2.f, 2.f, 2.f);
+				RenderMesh(allCars[1]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-				modelStack.Translate(-3.0, 0.9f, -2.35f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_1], true);
+				modelStack.Translate(-5.95f, 0.6f, -5.f);
+				modelStack.Scale(2.f, 2.f, 2.f);
+				RenderMesh(allCars[1]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
 		break;
 	case 2:
 		modelStack.PushMatrix();
-			modelStack.Translate(0.f, 0.852f, 0.f);
+			modelStack.Translate(0.f, 0.f, 0.f);
+			modelStack.Rotate(180.f, 0, 1, 0);
 			modelStack.Scale(0.5f, 0.5f, 0.5f);
-			modelStack.Rotate(-90.f, 0.f, 1.f, 0.f);
-			RenderMesh(meshList[GEO_CAR_FRAME_2], true);
+			RenderMesh(allCars[2]->GetCarMesh(), true);
 			modelStack.PushMatrix();
-				modelStack.Translate(-2.9f, -0.6f, -4.65f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_2], true);
+				modelStack.Scale(1.1f, 1.1f, 1.1f);
+				modelStack.Translate(-4.25f, 0.6f, 2.35f);
+				modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
+				RenderMesh(allCars[2]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-				modelStack.Translate(-2.9f, -0.6f, 4.f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_2], true);
+				modelStack.Scale(1.1f, 1.1f, 1.1f);
+				modelStack.Translate(-4.25f, 0.6f, -2.35f);
+				modelStack.Rotate(270.f, 0.f, 1.f, 0.f);
+				RenderMesh(allCars[2]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-				modelStack.Translate(2.9f, -0.6f, -4.65f);
-				modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_2], true);
+				modelStack.Scale(1.1f, 1.1f, 1.1f);
+				modelStack.Translate(3.7f, 0.6f, 2.35f);
+				modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
+				RenderMesh(allCars[2]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-				modelStack.Translate(2.9f, -0.6f, 4.f);
-				modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_2], true);
+				modelStack.Scale(1.1f, 1.1f, 1.1f);
+				modelStack.Translate(3.7f, 0.6f, -2.35f);
+				modelStack.Rotate(270.f, 0.f, 1.f, 0.f);
+				RenderMesh(allCars[2]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
 		break;
 	case 3:
 		modelStack.PushMatrix();
-			modelStack.Translate(0.f, -0.2f, 0.f);
-			modelStack.Scale(1.2f, 1.2f, 1.2f);
-			RenderMesh(meshList[GEO_CAR_FRAME_3], true);
+			modelStack.Scale(0.45f, 0.45f, 0.45f);
+			modelStack.Rotate(180.f, 0, 1, 0);
+			RenderMesh(allCars[3]->GetCarMesh(), true);
 			modelStack.PushMatrix();
-				modelStack.Translate(2.2f, 0.2f, 0.3f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_3], true);
+				modelStack.Scale(2.9f, 2.9f, 2.9f);
+				modelStack.Translate(0.05f, -0.3f, 0.1f);
+				RenderMesh(allCars[3]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-				modelStack.Translate(-0.1f, 0.2f, 0.3f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_3], true);
+				modelStack.Scale(2.9f, 2.9f, 2.9f);
+				modelStack.Translate(0.05f, -0.3f, -1.6f);
+				RenderMesh(allCars[3]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-				modelStack.Translate(2.2f, 0.2f, -1.8f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_3], true);
+				modelStack.Scale(2.9f, 2.9f, 2.9f);
+				modelStack.Translate(1.95f, -0.3f, 0.1f);
+				RenderMesh(allCars[3]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 			modelStack.PushMatrix();
-				modelStack.Translate(-0.1f, 0.2f, -1.8f);
-				RenderMesh(meshList[GEO_CAR_WHEEL_3], true);
+				modelStack.Scale(2.9f, 2.9f, 2.9f);
+				modelStack.Translate(1.95f, -0.3f, -1.6f);
+				RenderMesh(allCars[3]->GetWheelMesh(), true);
 			modelStack.PopMatrix();
 		modelStack.PopMatrix();
 		break;
+	// default: do nothing
 	}
 }
