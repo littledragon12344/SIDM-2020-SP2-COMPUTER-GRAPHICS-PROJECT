@@ -286,10 +286,10 @@ void Minigame::Update(double dt)
 			switchcolor = false;
 		}
 
-		if (Application::IsKeyPressed('J'))//Button to switch
+		if (Application::IsKeyPressed('H'))//Button to switch
 		{
-			light[1].color.Set(0 + lightcolor, 1 - lightcolor, lightcolor / 2);
-			glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &light[1].color.r);
+			light[0].color.Set(0 + lightcolor, 1 - lightcolor, lightcolor / 2);
+			glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[1].color.r);
 		}
 		if (Application::IsKeyPressed(0x31))
 		{
@@ -314,7 +314,7 @@ void Minigame::Update(double dt)
 			light[0].position.z += (float)(LSPEED * dt);
 		if (Application::IsKeyPressed('J'))
 			light[0].position.x -= (float)(LSPEED * dt);
-		if (Application::IsKeyPressed('L'))
+		if (Application::IsKeyPressed('U'))
 			light[0].position.x += (float)(LSPEED * dt);
 		if (Application::IsKeyPressed('O'))
 			light[0].position.y -= (float)(LSPEED * dt);
