@@ -40,6 +40,8 @@ class SceneSkybox : public Scene
 		GEO_LIGHTSPHERE1,
 		GEO_LIGHTSPHERE2,
 		GEO_TEXT,
+		GEO_NPCB,
+		GEO_TEXTBOX,
 		NUM_GEOMETRY,
 	};
 
@@ -141,6 +143,31 @@ private:
 	float Cameraspeed;
 	bool movesUp;
 
+	//for NPC
+
+	float movetocar1;
+	float movetocar2x;
+	float movetocar2z;
+	float movetocar3x;
+	float movetocar3z;
+	float movetocar4x;
+	float movetocar4z;
+	bool SpeakIntro;
+	bool Speak1;
+	bool Speak2;
+	bool Speak3;
+	bool Speak4;
+	bool nearPlatform;
+	bool duringconvo;
+	bool move1;
+	bool move2;
+	bool move3;
+	bool move4;
+	bool interactable;
+
+	double bounceTime;
+	float timer;
+
 	std::vector<CCar*>& allCars = CCar::AllCar;
 	int currentCarIndex;
 
@@ -159,10 +186,24 @@ private:
 	void RenderSkybox();
 	void RenderRoom();
 	void RenderPlayer();
-	void RenderNPC();
 	void RenderEnviroment();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+
+	//for NPC
+	void RenderTextBox();
+	void RenderNPCText();
+
+	NPC NPC[1];
+	std::string NPCtext;
+	std::string NPCDialogue();
+
+	void InteractionUpdate(int i);
+
+
+	bool NearNPC();
+	bool DuringConvo();
+
 
 public:
 	SceneSkybox();
