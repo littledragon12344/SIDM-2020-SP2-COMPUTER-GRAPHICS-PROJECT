@@ -13,6 +13,7 @@
 #include "SceneManager.h"
 #include "CarMinigame.h"
 #include "FirstPersonCamera.h"
+#include "MouseCamera.h"
 #include "Wall.h"
 
 
@@ -108,6 +109,7 @@ private:
 	Camera2 FPScamera;//Testing cameras
 	Camera Frecamera;
 	TopDownCamera TopCamera;//Main camera
+	MouseCamera Mouse;
 
 	Path path1;
 	CarAi Car1;

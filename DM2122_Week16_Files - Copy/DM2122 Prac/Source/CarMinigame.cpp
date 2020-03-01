@@ -50,12 +50,12 @@ void CarMinigame::Updates(float dt)
 		Acceleration = CCar::AllCar[CCar::CarSwitch]->GetAcceleration() / -2;//Fake decelleration due to Rotation
 	}
 	Vector3 Temp =(target - position).Normalized();
-		if (Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt)*2, TargetFromPos, 7, 2.5).size() != 0 )
+		if (Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt)*2, target, 7, 2.5).size() != 0 )
 		{
 			std::vector<Wall*> Temp = Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt) * 2, GetTargetpos(), 7, 2.5);
 			for (int i = 0; i < Temp.size(); i++)
 			{
-				if (Temp[i]->getPosition() == StartLine && !Collided)
+				if (Temp[i]->getPosition() == StartLine&&!Collided)
 				{
 					round++;
 				}
@@ -64,7 +64,7 @@ void CarMinigame::Updates(float dt)
 			previousZ = position.z;
 			Collided = true;
 		}
-		else if (Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt)*2, TargetFromPos, 7, 2.5).size() == 0)
+		else if (Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt)*2, target, 7, 2.5).size() == 0)
 		{
 			Collided = false;
 		}
@@ -72,7 +72,7 @@ void CarMinigame::Updates(float dt)
 		position += view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt);
 		if (Collided == true)
 		{
-			Collidewithwall(Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt)*2, TargetFromPos, 7, 2.5));
+			Collidewithwall(Wall::carWallCollision(position + view * (float)(CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() * dt)*2, target, 7, 2.5));
 		}
 		CCar::AllCar[CCar::CarSwitch]->CalculateSpeed(Acceleration, CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed(), dt);
 		if (CCar::AllCar[CCar::CarSwitch]->GetCurrentSpeed() < 0)
@@ -111,10 +111,14 @@ void CarMinigame::Collidewithwall(std::vector<Wall*> wallcollide)
 			if (wallcollide[i]->getLength() > wallcollide[i]->getDepth())
 			{
 				position.z = previousZ;
+				if (position.x < wallcollide[i]->getPosition().x + wallcollide[i]->getLength() && position.x < wallcollide[i]->getPosition().x - wallcollide[i]->getLength())
+					position.x = previousX;
 			}
 			if (wallcollide[i]->getLength() < wallcollide[i]->getDepth())
 			{
 				position.x = previousX;
+				if (position.z < wallcollide[i]->getPosition().z + wallcollide[i]->getDepth() && position.z < wallcollide[i]->getPosition().z - wallcollide[i]->getDepth())
+					position.z = previousZ;
 			}
 		}
 	}

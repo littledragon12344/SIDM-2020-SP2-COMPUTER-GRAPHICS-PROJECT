@@ -42,6 +42,7 @@ void Minigame::Init()
 	Frecamera.Init(Vector3(-10, 2, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
 	//TPSCamera.Init(Vector3(-30, 2, 0), FPScamera.position, FPScamera.up);
 	TopCamera.Init(Vector3(-10, 300, 0), Vector3(-10, 0, 0), Vector3(0, 0, -1));
+	Mouse.Init(Vector3(-10, 2, 0), Vector3(10, 0, 0), Vector3(0, 1, 0));
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
@@ -317,16 +318,22 @@ void Minigame::Update(double dt)
 			light[0].position.y -= (float)(LSPEED * dt);
 		if (Application::IsKeyPressed('P'))
 			light[0].position.y += (float)(LSPEED * dt);
+		ShowCursor(true);
 		if (SwitchCamera == 2)
 			Frecamera.Update(dt);
 		else if (SwitchCamera == 3)
 		{
 			TopCamera.Update(dt);
 		}
-		else
+		else if(SwitchCamera==1)
 		{
 			FPScamera.Update(dt);
 			//TPSCamera.Update(dt);
+		}
+		else
+		{
+			ShowCursor(false);
+			Mouse.Update(dt);
 		}
 		if (StartTime <= 0)
 		{
@@ -356,10 +363,11 @@ void Minigame::Update(double dt)
 	{
 		SwitchCamera = 3;
 	}
-	/*if (Application::IsKeyPressed('V'))
+	if (Application::IsKeyPressed('V'))
 	{
 		SwitchCamera = 4;
-	}*/
+		SetCursorPos(300, 300);
+	}
 	if (Application::IsKeyPressed('5'))
 	{
 		//to do: switch light type to POINT and pass the information to
@@ -407,10 +415,11 @@ void Minigame::Render()
 		viewStack.LookAt(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z, FPScamera.target.x, FPScamera.target.y, FPScamera.target.z, FPScamera.up.x, FPScamera.up.y, FPScamera.up.z);
 	//else if(SwitchCamera==3)
 	//	viewStack.LookAt(TPSCamera.position.x, TPSCamera.position.y, TPSCamera.position.z, TPSCamera.target.x, TPSCamera.target.y, TPSCamera.target.z, TPSCamera.up.x, TPSCamera.up.y, TPSCamera.up.z);
-	else//Main camera in use
+	else if (SwitchCamera==3)//Main camera in use
 		viewStack.LookAt(TopCamera.position.x, TopCamera.position.y, TopCamera.position.z, TopCamera.target.x, TopCamera.target.y, TopCamera.target.z, TopCamera.up.x, TopCamera.up.y, TopCamera.up.z);
+	else if(SwitchCamera==4)
+		viewStack.LookAt(Mouse.position.x, Mouse.position.y, Mouse.position.z, Mouse.target.x, Mouse.target.y, Mouse.target.z, Mouse.up.x, Mouse.up.y, Mouse.up.z);
 	modelStack.LoadIdentity();
-
 	// passing the light direction if it is a direction light	
 	if (light[0].type == Light::LIGHT_DIRECTIONAL)
 	{

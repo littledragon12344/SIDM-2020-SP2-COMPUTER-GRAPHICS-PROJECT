@@ -4,8 +4,8 @@
 #include "Scene.h"
 #include "Wall.h"
 #include <MatrixStack.h>
-#include "Camera2.h"
 #include "Camera3.h"
+#include "MouseCamera.h"
 #include "Mesh.h"
 #include "SceneManager.h"
 #include "CCar.h"
@@ -176,7 +176,7 @@ private:
 	MS modelStack, viewStack, projectionStack;
 	Light light[5];
 
-	Camera2 FPScamera;
+	MouseCamera FPScamera;
 	Camera Frecamera;
 
 	float lightcolor;

@@ -376,10 +376,12 @@ void SceneSkybox::Update(double dt)
 	{
 		Yaw =0;
 	}
+	ShowCursor(true);
 	if (SwitchCamera==2)
 		Frecamera.Update(dt);
 	else
 	{
+		ShowCursor(false);
 		FPScamera.Update(dt);
 	}
 	//light[1].position.Set(FPScamera.position.x, FPScamera.position.y, FPScamera.position.z);

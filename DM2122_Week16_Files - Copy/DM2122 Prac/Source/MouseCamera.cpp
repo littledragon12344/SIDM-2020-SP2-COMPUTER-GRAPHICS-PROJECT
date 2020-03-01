@@ -37,7 +37,7 @@ void MouseCamera::Update(double dt)
 	SetCursorPos(300, 300);
 	if (DisplacementX!=0)
 	{
-		float yaw = (float)(DisplacementX * dt * 5);
+		float yaw = (float)(-DisplacementX * dt * 5);
 		Mtx44 rotation;
 		rotation.SetToRotation(yaw, 0, 1, 0);
 		xzTarget = rotation * xzTarget;
@@ -47,7 +47,7 @@ void MouseCamera::Update(double dt)
 	}
 	if (DisplacementY!=0)
 	{
-		float pitch = (float)(DisplacementY * dt);
+		float pitch = (float)(DisplacementY * dt*5);
 		Vector3 Temp = position;
 		Temp.y = 2;
 		Vector3 view = (position - target).Normalized();
